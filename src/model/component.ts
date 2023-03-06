@@ -4,12 +4,14 @@ class Component {
   constructor(target: Element) {
     this.target = target;
 
+    this.setUp();
     this.mount();
     this.setEvent();
   }
 
   template(): string | void {}
 
+  setUp() {}
   setEvent() {}
 
   mount() {
