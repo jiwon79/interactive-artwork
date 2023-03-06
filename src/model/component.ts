@@ -5,9 +5,17 @@ class Component {
     this.target = target;
 
     this.mount();
+    this.setEvent();
   }
 
   template(): string | void {}
+
+  setEvent() {}
+
+  mount() {
+    this.render();
+    this.didMount();
+  }
 
   didMount() {}
 
@@ -17,10 +25,6 @@ class Component {
     this.target.innerHTML = template;
   }
 
-  mount() {
-    this.render();
-    this.didMount();
-  }
 }
 
 export default Component;
