@@ -7,22 +7,49 @@ interface RouteInfo {
   component: any;
 }
 
-class Route extends Component {
-  private routes: RouteInfo[] = [];
-
-  setUp() {
-    this.routes = [
-      {path: "/", component: MainPage},
-      {path: "/solid-text", component: SolidTextPage},
-    ];
+declare global {
+  interface WindowEventMap {
+    "historyChange": HistoryChangeEvent;
   }
+}
 
+interface HistoryChangeEvent extends Event {
+  detail: {
+    to: string;
+    isReplace: boolean;
+  }
+}
+
+const routes: RouteInfo[] = [
+  {path: "/", component: MainPage},
+  {path: "/solid-text", component: SolidTextPage},
+];
+
+class Route extends Component {
   render() {
     const path = window.location.pathname;
-    const route = this.routes.find((route) => route.path === path);
+    const route = routes.find((route) => route.path === path);
     if (!route) return;
 
     new route.component(this.target);
+  }
+
+  setEvent() {
+    window.addEventListener("popstate", () => {
+      this.render();
+    });
+
+    window.addEventListener("historyChange", (event: HistoryChangeEvent) => {
+      const {to, isReplace} = event.detail;
+
+      if (isReplace || to === location.pathname) {
+        history.replaceState(null, "", to);
+      } else {
+        history.pushState(null, "", to);
+      }
+
+      this.render();
+    });
   }
 }
 

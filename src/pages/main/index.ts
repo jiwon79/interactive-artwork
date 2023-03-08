@@ -1,5 +1,6 @@
 import "./style.scss"
 import Component from "../../model/component";
+import {navigate} from "../../router";
 
 class MainPage extends Component {
   template(): string {
@@ -22,7 +23,7 @@ class MainPage extends Component {
       const baseUrl = window.location.origin;
       const href = targetElement.href.replace(baseUrl, "");
 
-      console.log(href.replace(baseUrl, ""));
+      navigate(href);
     });
   }
 }
