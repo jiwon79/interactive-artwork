@@ -1,6 +1,6 @@
+import Component from "@model/component";
+import navigate from "../common/navigate";
 import "./style.scss"
-import Component from "../../model/component";
-import {navigate} from "../common/router";
 
 class MainPage extends Component {
   template(): string {

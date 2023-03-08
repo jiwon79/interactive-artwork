@@ -1,12 +1,14 @@
-import MainPage from "../main";
-import Component from "../../model/component";
-import SolidTextPage from "../solidText";
+import Component from "@model/component";
+import MainPage from "@pages/main";
+import SolidTextPage from "@pages/solidText";
+
 import {HistoryChangeEvent} from "./navigate";
 
 interface RouteInfo {
   path: string;
   component: any;
 }
+
 
 const routes: RouteInfo[] = [
   {path: "/", component: MainPage},
