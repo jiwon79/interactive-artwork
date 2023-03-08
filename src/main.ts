@@ -1,4 +1,4 @@
-import Route from "./router";
+import Route from "./pages/common/router";
 
 document.addEventListener('DOMContentLoaded', () => {
   // document.body.addEventListener('click', (e) => {

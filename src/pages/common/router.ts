@@ -1,23 +1,11 @@
-import MainPage from "./pages/main";
-import Component from "./model/component";
-import SolidTextPage from "./pages/solidText";
+import MainPage from "../main";
+import Component from "../../model/component";
+import SolidTextPage from "../solidText";
+import {HistoryChangeEvent} from "./navigate";
 
 interface RouteInfo {
   path: string;
   component: any;
-}
-
-declare global {
-  interface WindowEventMap {
-    "historyChange": HistoryChangeEvent;
-  }
-}
-
-interface HistoryChangeEvent extends Event {
-  detail: {
-    to: string;
-    isReplace: boolean;
-  }
 }
 
 const routes: RouteInfo[] = [
@@ -54,15 +42,3 @@ class Route extends Component {
 }
 
 export default Route;
-
-export const navigate = (to: String, isReplace: boolean = false) => {
-  const historyChangeEvent = new CustomEvent("historyChange", {
-    detail: {
-      to,
-      isReplace,
-    },
-  });
-
-  dispatchEvent(historyChangeEvent);
-};
-
