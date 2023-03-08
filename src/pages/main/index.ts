@@ -1,8 +1,8 @@
-import Component from "@model/component";
+import Component, { StateType } from "@model/component";
 import navigate from "../common/navigate";
 import "./style.scss"
 
-class MainPage extends Component {
+class MainPage extends Component<StateType> {
   template(): string {
     return `
       <div class="main">

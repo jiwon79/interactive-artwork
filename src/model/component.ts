@@ -1,8 +1,12 @@
-class Component {
+export interface StateType {}
+
+class Component<S extends StateType> {
   target: Element;
+  state: S;
 
   constructor(target: Element) {
     this.target = target;
+    this.state = {} as S;
 
     this.mount();
     this.setEvent();
@@ -17,7 +21,21 @@ class Component {
     this.didMount();
   }
 
+  update() {
+    this.render();
+    this.didUpdate();
+  }
+
   didMount() {}
+  didUpdate() {}
+
+  setState(newState: Partial<S>) {
+    const nextState = { ...this.state, ...newState }
+    if (JSON.stringify(this.state) === JSON.stringify(nextState)) return;
+
+    this.state = nextState
+    this.update()
+  }
 
   render() {
     const template = this.template();
