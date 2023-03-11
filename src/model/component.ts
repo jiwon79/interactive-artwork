@@ -8,12 +8,14 @@ class Component<S extends StateType> {
     this.target = target;
     this.state = {} as S;
 
+    this.setUp();
     this.mount();
     this.setEvent();
   }
 
   template(): string | void {}
 
+  setUp() {}
   setEvent() {}
 
   mount() {
@@ -33,8 +35,9 @@ class Component<S extends StateType> {
     const nextState = { ...this.state, ...newState }
     if (JSON.stringify(this.state) === JSON.stringify(nextState)) return;
 
-    this.state = nextState
-    this.update()
+    this.state = nextState;
+    this.update();
+    this.setEvent();
   }
 
   render() {

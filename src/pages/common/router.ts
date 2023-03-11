@@ -1,4 +1,4 @@
-import Component from "@model/component";
+import Component, {StateType} from "@model/component";
 import MainPage from "@pages/main";
 import SolidTextPage from "@pages/solidText";
 
@@ -15,7 +15,7 @@ const routes: RouteInfo[] = [
   {path: "/solid-text", component: SolidTextPage},
 ];
 
-class Route extends Component {
+class Route extends Component<StateType> {
   render() {
     const path = window.location.pathname;
     const route = routes.find((route) => route.path === path);
