@@ -51,40 +51,26 @@ class SolidTextPage extends Component<SolidTextStateType> {
   }
 
   setEvent() {
-    document.querySelector('.buttons #left')!.addEventListener('click', () => {
-      this.setState({
-        rotateZ: this.state.rotateZ + 60,
-        rotateX: this.state.rotateX + 10,
-      });
+    this.addEvent('click', '.buttons #left', () => {
+      this.setState({rotateZ: this.state.rotateZ + 10});
+    });
+    this.addEvent('click', '.buttons #right', () => {
+      this.setState({rotateZ: this.state.rotateZ - 10});
+    });
+    this.addEvent('click', '.buttons #up', () => {
+      this.setState({rotateX: this.state.rotateX + 10});
+    });
+    this.addEvent('click', '.buttons #down', () => {
+      this.setState({rotateX: this.state.rotateX - 10});
     });
   }
 
   didMount() {
-    this.clearDisplay();
     this.drawDonut();
   }
 
   didUpdate() {
-    console.log('update');
-    this.clearDisplay();
     this.drawDonut();
-    console.log(this.state);
-  }
-
-  clearDisplay() {
-    // const display = document.querySelector('.display')!;
-    //
-    // for (var i=0; i<HEIGHT; i++) {
-    //   var tr = document.createElement('tr');
-    //   display.appendChild(tr);
-    //   for (var j=0; j<WIDTH; j++) {
-    //     var td = document.createElement('td');
-    //     // td.style.width = tdWidth+'px';
-    //     // td.style.height = tdHeight+'px';
-    //     tr.appendChild(td);
-    //     td.innerHTML = ' ';
-    //   }
-    // }
   }
 
   drawDonut() {
@@ -120,11 +106,11 @@ class SolidTextPage extends Component<SolidTextStateType> {
           .map((_, index) => normalMatrix.getElement(0, index));
 
         var luminance = dotProduct(normal, LIGHT);
-        // var c = r.getElement(0, 2)/(majorRadius + minorRadius);
-        // luminance = Math.floor(1+7.9*luminance+2.9*c);
+        var c = r.getElement(0, 2)/(majorRadius + minorRadius);
+        luminance = Math.floor(1+7.9*luminance+2.9*c);
         // console.log(luminance);
         if (luminance < 0) continue;
-        luminance = Math.floor(11*luminance);
+        // luminance = Math.floor(11*luminance);
 
         r = new Matrix([[
           Math.floor(r.getElement(0, 0) + WIDTH / 2),

@@ -16,7 +16,6 @@ class Component<S extends StateType> {
   template(): string | void {}
 
   setUp() {}
-  setEvent() {}
 
   mount() {
     this.render();
@@ -37,7 +36,20 @@ class Component<S extends StateType> {
 
     this.state = nextState;
     this.update();
-    this.setEvent();
+  }
+
+  setEvent() {}
+  addEvent(eventType: string, selector: string, callback: (e: Event) => void) {
+    const children: Element[] = Array.from(this.target.querySelectorAll(selector));
+
+    const isTarget = (target: Element) => children.includes(target) || target.closest(selector)
+
+    this.target.addEventListener(eventType, (event: Event): boolean => {
+      if (!isTarget(event.target as HTMLElement)) return false
+      callback(event)
+
+      return true
+    })
   }
 
   render() {
