@@ -42,9 +42,10 @@ class SolidTextPage extends Component<SolidTextStateType> {
           <button class="key_button" id="left">left</button>
           <button class="key_button" id="right">right</button>
         </div>
-        <div class="area_display">
-          <table class="display"></table>
-        </div>
+        <canvas id="canvas" width="1800" height="1800"></canvas>
+<!--        <div class="area_display">-->
+<!--          <table class="display"></table>-->
+<!--        </div>-->
       </div>
     `;
   }
@@ -61,8 +62,6 @@ class SolidTextPage extends Component<SolidTextStateType> {
   didMount() {
     this.clearDisplay();
     this.drawDonut();
-    // const area = document.querySelector('.area')!;
-
   }
 
   didUpdate() {
@@ -73,29 +72,30 @@ class SolidTextPage extends Component<SolidTextStateType> {
   }
 
   clearDisplay() {
-    const display = document.querySelector('.display')!;
-
-    for (var i=0; i<HEIGHT; i++) {
-      var tr = document.createElement('tr');
-      display.appendChild(tr);
-      for (var j=0; j<WIDTH; j++) {
-        var td = document.createElement('td');
-        // td.style.width = tdWidth+'px';
-        // td.style.height = tdHeight+'px';
-        tr.appendChild(td);
-        td.innerHTML = ' ';
-      }
-    }
+    // const display = document.querySelector('.display')!;
+    //
+    // for (var i=0; i<HEIGHT; i++) {
+    //   var tr = document.createElement('tr');
+    //   display.appendChild(tr);
+    //   for (var j=0; j<WIDTH; j++) {
+    //     var td = document.createElement('td');
+    //     // td.style.width = tdWidth+'px';
+    //     // td.style.height = tdHeight+'px';
+    //     tr.appendChild(td);
+    //     td.innerHTML = ' ';
+    //   }
+    // }
   }
 
-
-
   drawDonut() {
+    const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d')!;
+    ctx.font = "18px serif";
+    ctx.fillStyle = "white";
     let zArray = create2DArray(WIDTH, HEIGHT);
 
     for (var i = 0; i < THETA_NUM; i++) {
       for (var j = 0; j < PHI_NUM; j++) {
-        console.log('i: ', i, 'j: ', j);
         var theta = 2 * Math.PI * i / THETA_NUM;
         var phi = 2 * Math.PI * j / PHI_NUM;
 
@@ -138,11 +138,10 @@ class SolidTextPage extends Component<SolidTextStateType> {
           && zArray[r.getElement(0, 0)][r.getElement(0, 1)]<=r.getElement(0, 2)
         ) {
           zArray[r.getElement(0, 0)][r.getElement(0, 1)] = r.getElement(0, 2);
-          const selector: string = 'table tr:nth-child('+String(r.getElement(0, 0))+') td:nth-child('+String([r.getElement(0, 1)])+')';
-          let textField = document.querySelector(selector);
-          // console.log(textField);
-          textField!.innerHTML = CHAR[luminance];
-          // textField!.innerHTML = luminance.toString();
+          const x = r.getElement(0, 0);
+          const y = r.getElement(0, 1);
+          ctx.clearRect(x * 18, y * 18, 18, 18);
+          ctx.fillText(CHAR[luminance], x * 18, (y + 1) * 18);
         }
       }
     }
