@@ -1,8 +1,8 @@
 import Component, {StateType} from "@model/component";
 import * as Constant from "./constants";
-import {create2DArray, twoDArray} from "./function";
+import {create2DArray, getNormalVector, getRVector, IParameter, IRotate, twoDArray} from "./function";
 import "./style.scss";
-import Matrix, {rotateMatrixByX, rotateMatrixByY} from "./math/matrix";
+import Matrix from "./math/matrix";
 import Vector from "./math/vector";
 
 interface SolidTextStateType extends StateType {
@@ -10,7 +10,7 @@ interface SolidTextStateType extends StateType {
   rotateY: number,
 }
 
-const LIGHT = new Vector([0,0,1]);
+const LIGHT = new Vector([0, 0, 1]);
 const SIZE: number = 1920;
 
 class SolidTextPage extends Component<SolidTextStateType> {
@@ -67,47 +67,36 @@ class SolidTextPage extends Component<SolidTextStateType> {
       for (var j = 0; j < Constant.PHI_NUM; j++) {
         var theta = 2 * Math.PI * i / Constant.THETA_NUM;
         var phi = 2 * Math.PI * j / Constant.PHI_NUM;
+        const parameter: IParameter = {theta, phi};
+        const rotate: IRotate = {rotateX: this.state.rotateX, rotateY: this.state.rotateY};
 
-        var r: Matrix = new Matrix([[
-          Math.cos(phi) * (Constant.minorRadius * Math.cos(theta) + Constant.majorRadius),
-          Math.sin(phi) * (Constant.minorRadius * Math.cos(theta) + Constant.majorRadius),
-          Constant.minorRadius * Math.sin(theta)
-        ]]);
-
-        var normal: Vector = new Vector([
-          Math.cos(theta) * Math.cos(phi),
-          Math.cos(theta) * Math.sin(phi),
-          Math.sin(theta)
-        ]);
-
-        const rotateMatX: Matrix = rotateMatrixByX(this.state.rotateX);
-        const rotateMatZ: Matrix = rotateMatrixByY(this.state.rotateY);
-        r = r.crossProduct(rotateMatX).crossProduct(rotateMatZ);
-        normal = normal.crossProduct(rotateMatX).crossProduct(rotateMatZ);
+        let r = getRVector(parameter, rotate);
+        const normal = getNormalVector(parameter, rotate);
 
         var luminance = normal.dotProduct(LIGHT);
         // var luminance = dotProduct(normal, LIGHT);
-        var c = r.getElement(0, 2)/(Constant.majorRadius + Constant.minorRadius);
-        luminance = Math.floor(1+7.9*luminance+2.9*c);
+        var c = r.getElement(0, 2) / (Constant.majorRadius + Constant.minorRadius);
+        luminance = Math.floor(1 + 7.9 * luminance + 2.9 * c);
         // console.log(luminance);
         if (luminance < 0) continue;
         // luminance = Math.floor(11*luminance);
 
-        r = new Matrix([[
+        const rCanvas = new Matrix([[
           Math.floor(r.getElement(0, 0) + Constant.ROW / 2),
           Math.floor(r.getElement(0, 1) + Constant.COLUMN / 2),
           r.getElement(0, 2)
         ]]);
 
-        const x = r.getElement(0, 0);
-        const y = r.getElement(0, 1);
+        const x = rCanvas.getElement(0, 0);
+        const y = rCanvas.getElement(0, 1);
+        const z = rCanvas.getElement(0, 2);
 
-        if (0<r.getElement(0, 0)
-          && r.getElement(0, 0)<Constant.COLUMN
-          && 0<r.getElement(0, 1) && r.getElement(0, 1) < Constant.ROW
-          && zArray[r.getElement(0, 0)][r.getElement(0, 1)]<=r.getElement(0, 2)
+        if (0 < x
+          && x < Constant.COLUMN
+          && 0 < y && y < Constant.ROW
+          && zArray[x][y] <= z
         ) {
-          zArray[x][y] = r.getElement(0, 2);
+          zArray[x][y] = z;
           luminanceArray[x][y] = luminance;
         }
       }
