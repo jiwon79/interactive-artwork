@@ -17,6 +17,10 @@ export default class Vector extends Matrix {
     return new Vector(this.elements[0].map((element) => element / scalar));
   }
 
+  public get length(): number {
+    return this.elements[0].length;
+  }
+
   public get magnitude(): number {
     return Math.sqrt(this.dotProduct(this));
   }

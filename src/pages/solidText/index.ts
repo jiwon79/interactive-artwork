@@ -1,6 +1,6 @@
 import Component, {StateType} from "@model/component";
 import * as Constant from "./constants";
-import {create2DArray, getNormalVector, getRVector, IParameter, IRotate, twoDArray} from "./function";
+import {create2DArray, getRotatedNormalVector, getRotatedRVector, IParameter, IRotate, twoDArray} from "./function";
 import "./style.scss";
 import Matrix from "./math/matrix";
 import Vector from "./math/vector";
@@ -70,8 +70,8 @@ class SolidTextPage extends Component<SolidTextStateType> {
         const parameter: IParameter = {theta, phi};
         const rotate: IRotate = {rotateX: this.state.rotateX, rotateY: this.state.rotateY};
 
-        let r = getRVector(parameter, rotate);
-        const normal = getNormalVector(parameter, rotate);
+        let r = getRotatedRVector(parameter, rotate);
+        const normal = getRotatedNormalVector(parameter, rotate);
 
         var luminance = normal.dotProduct(LIGHT);
         // var luminance = dotProduct(normal, LIGHT);

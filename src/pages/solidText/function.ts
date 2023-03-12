@@ -14,30 +14,47 @@ export interface IRotate {
   rotateY: number;
 }
 
-export function getRVector(parameter: IParameter, rotate: IRotate): Vector {
-  const r: Vector = new Vector([
-    Math.cos(parameter.phi) * (Constant.minorRadius * Math.cos(parameter.theta) + Constant.majorRadius),
-    Math.sin(parameter.phi) * (Constant.minorRadius * Math.cos(parameter.theta) + Constant.majorRadius),
-    Constant.minorRadius * Math.sin(parameter.theta)
+function getRVector(parameter: IParameter): Vector {
+  const {theta, phi} = parameter;
+
+  return new Vector([
+    Math.cos(phi) * (Constant.minorRadius * Math.cos(theta) + Constant.majorRadius),
+    Math.sin(phi) * (Constant.minorRadius * Math.cos(theta) + Constant.majorRadius),
+    Constant.minorRadius * Math.sin(theta)
   ]);
-
-  const rotateMatX: Matrix = rotateMatrixByX(rotate.rotateX);
-  const rotateMatZ: Matrix = rotateMatrixByY(rotate.rotateY);
-
-  return r.crossProduct(rotateMatX).crossProduct(rotateMatZ);
 }
 
-export function getNormalVector(parameter: IParameter, rotate: IRotate): Vector {
-  const normal: Vector = new Vector([
-    Math.cos(parameter.theta) * Math.cos(parameter.phi),
-    Math.cos(parameter.theta) * Math.sin(parameter.phi),
-    Math.sin(parameter.theta)
+function getNormalVector(parameter: IParameter): Vector {
+  const {theta, phi} = parameter;
+
+  return new Vector([
+    Math.cos(theta) * Math.cos(phi),
+    Math.cos(theta) * Math.sin(phi),
+    Math.sin(theta)
   ]);
+}
+
+function getRotatedVector(vector: Vector, rotate: IRotate): Vector {
+  if (vector.length != 3) {
+    throw new Error("length 3 의 vector 만 회전을 할 수 있습니다.");
+  }
 
   const rotateMatX: Matrix = rotateMatrixByX(rotate.rotateX);
   const rotateMatZ: Matrix = rotateMatrixByY(rotate.rotateY);
 
-  return normal.crossProduct(rotateMatX).crossProduct(rotateMatZ);
+  return vector.crossProduct(rotateMatX).crossProduct(rotateMatZ);
+}
+
+export function getRotatedRVector(parameter: IParameter, rotate: IRotate): Vector {
+  const r: Vector = getRVector(parameter);
+
+  return getRotatedVector(r, rotate);
+}
+
+export function getRotatedNormalVector(parameter: IParameter, rotate: IRotate): Vector {
+  const normal: Vector = getNormalVector(parameter);
+
+  return getRotatedVector(normal, rotate);
 }
 
 //////////////////////////// Matrix Function ///////////////////////////
