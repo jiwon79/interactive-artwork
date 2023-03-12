@@ -1,11 +1,9 @@
 import Component, {StateType} from "@model/component";
-import * as Constant from "@pages/solidText/constants";
-import {
-  create2DArray, twoDArray,
-} from "@pages/solidText/function";
+import * as Constant from "./constants";
+import {create2DArray, twoDArray} from "./function";
 import "./style.scss";
-import Matrix, {rotateMatrixByX, rotateMatrixByY} from "@pages/solidText/math/matrix";
-import Vector from "@pages/solidText/math/vector";
+import Matrix, {rotateMatrixByX, rotateMatrixByY} from "./math/matrix";
+import Vector from "./math/vector";
 
 interface SolidTextStateType extends StateType {
   rotateX: number,
@@ -61,23 +59,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
     this.drawDonut();
   }
 
-  drawCanvas(luminanceArray: twoDArray) {
-    const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d')!;
-    const fontSize: number = Math.floor(SIZE / Constant.ROW);
-    ctx.font = `${fontSize}px serif`;
-    ctx.fillStyle = "white";
-
-    luminanceArray.forEach((row, rowIndex) => {
-      row.forEach((luminance, columnIndex) => {
-        if (luminance > 0 && luminance < Constant.CHAR.length) {
-          ctx.fillText(Constant.CHAR[luminance], rowIndex * fontSize, (columnIndex + 1) * fontSize);
-        }
-      })
-    })
-  }
-
-  drawDonut() {
+  createLuminanceArray(): twoDArray {
     let zArray = create2DArray(Constant.ROW, Constant.COLUMN);
     let luminanceArray = create2DArray(Constant.ROW, Constant.COLUMN);
 
@@ -130,7 +112,30 @@ class SolidTextPage extends Component<SolidTextStateType> {
         }
       }
     }
-    this.drawCanvas(luminanceArray);
+
+    return luminanceArray
+  }
+
+  drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceArray: twoDArray) {
+    const fontSize: number = Math.floor(SIZE / Constant.ROW);
+    ctx.font = `${fontSize}px serif`;
+    ctx.fillStyle = "white";
+
+    luminanceArray.forEach((row, rowIndex) => {
+      row.forEach((luminance, columnIndex) => {
+        if (luminance > 0 && luminance < Constant.CHAR.length) {
+          ctx.fillText(Constant.CHAR[luminance], rowIndex * fontSize, (columnIndex + 1) * fontSize);
+        }
+      })
+    })
+  }
+
+  drawDonut() {
+    const luminanceArray = this.createLuminanceArray();
+    const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
+    const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
+
+    this.drawByLuminanceArray(ctx, luminanceArray);
   }
 }
 
