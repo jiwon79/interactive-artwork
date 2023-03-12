@@ -9,10 +9,11 @@ import {
   ROW
 } from "@pages/solidText/constants";
 import {
-  create2DArray, twoDArray, Vector,
+  create2DArray, twoDArray,
 } from "@pages/solidText/function";
 import "./style.scss";
 import Matrix, {rotateMatrixByX, rotateMatrixByY} from "@pages/solidText/math/matrix";
+import Vector from "@pages/solidText/math/vector";
 
 interface SolidTextStateType extends StateType {
   rotateX: number,
