@@ -7,7 +7,6 @@ import Matrix from "./math/matrix";
 interface SolidTextStateType extends StateType, IRotate {}
 
 
-const SIZE: number = 1920;
 
 class SolidTextPage extends Component<SolidTextStateType> {
   setUp() {
@@ -27,7 +26,11 @@ class SolidTextPage extends Component<SolidTextStateType> {
           <button class="key_button" id="left">left</button>
           <button class="key_button" id="right">right</button>
         </div>
-        <canvas id="canvas" width="${SIZE}" height="${SIZE}"></canvas>
+        <canvas
+            id="canvas"
+            width="${Constant.CANVAS_SIZE}"
+            height="${Constant.CANVAS_SIZE}"
+          />
       </div>
     `;
   }
@@ -68,12 +71,12 @@ class SolidTextPage extends Component<SolidTextStateType> {
   }
 
   drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceArray: Matrix) {
-    const fontSize: number = Math.floor(SIZE / Constant.ROW);
+    const fontSize: number = Math.floor(Constant.CANVAS_SIZE / Constant.MATRIX_SIZE);
     ctx.font = `${fontSize}px serif`;
     ctx.fillStyle = "white";
 
-    for (let i = 0; i < Constant.ROW; i++) {
-      for (let j = 0; j < Constant.COLUMN; j++) {
+    for (let i = 0; i < Constant.MATRIX_SIZE; i++) {
+      for (let j = 0; j < Constant.MATRIX_SIZE; j++) {
         const luminance = luminanceArray.getElement(i, j);
         if (luminance > 0 && luminance < Constant.CHAR.length) {
           ctx.fillText(Constant.CHAR[luminance], i * fontSize, j * fontSize);

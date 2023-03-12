@@ -1,7 +1,5 @@
-export const ROW = 100;
-export const COLUMN = 100;
-export const tdWidth = 18;
-export const tdHeight = 18;
+export const CANVAS_SIZE: number = 1920;
+export const MATRIX_SIZE = 100;
 
 export const THETA_NUM = 100;
 export const PHI_NUM = 300;

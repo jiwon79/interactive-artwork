@@ -15,8 +15,8 @@ export interface IRotate {
 const LIGHT = new Vector([0, 0, 1]).unit;
 
 export function createLuminanceArray(rotate: IRotate): Matrix {
-  let zArray = Matrix.createByRowAndColumn(Constant.ROW, Constant.COLUMN);
-  let luminanceArray = Matrix.createByRowAndColumn(Constant.ROW, Constant.COLUMN);
+  let zArray = Matrix.createByRowAndColumn(Constant.MATRIX_SIZE, Constant.MATRIX_SIZE);
+  let luminanceArray = Matrix.createByRowAndColumn(Constant.MATRIX_SIZE, Constant.MATRIX_SIZE);
 
   for (let i = 0; i < Constant.THETA_NUM; i++) {
     for (let j = 0; j < Constant.PHI_NUM; j++) {
@@ -36,8 +36,8 @@ export function createLuminanceArray(rotate: IRotate): Matrix {
       // luminance = Math.floor(11*luminance);
 
       const rCanvas = new Matrix([[
-        Math.floor(r.getElement(0, 0) + Constant.ROW / 2),
-        Math.floor(r.getElement(0, 1) + Constant.COLUMN / 2),
+        Math.floor(r.getElement(0, 0) + Constant.MATRIX_SIZE / 2),
+        Math.floor(r.getElement(0, 1) + Constant.MATRIX_SIZE / 2),
         r.getElement(0, 2)
       ]]);
 
@@ -46,8 +46,8 @@ export function createLuminanceArray(rotate: IRotate): Matrix {
       const z = rCanvas.getElement(0, 2);
 
       if (0 < x
-        && x < Constant.COLUMN
-        && 0 < y && y < Constant.ROW
+        && x < Constant.MATRIX_SIZE
+        && 0 < y && y < Constant.MATRIX_SIZE
         && zArray.getElement(x, y) <= z
       ) {
         zArray.setElement(x, y, z);
