@@ -9,14 +9,14 @@ import {
   ROW
 } from "@pages/solidText/constants";
 import {
-  create2DArray,
-  Matrix, rotateMatrixByX, rotateMatrixByZ, twoDArray, Vector,
+  create2DArray, twoDArray, Vector,
 } from "@pages/solidText/function";
 import "./style.scss";
+import Matrix, {rotateMatrixByX, rotateMatrixByY} from "@pages/solidText/math/matrix";
 
 interface SolidTextStateType extends StateType {
   rotateX: number,
-  rotateZ: number,
+  rotateY: number,
 }
 
 const LIGHT = new Vector([0,0,1]);
@@ -26,7 +26,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
   setUp() {
     this.state = {
       rotateX: 0,
-      rotateZ: 0,
+      rotateY: 0,
     }
   }
 
@@ -47,10 +47,10 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
   setEvent() {
     this.addEvent('click', '.buttons #left', () => {
-      this.setState({rotateZ: this.state.rotateZ + 10});
+      this.setState({rotateY: this.state.rotateY + 10});
     });
     this.addEvent('click', '.buttons #right', () => {
-      this.setState({rotateZ: this.state.rotateZ - 10});
+      this.setState({rotateY: this.state.rotateY - 10});
     });
     this.addEvent('click', '.buttons #up', () => {
       this.setState({rotateX: this.state.rotateX + 10});
@@ -106,7 +106,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
         ]);
 
         const rotateMatX: Matrix = rotateMatrixByX(this.state.rotateX);
-        const rotateMatZ: Matrix = rotateMatrixByZ(this.state.rotateZ);
+        const rotateMatZ: Matrix = rotateMatrixByY(this.state.rotateY);
         r = r.crossProduct(rotateMatX).crossProduct(rotateMatZ);
         normal = normal.crossProduct(rotateMatX).crossProduct(rotateMatZ);
 
