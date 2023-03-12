@@ -13,12 +13,12 @@ export default class Vector extends Matrix {
     return super.crossProduct(other) as Vector;
   }
 
-  public divide (scalar: number): Vector {
-    return new Vector(this.elements[0].map((element) => element / scalar));
-  }
-
   public get length(): number {
     return this.elements[0].length;
+  }
+
+  public divide (scalar: number): Vector {
+    return new Vector(this.elements[0].map((element) => element / scalar));
   }
 
   public get magnitude(): number {
