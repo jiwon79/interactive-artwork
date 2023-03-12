@@ -21,9 +21,24 @@ export class Matrix {
     return this.elements[row][column];
   }
 
-  public product(other: Matrix): Matrix {
+  public dotProduct(other: Matrix): number {
+    if (this.rows !== other.rows || this.columns !== other.columns) {
+      throw new Error('row, column 이 같아야 합니다.');
+    }
+
+    let sum = 0;
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        sum += this.elements[i][j] * other.elements[i][j];
+      }
+    }
+
+    return sum;
+  }
+
+  public crossProduct(other: Matrix): Matrix {
     if (this.columns !== other.rows) {
-      throw new Error('Cannot perform matrix product with incompatible matrices');
+      throw new Error(`Cannot perform matrix product with incompatible matrices\nthis column : ${this.columns}, other row : ${other.rows}, other column : ${other.columns}`);
     }
 
     const result = new Matrix(
@@ -44,32 +59,33 @@ export class Matrix {
   }
 }
 
-//////////////////////////// Vector Function ///////////////////////////
-export type vector = number[];
+export class Vector extends Matrix {
+  constructor(elements: number[]) {
+    super([elements]);
+  }
+
+  public dotProduct(other: Vector): number {
+    return super.dotProduct(other);
+  }
+
+  public crossProduct(other: Matrix): Vector {
+    return super.crossProduct(other) as Vector;
+  }
+
+  public divide (scalar: number): Vector {
+    return new Vector(this.elements[0].map((element) => element / scalar));
+  }
+
+  public get magnitude(): number {
+    return Math.sqrt(this.dotProduct(this));
+  }
+
+  public get unit(): Vector {
+    return this.divide(this.magnitude);
+  }
+}
+
 export type twoDArray = number[][];
-
-export function getMagnitude(vec: vector): number {
-  let result: number = 0;
-  for (let i=0; i<vec.length; i++) {
-    result += vec[i]*vec[i]
-  }
-
-  return Math.sqrt(result)
-}
-
-export function unit(vec: vector): vector {
-  const magnitude = getMagnitude(vec);
-
-  return vec.map((v) => v / magnitude);
-}
-
-export function dotProduct(vec1: vector, vec2: vector): number {
-  if (vec1.length != vec2.length) {
-    throw new Error("vector length is not same");
-  }
-
-  return vec1.reduce((result, v, i) => result + v * vec2[i], 0);
-}
 
 //////////////////////////// Matrix Function ///////////////////////////
 export function create2DArray(rows: number, columns: number): twoDArray {

@@ -10,10 +10,7 @@ import {
 } from "@pages/solidText/constants";
 import {
   create2DArray,
-  dotProduct,
-  Matrix, rotateMatrixByX, rotateMatrixByZ, twoDArray,
-  unit,
-  vector
+  Matrix, rotateMatrixByX, rotateMatrixByZ, twoDArray, Vector,
 } from "@pages/solidText/function";
 import "./style.scss";
 
@@ -22,7 +19,7 @@ interface SolidTextStateType extends StateType {
   rotateZ: number,
 }
 
-const LIGHT = unit([0,0,1]);
+const LIGHT = new Vector([0,0,1]);
 const SIZE: number = 900;
 
 class SolidTextPage extends Component<SolidTextStateType> {
@@ -102,7 +99,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
           minorRadius * Math.sin(theta)
         ]]);
 
-        var normal: vector = unit([
+        var normal: Vector = new Vector([
           Math.cos(theta) * Math.cos(phi),
           Math.cos(theta) * Math.sin(phi),
           Math.sin(theta)
@@ -110,13 +107,11 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
         const rotateMatX: Matrix = rotateMatrixByX(this.state.rotateX);
         const rotateMatZ: Matrix = rotateMatrixByZ(this.state.rotateZ);
-        r = r.product(rotateMatX).product(rotateMatZ);
-        const normalMatrix: Matrix = new Matrix([normal]).product(rotateMatX).product(rotateMatZ);
-        normal = Array(normalMatrix.columns)
-          .fill(0)
-          .map((_, index) => normalMatrix.getElement(0, index));
+        r = r.crossProduct(rotateMatX).crossProduct(rotateMatZ);
+        normal = normal.crossProduct(rotateMatX).crossProduct(rotateMatZ);
 
-        var luminance = dotProduct(normal, LIGHT);
+        var luminance = normal.dotProduct(LIGHT);
+        // var luminance = dotProduct(normal, LIGHT);
         var c = r.getElement(0, 2)/(majorRadius + minorRadius);
         luminance = Math.floor(1+7.9*luminance+2.9*c);
         // console.log(luminance);
