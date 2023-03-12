@@ -57,20 +57,26 @@ export default class Matrix {
 
     return result;
   }
-}
 
-export function rotateMatrixByX(theta: number): Matrix {
-  return new Matrix([
-    [1, 0, 0],
-    [0, Math.cos(theta), -1*Math.sin(theta)],
-    [0, Math.sin(theta), Math.cos(theta)]
-  ]);
-}
+  static rotateMatrixByX(theta: number): Matrix {
+    return new Matrix([
+      [1, 0, 0],
+      [0, Math.cos(theta), -Math.sin(theta)],
+      [0, Math.sin(theta), Math.cos(theta)]
+    ]);
+  }
 
-export function rotateMatrixByY(theta: number): Matrix {
-  return new Matrix([
-    [Math.cos(theta), 0, -1*Math.sin(theta)],
-    [0, 1, 0],
-    [Math.sin(theta), 0, Math.cos(theta)]
-  ]);
+  static rotateMatrixByY(theta: number): Matrix {
+    return new Matrix([
+      [Math.cos(theta), 0, Math.sin(theta)],
+      [0, 1, 0],
+      [-Math.sin(theta), 0, Math.cos(theta)]
+    ]);
+  }
+
+  static createByRowAndColumn(rows: number, columns: number): Matrix {
+    return new Matrix(
+      Array(rows).fill(0).map(() => Array(columns).fill(-Infinity))
+    );
+  }
 }

@@ -1,6 +1,6 @@
 import Component, {StateType} from "@model/component";
 import * as Constant from "./constants";
-import {create2DArray, getRotatedNormalVector, getRotatedRVector, IParameter, IRotate, twoDArray} from "./function";
+import {getRotatedNormalVector, getRotatedRVector, IParameter, IRotate} from "./function";
 import "./style.scss";
 import Matrix from "./math/matrix";
 import Vector from "./math/vector";
@@ -59,14 +59,14 @@ class SolidTextPage extends Component<SolidTextStateType> {
     this.drawDonut();
   }
 
-  createLuminanceArray(): twoDArray {
-    let zArray = create2DArray(Constant.ROW, Constant.COLUMN);
-    let luminanceArray = create2DArray(Constant.ROW, Constant.COLUMN);
+  createLuminanceArray(): Matrix {
+    let zArray = Matrix.createByRowAndColumn(Constant.ROW, Constant.COLUMN);
+    let luminanceArray = Matrix.createByRowAndColumn(Constant.ROW, Constant.COLUMN);
 
-    for (var i = 0; i < Constant.THETA_NUM; i++) {
-      for (var j = 0; j < Constant.PHI_NUM; j++) {
-        var theta = 2 * Math.PI * i / Constant.THETA_NUM;
-        var phi = 2 * Math.PI * j / Constant.PHI_NUM;
+    for (let i = 0; i < Constant.THETA_NUM; i++) {
+      for (let j = 0; j < Constant.PHI_NUM; j++) {
+        const theta = 2 * Math.PI * i / Constant.THETA_NUM;
+        const phi = 2 * Math.PI * j / Constant.PHI_NUM;
         const parameter: IParameter = {theta, phi};
         const rotate: IRotate = {rotateX: this.state.rotateX, rotateY: this.state.rotateY};
 
@@ -94,10 +94,10 @@ class SolidTextPage extends Component<SolidTextStateType> {
         if (0 < x
           && x < Constant.COLUMN
           && 0 < y && y < Constant.ROW
-          && zArray[x][y] <= z
+          && zArray.getElement(x, y) <= z
         ) {
-          zArray[x][y] = z;
-          luminanceArray[x][y] = luminance;
+          zArray.setElement(x, y, z);
+          luminanceArray.setElement(x, y, luminance);
         }
       }
     }
@@ -105,18 +105,19 @@ class SolidTextPage extends Component<SolidTextStateType> {
     return luminanceArray
   }
 
-  drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceArray: twoDArray) {
+  drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceArray: Matrix) {
     const fontSize: number = Math.floor(SIZE / Constant.ROW);
     ctx.font = `${fontSize}px serif`;
     ctx.fillStyle = "white";
 
-    luminanceArray.forEach((row, rowIndex) => {
-      row.forEach((luminance, columnIndex) => {
+    for (let i = 0; i < Constant.ROW; i++) {
+      for (let j = 0; j < Constant.COLUMN; j++) {
+        const luminance = luminanceArray.getElement(i, j);
         if (luminance > 0 && luminance < Constant.CHAR.length) {
-          ctx.fillText(Constant.CHAR[luminance], rowIndex * fontSize, (columnIndex + 1) * fontSize);
+          ctx.fillText(Constant.CHAR[luminance], i * fontSize, j * fontSize);
         }
-      })
-    })
+      }
+    }
   }
 
   drawDonut() {
