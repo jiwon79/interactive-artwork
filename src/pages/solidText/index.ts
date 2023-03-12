@@ -20,7 +20,7 @@ interface SolidTextStateType extends StateType {
 }
 
 const LIGHT = new Vector([0,0,1]);
-const SIZE: number = 900;
+const SIZE: number = 1920;
 
 class SolidTextPage extends Component<SolidTextStateType> {
   setUp() {

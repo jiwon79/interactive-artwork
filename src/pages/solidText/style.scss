@@ -1,15 +1,4 @@
-.display {
-  //width: 1000px;
-  //height: 1000px;
-  table {
-    table-layout: fixed;
-  }
-
-  td {
-    width: 12px;
-    height: 12px;
-    font-size: 10px;
-    line-height: 0.8;
-    box-sizing: border-box;
-  }
+canvas {
+  width: 800px;
+  height: 800px;
 }
