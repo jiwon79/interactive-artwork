@@ -1,17 +1,17 @@
 import Component, {StateType} from "@model/component";
 import {
   CHAR,
-  HEIGHT,
+  COLUMN,
   minorRadius,
   majorRadius,
   PHI_NUM,
   THETA_NUM,
-  WIDTH
+  ROW
 } from "@pages/solidText/constants";
 import {
   create2DArray,
   dotProduct,
-  Matrix, rotateMatrixByX, rotateMatrixByZ,
+  Matrix, rotateMatrixByX, rotateMatrixByZ, twoDArray,
   unit,
   vector
 } from "@pages/solidText/function";
@@ -23,6 +23,7 @@ interface SolidTextStateType extends StateType {
 }
 
 const LIGHT = unit([0,0,1]);
+const SIZE: number = 900;
 
 class SolidTextPage extends Component<SolidTextStateType> {
   setUp() {
@@ -42,10 +43,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
           <button class="key_button" id="left">left</button>
           <button class="key_button" id="right">right</button>
         </div>
-        <canvas id="canvas" width="1800" height="1800"></canvas>
-<!--        <div class="area_display">-->
-<!--          <table class="display"></table>-->
-<!--        </div>-->
+        <canvas id="canvas" width="${SIZE}" height="${SIZE}"></canvas>
       </div>
     `;
   }
@@ -73,12 +71,25 @@ class SolidTextPage extends Component<SolidTextStateType> {
     this.drawDonut();
   }
 
-  drawDonut() {
+  drawCanvas(luminanceArray: twoDArray) {
     const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d')!;
-    ctx.font = "18px serif";
+    const fontSize: number = Math.floor(SIZE / ROW);
+    ctx.font = `${fontSize}px serif`;
     ctx.fillStyle = "white";
-    let zArray = create2DArray(WIDTH, HEIGHT);
+
+    luminanceArray.forEach((row, rowIndex) => {
+      row.forEach((luminance, columnIndex) => {
+        if (luminance > 0 && luminance < CHAR.length) {
+          ctx.fillText(CHAR[luminance], rowIndex * fontSize, (columnIndex + 1) * fontSize);
+        }
+      })
+    })
+  }
+
+  drawDonut() {
+    let zArray = create2DArray(ROW, COLUMN);
+    let luminanceArray = create2DArray(ROW, COLUMN);
 
     for (var i = 0; i < THETA_NUM; i++) {
       for (var j = 0; j < PHI_NUM; j++) {
@@ -113,24 +124,25 @@ class SolidTextPage extends Component<SolidTextStateType> {
         // luminance = Math.floor(11*luminance);
 
         r = new Matrix([[
-          Math.floor(r.getElement(0, 0) + WIDTH / 2),
-          Math.floor(r.getElement(0, 1) + HEIGHT / 2),
+          Math.floor(r.getElement(0, 0) + ROW / 2),
+          Math.floor(r.getElement(0, 1) + COLUMN / 2),
           r.getElement(0, 2)
         ]]);
 
+        const x = r.getElement(0, 0);
+        const y = r.getElement(0, 1);
+
         if (0<r.getElement(0, 0)
-          && r.getElement(0, 0)<HEIGHT
-          && 0<r.getElement(0, 1) && r.getElement(0, 1) < WIDTH
+          && r.getElement(0, 0)<COLUMN
+          && 0<r.getElement(0, 1) && r.getElement(0, 1) < ROW
           && zArray[r.getElement(0, 0)][r.getElement(0, 1)]<=r.getElement(0, 2)
         ) {
-          zArray[r.getElement(0, 0)][r.getElement(0, 1)] = r.getElement(0, 2);
-          const x = r.getElement(0, 0);
-          const y = r.getElement(0, 1);
-          ctx.clearRect(x * 18, y * 18, 18, 18);
-          ctx.fillText(CHAR[luminance], x * 18, (y + 1) * 18);
+          zArray[x][y] = r.getElement(0, 2);
+          luminanceArray[x][y] = luminance;
         }
       }
     }
+    this.drawCanvas(luminanceArray);
   }
 }
 
