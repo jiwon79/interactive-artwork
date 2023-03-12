@@ -1,13 +1,5 @@
 import Component, {StateType} from "@model/component";
-import {
-  CHAR,
-  COLUMN,
-  minorRadius,
-  majorRadius,
-  PHI_NUM,
-  THETA_NUM,
-  ROW
-} from "@pages/solidText/constants";
+import * as Constant from "@pages/solidText/constants";
 import {
   create2DArray, twoDArray,
 } from "@pages/solidText/function";
@@ -72,32 +64,32 @@ class SolidTextPage extends Component<SolidTextStateType> {
   drawCanvas(luminanceArray: twoDArray) {
     const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d')!;
-    const fontSize: number = Math.floor(SIZE / ROW);
+    const fontSize: number = Math.floor(SIZE / Constant.ROW);
     ctx.font = `${fontSize}px serif`;
     ctx.fillStyle = "white";
 
     luminanceArray.forEach((row, rowIndex) => {
       row.forEach((luminance, columnIndex) => {
-        if (luminance > 0 && luminance < CHAR.length) {
-          ctx.fillText(CHAR[luminance], rowIndex * fontSize, (columnIndex + 1) * fontSize);
+        if (luminance > 0 && luminance < Constant.CHAR.length) {
+          ctx.fillText(Constant.CHAR[luminance], rowIndex * fontSize, (columnIndex + 1) * fontSize);
         }
       })
     })
   }
 
   drawDonut() {
-    let zArray = create2DArray(ROW, COLUMN);
-    let luminanceArray = create2DArray(ROW, COLUMN);
+    let zArray = create2DArray(Constant.ROW, Constant.COLUMN);
+    let luminanceArray = create2DArray(Constant.ROW, Constant.COLUMN);
 
-    for (var i = 0; i < THETA_NUM; i++) {
-      for (var j = 0; j < PHI_NUM; j++) {
-        var theta = 2 * Math.PI * i / THETA_NUM;
-        var phi = 2 * Math.PI * j / PHI_NUM;
+    for (var i = 0; i < Constant.THETA_NUM; i++) {
+      for (var j = 0; j < Constant.PHI_NUM; j++) {
+        var theta = 2 * Math.PI * i / Constant.THETA_NUM;
+        var phi = 2 * Math.PI * j / Constant.PHI_NUM;
 
         var r: Matrix = new Matrix([[
-          Math.cos(phi) * (minorRadius * Math.cos(theta) + majorRadius),
-          Math.sin(phi) * (minorRadius * Math.cos(theta) + majorRadius),
-          minorRadius * Math.sin(theta)
+          Math.cos(phi) * (Constant.minorRadius * Math.cos(theta) + Constant.majorRadius),
+          Math.sin(phi) * (Constant.minorRadius * Math.cos(theta) + Constant.majorRadius),
+          Constant.minorRadius * Math.sin(theta)
         ]]);
 
         var normal: Vector = new Vector([
@@ -113,15 +105,15 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
         var luminance = normal.dotProduct(LIGHT);
         // var luminance = dotProduct(normal, LIGHT);
-        var c = r.getElement(0, 2)/(majorRadius + minorRadius);
+        var c = r.getElement(0, 2)/(Constant.majorRadius + Constant.minorRadius);
         luminance = Math.floor(1+7.9*luminance+2.9*c);
         // console.log(luminance);
         if (luminance < 0) continue;
         // luminance = Math.floor(11*luminance);
 
         r = new Matrix([[
-          Math.floor(r.getElement(0, 0) + ROW / 2),
-          Math.floor(r.getElement(0, 1) + COLUMN / 2),
+          Math.floor(r.getElement(0, 0) + Constant.ROW / 2),
+          Math.floor(r.getElement(0, 1) + Constant.COLUMN / 2),
           r.getElement(0, 2)
         ]]);
 
@@ -129,8 +121,8 @@ class SolidTextPage extends Component<SolidTextStateType> {
         const y = r.getElement(0, 1);
 
         if (0<r.getElement(0, 0)
-          && r.getElement(0, 0)<COLUMN
-          && 0<r.getElement(0, 1) && r.getElement(0, 1) < ROW
+          && r.getElement(0, 0)<Constant.COLUMN
+          && 0<r.getElement(0, 1) && r.getElement(0, 1) < Constant.ROW
           && zArray[r.getElement(0, 0)][r.getElement(0, 1)]<=r.getElement(0, 2)
         ) {
           zArray[x][y] = r.getElement(0, 2);
