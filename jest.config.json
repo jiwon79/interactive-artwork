@@ -2,7 +2,12 @@
   "roots": ["<rootDir>/"],
   "testEnvironment": "jsdom",
   "moduleNameMapper": {
-    "\\.(css|less|svg)$": "identity-obj-proxy"
+    "\\.(css|less|svg)$": "identity-obj-proxy",
+    "^@/(.*)$": "<rootDir>/$1",
+    "^@src/(.*)$": "<rootDir>/src/$1",
+    "^@pages/(.*)$": "<rootDir>/src/pages/$1",
+    "^@model/(.*)$": "<rootDir>/src/model/$1",
+    "^@public/(.*)$": "<rootDir>/public/$1"
   },
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
