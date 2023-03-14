@@ -21,6 +21,22 @@ export default class Matrix {
     return this.elements[row][column];
   }
 
+  public equal(other: Matrix): boolean {
+    if (this.rows !== other.rows || this.columns !== other.columns) {
+      return false;
+    }
+
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        if (this.elements[i][j] !== other.elements[i][j]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   public dotProduct(other: Matrix): number {
     if (this.rows !== other.rows || this.columns !== other.columns) {
       throw new Error('row, column 이 같아야 합니다.');
