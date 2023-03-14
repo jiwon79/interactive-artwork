@@ -1,5 +1,5 @@
 import Matrix from "./math/matrix";
-import Vector from "./math/vector";
+import Vector, {getRotatedNormalVector, getRotatedRVector} from "./math/vector";
 import * as Constant from "./constants";
 
 export interface IParameter {
@@ -11,6 +11,20 @@ export interface IRotate {
   rotateX: number;
   rotateY: number;
 }
+
+// class SolidText {
+//   public size: number;
+//   public zMatrix: Matrix;
+//   public luminanceMatrix: Matrix;
+//
+//   constructor(size: number) {
+//     this.size = Constant.MATRIX_SIZE;
+//     this.zMatrix = Matrix.createByRowAndColumn(size, size);
+//     this.luminanceMatrix = Matrix.createByRowAndColumn(size, size);
+//   }
+//
+//
+// }
 
 const LIGHT = new Vector([0, 0, 1]).unit;
 
@@ -27,13 +41,8 @@ export function createLuminanceArray(rotate: IRotate): Matrix {
       let r = getRotatedRVector(parameter, rotate);
       const normal = getRotatedNormalVector(parameter, rotate);
 
-      var luminance = normal.dotProduct(LIGHT);
-      // var luminance = dotProduct(normal, LIGHT);
-      var c = r.getElement(0, 2) / (Constant.majorRadius + Constant.minorRadius);
-      luminance = Math.floor(1 + 7.9 * luminance + 2.9 * c);
-      // console.log(luminance);
+      const luminance = calculateLuminance(r, normal);
       if (luminance < 0) continue;
-      // luminance = Math.floor(11*luminance);
 
       const rCanvas = new Matrix([[
         Math.floor(r.getElement(0, 0) + Constant.MATRIX_SIZE / 2),
@@ -59,45 +68,10 @@ export function createLuminanceArray(rotate: IRotate): Matrix {
   return luminanceArray
 }
 
-export function getRotatedRVector(parameter: IParameter, rotate: IRotate): Vector {
-  const r: Vector = getRVector(parameter);
+function calculateLuminance(r: Vector, normal: Vector): number {
+  let luminance = normal.dotProduct(LIGHT);
+  // var luminance = dotProduct(normal, LIGHT);
+  let c = r.getElement(0, 2) / (Constant.majorRadius + Constant.minorRadius);
 
-  return getRotatedVector(r, rotate);
-}
-
-export function getRotatedNormalVector(parameter: IParameter, rotate: IRotate): Vector {
-  const normal: Vector = getNormalVector(parameter);
-
-  return getRotatedVector(normal, rotate);
-}
-
-function getRotatedVector(vector: Vector, rotate: IRotate): Vector {
-  if (vector.length != 3) {
-    throw new Error("length 3 의 vector 만 회전을 할 수 있습니다.");
-  }
-
-  const rotateMatX: Matrix = Matrix.rotateMatrixByX(rotate.rotateX);
-  const rotateMatZ: Matrix = Matrix.rotateMatrixByY(rotate.rotateY);
-
-  return vector.crossProduct(rotateMatX).crossProduct(rotateMatZ);
-}
-
-function getRVector(parameter: IParameter): Vector {
-  const {theta, phi} = parameter;
-
-  return new Vector([
-    Math.cos(phi) * (Constant.minorRadius * Math.cos(theta) + Constant.majorRadius),
-    Math.sin(phi) * (Constant.minorRadius * Math.cos(theta) + Constant.majorRadius),
-    Constant.minorRadius * Math.sin(theta)
-  ]);
-}
-
-function getNormalVector(parameter: IParameter): Vector {
-  const {theta, phi} = parameter;
-
-  return new Vector([
-    Math.cos(theta) * Math.cos(phi),
-    Math.cos(theta) * Math.sin(phi),
-    Math.sin(theta)
-  ]);
+  return Math.floor(1 + 7.9 * luminance + 2.9 * c);
 }

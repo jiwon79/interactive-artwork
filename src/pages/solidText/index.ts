@@ -6,8 +6,6 @@ import Matrix from "./math/matrix";
 
 interface SolidTextStateType extends StateType, IRotate {}
 
-
-
 class SolidTextPage extends Component<SolidTextStateType> {
   setUp() {
     this.state = {
