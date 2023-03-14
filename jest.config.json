@@ -1,0 +1,10 @@
+{
+  "roots": ["<rootDir>/"],
+  "testEnvironment": "jsdom",
+  "moduleNameMapper": {
+    "\\.(css|less|svg)$": "identity-obj-proxy"
+  },
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  }
+}
