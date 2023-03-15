@@ -44,7 +44,10 @@ export function getRotatedNormalVector(parameter: IParameter, rotate: IRotate): 
   return getRotatedVector(normal, rotate);
 }
 
-function getRotatedVector(vector: Vector, rotate: IRotate): Vector {
+/// rotateX : z -> y 로 회전
+///
+/// rotateY : x -> z 로 회전
+export function getRotatedVector(vector: Vector, rotate: IRotate): Vector {
   if (vector.length != 3) {
     throw new Error("length 3 의 vector 만 회전을 할 수 있습니다.");
   }
