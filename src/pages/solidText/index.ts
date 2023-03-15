@@ -1,10 +1,12 @@
 import Component, {StateType} from "@model/component";
 import * as Constant from "./constants";
-import {createLuminanceArray, IRotate} from "./function";
+import SolidTextViewModel, {IRotate} from "./viewModel";
 import "./style.scss";
 import Matrix from "./math/matrix";
 
 interface SolidTextStateType extends StateType, IRotate {}
+
+const solidTextViewModel = new SolidTextViewModel(Constant.MATRIX_SIZE);
 
 class SolidTextPage extends Component<SolidTextStateType> {
   setUp() {
@@ -61,11 +63,12 @@ class SolidTextPage extends Component<SolidTextStateType> {
       rotateX: this.state.rotateX,
       rotateY: this.state.rotateY,
     }
-    const luminanceArray = createLuminanceArray(rotate);
+    solidTextViewModel.updateLuminanceMatrix(rotate);
+    const luminanceMatrix = solidTextViewModel.getLuminanceMatrix();
     const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
     const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
 
-    this.drawByLuminanceArray(ctx, luminanceArray);
+    this.drawByLuminanceArray(ctx, luminanceMatrix);
   }
 
   drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceArray: Matrix) {

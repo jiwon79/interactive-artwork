@@ -21,6 +21,10 @@ export default class Matrix {
     return this.elements[row][column];
   }
 
+  public clear(): void {
+    this.elements = this.elements.map((row) => row.map(() => -Infinity));
+  }
+
   public equal(other: Matrix): boolean {
     if (this.rows !== other.rows || this.columns !== other.columns) {
       return false;

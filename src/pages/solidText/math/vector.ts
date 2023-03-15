@@ -1,6 +1,6 @@
 import Matrix from "./matrix";
 import * as Constant from "@pages/solidText/constants";
-import {IParameter, IRotate} from "@pages/solidText/function";
+import {IParameter, IRotate} from "@pages/solidText/viewModel";
 
 export default class Vector extends Matrix {
   constructor(elements: number[]) {
