@@ -15,6 +15,13 @@ describe('Matrix', () => {
     expect(a.equal(b)).toBe(false);
   });
 
+  test("Matrix similar", () => {
+    const a: Matrix = new Matrix([[1, 2], [3, 4]]);
+    const b: Matrix = new Matrix([[1.0001, 2.0001], [3.0001, 4.0001]]);
+
+    expect(a.similar(b, 0.001)).toBe(true);
+  });
+
   test("Matrix get element", () => {
     const a: Matrix = new Matrix([[1, 2, 3], [4, 5, 6]]);
 
