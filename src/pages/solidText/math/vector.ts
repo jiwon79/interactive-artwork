@@ -7,12 +7,20 @@ export default class Vector extends Matrix {
     super([elements]);
   }
 
+  static fromMatrix(matrix: Matrix): Vector {
+    if (matrix.rows != 1) {
+      throw new Error("row 가 1이 아닌 matrix 를 vector 로 변환할 수 없습니다.");
+    }
+
+    return new Vector(matrix.elements[0]);
+  }
+
   public dotProduct(other: Vector): number {
     return super.dotProduct(other);
   }
 
   public crossProduct(other: Matrix): Vector {
-    return super.crossProduct(other) as Vector;
+    return Vector.fromMatrix(super.crossProduct(other));
   }
 
   public get length(): number {
