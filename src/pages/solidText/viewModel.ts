@@ -45,32 +45,35 @@ export default class SolidTextViewModel {
         const phi = 2 * Math.PI * j / Constant.PHI_NUM;
         const parameter: IParameter = {theta, phi};
 
-        let r = getRotatedRVector(parameter, this.rotate);
-        const normal = getRotatedNormalVector(parameter, this.rotate);
+        let rVector = getRotatedRVector(parameter, this.rotate);
+        const normalVector = getRotatedNormalVector(parameter, this.rotate);
 
-        const luminance = this.calculateLuminance(r, normal);
+        const luminance = this.calculateLuminance(rVector, normalVector);
         if (luminance < 0) continue;
 
-        const rCanvas = new Matrix([[
-          Math.floor(r.getElement(0, 0) + Constant.MATRIX_SIZE / 2),
-          Math.floor(r.getElement(0, 1) + Constant.MATRIX_SIZE / 2),
-          r.getElement(0, 2)
-        ]]);
+        const rCanvasVector = new Vector([
+          Math.floor(rVector.x + Constant.MATRIX_SIZE / 2),
+          Math.floor(rVector.y + Constant.MATRIX_SIZE / 2),
+          rVector.z
+        ]);
 
-        const x = rCanvas.getElement(0, 0);
-        const y = rCanvas.getElement(0, 1);
-        const z = rCanvas.getElement(0, 2);
-
-        if (0 < x
-          && x < Constant.MATRIX_SIZE
-          && 0 < y && y < Constant.MATRIX_SIZE
-          && this.zMatrix.getElement(x, y) <= z
-        ) {
-          this.zMatrix.setElement(x, y, z);
-          this.luminanceMatrix.setElement(x, y, luminance);
+        if (this.isUpdateLuminanceMatrix(rCanvasVector)) {
+          this.zMatrix.setElement(rCanvasVector.x, rCanvasVector.y, rCanvasVector.z);
+          this.luminanceMatrix.setElement(rCanvasVector.x, rCanvasVector.y, luminance);
         }
       }
     }
+  }
+
+  isUpdateLuminanceMatrix(rCanvasVector: Vector): boolean {
+    const x = rCanvasVector.x;
+    const y = rCanvasVector.y;
+    const z = rCanvasVector.z;
+
+    return 0 < x
+      && x < Constant.MATRIX_SIZE
+      && 0 < y && y < Constant.MATRIX_SIZE
+      && this.zMatrix.getElement(x, y) <= z;
   }
 
   calculateLuminance(r: Vector, normal: Vector): number {
