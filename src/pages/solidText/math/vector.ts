@@ -30,6 +30,21 @@ export default class Vector extends Matrix {
   public get unit(): Vector {
     return this.divide(this.magnitude);
   }
+
+  public get x(): number {
+    if (this.length != 3) throw new Error("length 가 3이 아닌 vector 에서는 x 값을 가져올 수 없습니다.");
+    return this.elements[0][0];
+  }
+
+  public get y(): number {
+    if (this.length != 3) throw new Error("length 가 3이 아닌 vector 에서는 y 값을 가져올 수 없습니다.");
+    return this.elements[0][1];
+  }
+
+  public get z(): number {
+    if (this.length != 3) throw new Error("length 가 3이 아닌 vector 에서는 z 값을 가져올 수 없습니다.");
+    return this.elements[0][2];
+  }
 }
 
 export function getRotatedRVector(parameter: IParameter, rotate: IRotate): Vector {
