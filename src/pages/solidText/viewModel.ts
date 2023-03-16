@@ -15,11 +15,13 @@ export interface IRotate {
 export default class SolidTextViewModel {
   static LIGHT = new Vector([0, 0, 1]).unit;
   public size: number;
+  private rotate: IRotate;
   private zMatrix: Matrix;
   private luminanceMatrix: Matrix;
 
   constructor(size: number) {
     this.size = Constant.MATRIX_SIZE;
+    this.rotate = {rotateX: 0, rotateY: 0};
     this.zMatrix = Matrix.createByRowAndColumn(size, size);
     this.luminanceMatrix = Matrix.createByRowAndColumn(size, size);
   }
@@ -28,7 +30,12 @@ export default class SolidTextViewModel {
     return this.luminanceMatrix;
   }
 
-  public updateLuminanceMatrix(rotate: IRotate) {
+  public addRotate(rotate: IRotate) {
+    this.rotate.rotateX += rotate.rotateX;
+    this.rotate.rotateY += rotate.rotateY;
+  }
+
+  public updateLuminanceMatrix() {
     this.zMatrix.clear();
     this.luminanceMatrix.clear();
 
@@ -38,8 +45,8 @@ export default class SolidTextViewModel {
         const phi = 2 * Math.PI * j / Constant.PHI_NUM;
         const parameter: IParameter = {theta, phi};
 
-        let r = getRotatedRVector(parameter, rotate);
-        const normal = getRotatedNormalVector(parameter, rotate);
+        let r = getRotatedRVector(parameter, this.rotate);
+        const normal = getRotatedNormalVector(parameter, this.rotate);
 
         const luminance = this.calculateLuminance(r, normal);
         if (luminance < 0) continue;
@@ -67,9 +74,8 @@ export default class SolidTextViewModel {
   }
 
   calculateLuminance(r: Vector, normal: Vector): number {
-    let luminance = normal.dotProduct(SolidTextViewModel.LIGHT);
-    // var luminance = dotProduct(normal, LIGHT);
-    let c = r.getElement(0, 2) / (Constant.majorRadius + Constant.minorRadius);
+    const luminance = normal.dotProduct(SolidTextViewModel.LIGHT);
+    const c = r.getElement(0, 2) / (Constant.majorRadius + Constant.minorRadius);
 
     return Math.floor(1 + 7.9 * luminance + 2.9 * c);
   }

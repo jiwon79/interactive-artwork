@@ -9,12 +9,7 @@ interface SolidTextStateType extends StateType, IRotate {}
 const solidTextViewModel = new SolidTextViewModel(Constant.MATRIX_SIZE);
 
 class SolidTextPage extends Component<SolidTextStateType> {
-  setUp() {
-    this.state = {
-      rotateX: 0,
-      rotateY: 0,
-    }
-  }
+  public ctx!: CanvasRenderingContext2D;
 
   template(): string {
     return `
@@ -37,49 +32,48 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
   setEvent() {
     this.addEvent('click', '.buttons #left', () => {
-      this.setState({rotateY: this.state.rotateY + 10});
+      solidTextViewModel.addRotate({rotateX: 0, rotateY: 10});
+      this.drawDonut();
     });
     this.addEvent('click', '.buttons #right', () => {
-      this.setState({rotateY: this.state.rotateY - 10});
+      solidTextViewModel.addRotate({rotateX: 0, rotateY: -10});
+      this.drawDonut();
     });
     this.addEvent('click', '.buttons #up', () => {
-      this.setState({rotateX: this.state.rotateX + 10});
+      solidTextViewModel.addRotate({rotateX: 10, rotateY: 0});
+      this.drawDonut();
     });
     this.addEvent('click', '.buttons #down', () => {
-      this.setState({rotateX: this.state.rotateX - 10});
+      solidTextViewModel.addRotate({rotateX: -10, rotateY: 0});
+      this.drawDonut();
     });
   }
 
   didMount() {
-    this.drawDonut();
-  }
-
-  didUpdate() {
+    const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
+    this.ctx = canvas.getContext('2d')!;
     this.drawDonut();
   }
 
   drawDonut() {
-    const rotate: IRotate = {
-      rotateX: this.state.rotateX,
-      rotateY: this.state.rotateY,
-    }
-    solidTextViewModel.updateLuminanceMatrix(rotate);
+    solidTextViewModel.updateLuminanceMatrix();
     const luminanceMatrix = solidTextViewModel.getLuminanceMatrix();
     const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
-    const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d')!;
 
     this.drawByLuminanceArray(ctx, luminanceMatrix);
   }
 
-  drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceArray: Matrix) {
+  drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceMatrix: Matrix) {
     const fontSize: number = Math.floor(Constant.CANVAS_SIZE / Constant.MATRIX_SIZE);
     ctx.font = `${fontSize}px serif`;
     ctx.fillStyle = "white";
+    ctx.clearRect(0, 0, Constant.CANVAS_SIZE, Constant.CANVAS_SIZE)
 
-    for (let i = 0; i < Constant.MATRIX_SIZE; i++) {
-      for (let j = 0; j < Constant.MATRIX_SIZE; j++) {
-        const luminance = luminanceArray.getElement(i, j);
-        if (luminance > 0 && luminance < Constant.CHAR.length) {
+    for (let i = 0; i < luminanceMatrix.rows; i++) {
+      for (let j = 0; j < luminanceMatrix.columns; j++) {
+        const luminance = luminanceMatrix.getElement(i, j);
+        if (luminance >= 0 && luminance < Constant.CHAR.length) {
           ctx.fillText(Constant.CHAR[luminance], i * fontSize, j * fontSize);
         }
       }
