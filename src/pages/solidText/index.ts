@@ -1,8 +1,8 @@
 import Component, {StateType} from "@model/component";
-import * as Constant from "./constants";
 import SolidTextViewModel from "./viewModel";
-import "./style.scss";
 import Matrix from "./math/matrix";
+import * as Constant from "./constants";
+import "./style.scss";
 
 interface SolidTextStateType extends StateType {
   canvasSize: number;
@@ -54,6 +54,17 @@ class SolidTextPage extends Component<SolidTextStateType> {
       solidTextViewModel.addRotate({rotateX: -10, rotateY: 0});
       this.drawDonut();
     });
+    // // @ts-ignore
+    // this.addEvent("mousemove", "#canvas", (e: MouseEvent) => {
+    //   const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
+    //   const x = e.clientX - rect.left;
+    //   const y = e.clientY - rect.top;
+    //   console.log(x, y)
+    //   // const rotateX = (y - Constant.MATRIX_SIZE / 2) / 10;
+    //   // const rotateY = (x - Constant.MATRIX_SIZE / 2) / 10;
+    //   // solidTextViewModel.addRotate({rotateX, rotateY});
+    //   // this.drawDonut();
+    // });
   }
 
   didMount() {

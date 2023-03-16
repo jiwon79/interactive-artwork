@@ -45,7 +45,7 @@ export default class SolidTextViewModel {
         const phi = 2 * Math.PI * j / Constant.PHI_NUM;
         const parameter: IParameter = {theta, phi};
 
-        let rVector = getRotatedRVector(parameter, this.rotate);
+        const rVector: Vector = getRotatedRVector(parameter, this.rotate);
         const normalVector = getRotatedNormalVector(parameter, this.rotate);
 
         const luminance = this.calculateLuminance(rVector, normalVector);
@@ -70,8 +70,7 @@ export default class SolidTextViewModel {
     const y = rCanvasVector.y;
     const z = rCanvasVector.z;
 
-    return 0 < x
-      && x < Constant.MATRIX_SIZE
+    return 0 < x && x < Constant.MATRIX_SIZE
       && 0 < y && y < Constant.MATRIX_SIZE
       && this.zMatrix.getElement(x, y) <= z;
   }
