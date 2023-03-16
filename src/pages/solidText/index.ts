@@ -1,15 +1,22 @@
 import Component, {StateType} from "@model/component";
 import * as Constant from "./constants";
-import SolidTextViewModel, {IRotate} from "./viewModel";
+import SolidTextViewModel from "./viewModel";
 import "./style.scss";
 import Matrix from "./math/matrix";
 
-interface SolidTextStateType extends StateType, IRotate {}
+interface SolidTextStateType extends StateType {
+  canvasSize: number;
+}
 
 const solidTextViewModel = new SolidTextViewModel(Constant.MATRIX_SIZE);
+let ctx: CanvasRenderingContext2D;
 
 class SolidTextPage extends Component<SolidTextStateType> {
-  public ctx!: CanvasRenderingContext2D;
+  setUp() {
+    this.state = {
+      canvasSize: Constant.CANVAS_SIZE
+    };
+  }
 
   template(): string {
     return `
@@ -23,8 +30,8 @@ class SolidTextPage extends Component<SolidTextStateType> {
         </div>
         <canvas
             id="canvas"
-            width="${Constant.CANVAS_SIZE}"
-            height="${Constant.CANVAS_SIZE}"
+            width="${this.state.canvasSize}"
+            height="${this.state.canvasSize}"
           />
       </div>
     `;
@@ -51,24 +58,22 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
   didMount() {
     const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
-    this.ctx = canvas.getContext('2d')!;
+    ctx = canvas.getContext('2d')!;
     this.drawDonut();
   }
 
   drawDonut() {
     solidTextViewModel.updateLuminanceMatrix();
     const luminanceMatrix = solidTextViewModel.getLuminanceMatrix();
-    const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d')!;
 
     this.drawByLuminanceArray(ctx, luminanceMatrix);
   }
 
   drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceMatrix: Matrix) {
-    const fontSize: number = Math.floor(Constant.CANVAS_SIZE / Constant.MATRIX_SIZE);
+    const fontSize: number = Math.floor(this.state.canvasSize / Constant.MATRIX_SIZE);
     ctx.font = `${fontSize}px serif`;
     ctx.fillStyle = "white";
-    ctx.clearRect(0, 0, Constant.CANVAS_SIZE, Constant.CANVAS_SIZE)
+    ctx.clearRect(0, 0, this.state.canvasSize, this.state.canvasSize)
 
     for (let i = 0; i < luminanceMatrix.rows; i++) {
       for (let j = 0; j < luminanceMatrix.columns; j++) {
