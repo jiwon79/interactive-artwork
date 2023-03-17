@@ -62,7 +62,9 @@ class SolidTextPage extends Component<SolidTextStateType> {
       const rotateX = (y - Constant.MATRIX_SIZE / 2) / 10000;
       const rotateY = (x - Constant.MATRIX_SIZE / 2) / 10000;
       solidTextViewModel.addRotate({rotateX, rotateY});
-      this.drawDonut();
+      if (solidTextViewModel.isOverThreshold) {
+        this.drawDonut();
+      }
     });
   }
 
