@@ -94,6 +94,14 @@ export default class Matrix {
     return result;
   }
 
+  static rotateMatrixByXY(thetaX: number, thetaY: number): Matrix {
+    return new Matrix([
+      [Math.cos(thetaY), 0, Math.sin(thetaY)],
+      [Math.sin(thetaX) * Math.sin(thetaY), Math.cos(thetaX), -Math.sin(thetaX) * Math.cos(thetaY)],
+      [-Math.cos(thetaX) * Math.sin(thetaY), Math.sin(thetaX), Math.cos(thetaX) * Math.cos(thetaY)]
+    ])
+  }
+
   static rotateMatrixByX(theta: number): Matrix {
     return new Matrix([
       [1, 0, 0],

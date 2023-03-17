@@ -75,10 +75,9 @@ export function getRotatedVector(vector: Vector, rotate: IRotate): Vector {
     throw new Error("length 3 의 vector 만 회전을 할 수 있습니다.");
   }
 
-  const rotateMatX: Matrix = Matrix.rotateMatrixByX(rotate.rotateX);
-  const rotateMatZ: Matrix = Matrix.rotateMatrixByY(rotate.rotateY);
+  const rotateMatXY: Matrix = Matrix.rotateMatrixByXY(rotate.rotateX, rotate.rotateY);
 
-  return vector.crossProduct(rotateMatX).crossProduct(rotateMatZ);
+  return vector.crossProduct(rotateMatXY);
 }
 
 function getRVector(parameter: IParameter): Vector {
