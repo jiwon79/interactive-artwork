@@ -15,12 +15,14 @@ export interface IRotate {
 export default class SolidTextViewModel {
   static LIGHT = new Vector([0, 0, 1]).unit;
   public size: number;
+  private lastRotate: IRotate;
   private rotate: IRotate;
   private zMatrix: Matrix;
   private luminanceMatrix: Matrix;
 
   constructor(size: number) {
     this.size = Constant.MATRIX_SIZE;
+    this.lastRotate = {rotateX: 0, rotateY: 0};
     this.rotate = {rotateX: 0, rotateY: 0};
     this.zMatrix = Matrix.createByRowAndColumn(size, size);
     this.luminanceMatrix = Matrix.createByRowAndColumn(size, size);
@@ -35,7 +37,18 @@ export default class SolidTextViewModel {
     this.rotate.rotateY += rotate.rotateY;
   }
 
+  public getRotate(): IRotate {
+    return this.rotate;
+  }
+
+  public get isOverThreshold(): boolean {
+    return Math.abs(this.rotate.rotateX - this.lastRotate.rotateX) > Constant.THETA_TRESHOLD ||
+      Math.abs(this.rotate.rotateY - this.lastRotate.rotateY) > Constant.THETA_TRESHOLD;
+  }
+
   public updateLuminanceMatrix() {
+    this.lastRotate.rotateX = this.rotate.rotateX;
+    this.lastRotate.rotateY = this.rotate.rotateY;
     this.zMatrix.clear();
     this.luminanceMatrix.clear();
 
