@@ -39,14 +39,14 @@ class Component<S extends StateType> {
   }
 
   setEvent() {}
-  addEvent(eventType: string, selector: string, callback: (e: Event) => void) {
+  addEvent<T extends Event>(eventType: string, selector: string, callback: (e: T) => void) {
     const children: Element[] = Array.from(this.target.querySelectorAll(selector));
 
     const isTarget = (target: Element) => children.includes(target) || target.closest(selector)
 
     this.target.addEventListener(eventType, (event: Event): boolean => {
       if (!isTarget(event.target as HTMLElement)) return false
-      callback(event)
+      callback(event as T)
 
       return true
     })

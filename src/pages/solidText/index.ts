@@ -54,7 +54,6 @@ class SolidTextPage extends Component<SolidTextStateType> {
       solidTextViewModel.addRotate({rotateX: -10, rotateY: 0});
       this.drawDonut();
     });
-    // @ts-ignore
     this.addEvent("mousemove", "#canvas", (e: MouseEvent) => {
       const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
       const x = e.clientX - rect.left;

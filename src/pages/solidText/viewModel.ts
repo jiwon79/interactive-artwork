@@ -42,8 +42,8 @@ export default class SolidTextViewModel {
   }
 
   public get isOverThreshold(): boolean {
-    return Math.abs(this.rotate.rotateX - this.lastRotate.rotateX) > Constant.THETA_TRESHOLD ||
-      Math.abs(this.rotate.rotateY - this.lastRotate.rotateY) > Constant.THETA_TRESHOLD;
+    return Math.abs(this.rotate.rotateX - this.lastRotate.rotateX) > Constant.THETA_THRESHOLD ||
+      Math.abs(this.rotate.rotateY - this.lastRotate.rotateY) > Constant.THETA_THRESHOLD;
   }
 
   public updateLuminanceMatrix() {
