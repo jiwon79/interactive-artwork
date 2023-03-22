@@ -40,17 +40,17 @@ export default class Vector extends Matrix {
   }
 
   public get x(): number {
-    if (this.length != 3) throw new Error("length 가 3이 아닌 vector 에서는 x 값을 가져올 수 없습니다.");
+    if (this.length < 1) throw new Error("length 가 1보다 작은 vector 에서는 x 값을 가져올 수 없습니다.");
     return this.elements[0][0];
   }
 
   public get y(): number {
-    if (this.length != 3) throw new Error("length 가 3이 아닌 vector 에서는 y 값을 가져올 수 없습니다.");
+    if (this.length < 2) throw new Error("length 가 2보다 작은 vector 에서는 y 값을 가져올 수 없습니다.");
     return this.elements[0][1];
   }
 
   public get z(): number {
-    if (this.length != 3) throw new Error("length 가 3이 아닌 vector 에서는 z 값을 가져올 수 없습니다.");
+    if (this.length < 3) throw new Error("length 가 3보다 작은 vector 에서는 z 값을 가져올 수 없습니다.");
     return this.elements[0][2];
   }
 }
@@ -75,9 +75,9 @@ export function getRotatedVector(vector: Vector, rotate: IRotate): Vector {
     throw new Error("length 3 의 vector 만 회전을 할 수 있습니다.");
   }
 
-  const rotateMatXY: Matrix = Matrix.rotateMatrixByXY(rotate.rotateX, rotate.rotateY);
+  const rotateMat: Matrix = Matrix.rotateMatrixByXY(rotate.rotateX, rotate.rotateY);
 
-  return vector.crossProduct(rotateMatXY);
+  return vector.crossProduct(rotateMat);
 }
 
 function getRVector(parameter: IParameter): Vector {
