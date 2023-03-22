@@ -13,7 +13,7 @@ let ctx: CanvasRenderingContext2D;
 let isDragging = false;
 let startX = 0;
 let startY = 0;
-let isRotateReverse = false;
+let isSolidReverse = false;
 let distanceX = 0;
 let distanceY = 0;
 
@@ -36,26 +36,27 @@ class SolidTextPage extends Component<SolidTextStateType> {
     `;
   }
 
+  setVariable(clientX: number, clientY: number) {
+    isDragging = true;
+    startX = clientX;
+    startY = clientY;
+    isSolidReverse = solidTextViewModel.isSolidReverse;
+  }
+
   setEvent() {
     this.addEvent("mousedown", "#canvas", (e: MouseEvent) => {
-      isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      const rotate = solidTextViewModel.getRotate();
-      isRotateReverse = Math.abs( Math.floor(rotate.rotateY / Math.PI + 0.5) % 2) == 1
+      this.setVariable(e.clientX, e.clientY);
     });
 
     this.addEvent("touchstart", "#canvas", (e: TouchEvent) => {
-      isDragging = true;
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
+      this.setVariable(e.touches[0].clientX, e.touches[0].clientY);
     });
 
     this.addEvent("mousemove", "#canvas", (e: MouseEvent) => {
       if (isDragging) {
         distanceX = e.clientX - startX;
         distanceY = e.clientY - startY;
-        const rotateX = isRotateReverse ? -distanceY / 2000 : distanceY / 2000;
+        const rotateX = isSolidReverse ? -distanceY / 2000 : distanceY / 2000;
         const rotateY = -distanceX / 2000;
         solidTextViewModel.addRotate({rotateX, rotateY});
         if (solidTextViewModel.isOverThreshold) {

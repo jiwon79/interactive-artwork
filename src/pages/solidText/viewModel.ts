@@ -46,6 +46,10 @@ export default class SolidTextViewModel {
       Math.abs(this.rotate.rotateY - this.lastRotate.rotateY) > Constant.THETA_THRESHOLD;
   }
 
+  public get isSolidReverse(): boolean {
+    return Math.abs( Math.floor(this.rotate.rotateY / Math.PI + 0.5) % 2) == 1
+  }
+
   public updateLuminanceMatrix() {
     this.lastRotate.rotateX = this.rotate.rotateX;
     this.lastRotate.rotateY = this.rotate.rotateY;
