@@ -10,6 +10,12 @@ interface SolidTextStateType extends StateType {
 
 const solidTextViewModel = new SolidTextViewModel(Constant.MATRIX_SIZE);
 let ctx: CanvasRenderingContext2D;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let isRotateReverse = false;
+let distanceX = 0;
+let distanceY = 0;
 
 class SolidTextPage extends Component<SolidTextStateType> {
   setUp() {
@@ -21,13 +27,6 @@ class SolidTextPage extends Component<SolidTextStateType> {
   template(): string {
     return `
       <div>
-        solid text
-        <div class="buttons">
-          <button class="key_button" id="up">up</button>
-          <button class="key_button" id="down">down</button>
-          <button class="key_button" id="left">left</button>
-          <button class="key_button" id="right">right</button>
-        </div>
         <canvas
             id="canvas"
             width="${this.state.canvasSize}"
@@ -38,32 +37,48 @@ class SolidTextPage extends Component<SolidTextStateType> {
   }
 
   setEvent() {
-    this.addEvent('click', '.buttons #left', () => {
-      solidTextViewModel.addRotate({rotateX: 0, rotateY: 10});
-      this.drawDonut();
+    this.addEvent("mousedown", "#canvas", (e: MouseEvent) => {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      const rotate = solidTextViewModel.getRotate();
+      isRotateReverse = Math.abs( Math.floor(rotate.rotateY / Math.PI + 0.5) % 2) == 1
     });
-    this.addEvent('click', '.buttons #right', () => {
-      solidTextViewModel.addRotate({rotateX: 0, rotateY: -10});
-      this.drawDonut();
+
+    this.addEvent("touchstart", "#canvas", (e: TouchEvent) => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
     });
-    this.addEvent('click', '.buttons #up', () => {
-      solidTextViewModel.addRotate({rotateX: 10, rotateY: 0});
-      this.drawDonut();
-    });
-    this.addEvent('click', '.buttons #down', () => {
-      solidTextViewModel.addRotate({rotateX: -10, rotateY: 0});
-      this.drawDonut();
-    });
+
     this.addEvent("mousemove", "#canvas", (e: MouseEvent) => {
-      const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const rotateX = (y - Constant.MATRIX_SIZE / 2) / 10000;
-      const rotateY = (x - Constant.MATRIX_SIZE / 2) / 10000;
-      solidTextViewModel.addRotate({rotateX, rotateY});
-      if (solidTextViewModel.isOverThreshold) {
-        this.drawDonut();
+      if (isDragging) {
+        distanceX = e.clientX - startX;
+        distanceY = e.clientY - startY;
+        const rotateX = isRotateReverse ? -distanceY / 2000 : distanceY / 2000;
+        const rotateY = -distanceX / 2000;
+        solidTextViewModel.addRotate({rotateX, rotateY});
+        if (solidTextViewModel.isOverThreshold) {
+          this.drawDonut();
+        }
       }
+    });
+
+    this.addEvent("touchmove", "#canvas", (e: TouchEvent) => {
+      if (isDragging) {
+        // calculate the distance dragged along the X and Y axes
+        distanceX = e.touches[0].clientY - startY;
+        distanceY = e.touches[0].clientX - startX;
+        console.log(`Distance dragged: ${distanceX}px horizontally, ${distanceY}px vertically`);
+      }
+    });
+
+    this.addEvent("mouseup", "#canvas", () => {
+      isDragging = false;
+    });
+
+    this.addEvent("touchend", "#canvas", () => {
+      isDragging = false;
     });
   }
 
