@@ -1,7 +1,8 @@
+import Vector from "@utils/vector";
 import NumberMatrix from "@utils/numberMatrix";
-import Vector, { getRotatedNormalVector, getRotatedRVector } from "../../core/utils/vector";
 import * as Constant from "./utils/constants";
 import { Parameter, Rotate } from "./utils/type";
+import { getRotatedNormalVector, getRotatedRVector } from "./utils/rotateVector";
 
 export default class SolidTextViewModel {
   static LIGHT = new Vector([0, 0, 1]).unit;
