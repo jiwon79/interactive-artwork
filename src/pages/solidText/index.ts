@@ -1,8 +1,9 @@
 import Component, { StateType } from "@src/core/model/component";
 import SolidTextViewModel from "./viewModel";
-import NumberMatrix from "@utils/numberMatrix";
 import * as Constant from "./utils/constants";
 import "./style.scss";
+import { PixelData } from "@pages/solidText/utils/type";
+import Matrix from "@utils/matrix";
 
 interface SolidTextStateType extends StateType {
   canvasSize: number;
@@ -97,20 +98,21 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
   drawDonut() {
     solidTextViewModel.updateLuminanceMatrix();
-    const luminanceMatrix = solidTextViewModel.getLuminanceMatrix();
+    const pixelMatrix = solidTextViewModel.getPixelMatrix();
 
-    this.drawByLuminanceArray(ctx, luminanceMatrix);
+    this.drawByLuminanceArray(ctx, pixelMatrix);
   }
 
-  drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceMatrix: NumberMatrix) {
+  drawByLuminanceArray(ctx: CanvasRenderingContext2D, pixelMatrix: Matrix<PixelData>) {
     const fontSize: number = Math.floor(this.state.canvasSize / Constant.MATRIX_SIZE);
     ctx.font = `${fontSize}px serif`;
     ctx.fillStyle = "white";
     ctx.clearRect(0, 0, this.state.canvasSize, this.state.canvasSize)
 
-    for (let i = 0; i < luminanceMatrix.rows; i++) {
-      for (let j = 0; j < luminanceMatrix.columns; j++) {
-        const luminance = luminanceMatrix.getElement(i, j);
+    for (let i = 0; i < pixelMatrix.rows; i++) {
+      for (let j = 0; j < pixelMatrix.columns; j++) {
+        const pixel = pixelMatrix.getElement(i, j);
+        const luminance = pixel.luminance;
         if (luminance >= 0 && luminance < Constant.CHAR.length) {
           ctx.fillText(Constant.CHAR[luminance], i * fontSize, j * fontSize);
         }

@@ -10,6 +10,6 @@ export interface Rotate {
 
 export interface PixelData {
   luminance: number;
-  color: string;
+  parameter: Parameter;
 }
 

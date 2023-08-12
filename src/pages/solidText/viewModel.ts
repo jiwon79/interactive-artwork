@@ -1,8 +1,11 @@
 import Vector from "@utils/vector";
 import NumberMatrix from "@utils/numberMatrix";
 import * as Constant from "./utils/constants";
-import { Parameter, Rotate } from "./utils/type";
+import { Parameter, PixelData, Rotate } from "./utils/type";
 import { getRotatedNormalVector, getRotatedRVector } from "./utils/rotateVector";
+import Matrix from "@utils/matrix";
+
+const initPixel: PixelData = {luminance: -Infinity, parameter: {theta: 0, phi: 0}};
 
 export default class SolidTextViewModel {
   static LIGHT = new Vector([0, 0, 1]).unit;
@@ -10,18 +13,24 @@ export default class SolidTextViewModel {
   private lastRotate: Rotate;
   private readonly rotate: Rotate;
   private zMatrix: NumberMatrix;
+  private readonly pixelMatrix: Matrix<PixelData>;
   private readonly luminanceMatrix: NumberMatrix;
 
   constructor(size: number) {
     this.size = Constant.MATRIX_SIZE;
     this.lastRotate = {rotateX: 0, rotateY: 0};
     this.rotate = {rotateX: 0, rotateY: 0};
-    this.zMatrix = NumberMatrix.createByRowAndColumn(size, size);
-    this.luminanceMatrix = NumberMatrix.createByRowAndColumn(size, size);
+    this.pixelMatrix = Matrix.create<PixelData>(size, size, initPixel);
+    this.zMatrix = NumberMatrix.createAllMinusInf(size, size);
+    this.luminanceMatrix = NumberMatrix.createAllMinusInf(size, size);
   }
 
   public getLuminanceMatrix(): NumberMatrix {
     return this.luminanceMatrix;
+  }
+
+  public getPixelMatrix(): Matrix<PixelData> {
+    return this.pixelMatrix;
   }
 
   public addRotate(rotate: Rotate) {
@@ -47,6 +56,7 @@ export default class SolidTextViewModel {
     this.lastRotate.rotateY = this.rotate.rotateY;
     this.zMatrix.clear();
     this.luminanceMatrix.clear();
+    this.pixelMatrix.clear(initPixel);
 
     for (let i = 0; i < Constant.THETA_NUM; i++) {
       for (let j = 0; j < Constant.PHI_NUM; j++) {
@@ -68,6 +78,7 @@ export default class SolidTextViewModel {
 
         if (this.isUpdateLuminanceMatrix(rCanvasVector)) {
           this.zMatrix.setElement(rCanvasVector.x, rCanvasVector.y, rCanvasVector.z);
+          this.pixelMatrix.setElement(rCanvasVector.x, rCanvasVector.y, {luminance, parameter})
           this.luminanceMatrix.setElement(rCanvasVector.x, rCanvasVector.y, luminance);
         }
       }
