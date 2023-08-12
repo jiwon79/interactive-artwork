@@ -1,5 +1,5 @@
 class Matrix<T> {
-  public elements: T[][];
+  protected elements: T[][];
   public rows: number;
   public columns: number;
 
@@ -39,6 +39,19 @@ class Matrix<T> {
     }
 
     return true;
+  }
+
+  static create<T>(rows: number, columns: number, value: T): Matrix<T> {
+    const elements: T[][] = [];
+    for (let i = 0; i < rows; i++) {
+      const row: T[] = [];
+      for (let j = 0; j < columns; j++) {
+        row.push(value);
+      }
+      elements.push(row);
+    }
+
+    return new Matrix(elements);
   }
 }
 

@@ -86,7 +86,7 @@ export default class NumberMatrix extends Matrix<number> {
     ]);
   }
 
-  static createByRowAndColumn(rows: number, columns: number): NumberMatrix {
+  static createAllMinusInf(rows: number, columns: number): NumberMatrix {
     return new NumberMatrix(
       Array(rows).fill(0).map(() => Array(columns).fill(-Infinity))
     );
