@@ -1,7 +1,7 @@
-import Component, {StateType} from "@model/component";
+import Component, { StateType } from "@model/component";
 import SolidTextViewModel from "./viewModel";
 import Matrix from "./math/matrix";
-import * as Constant from "./constants";
+import * as Constant from "./utils/constants";
 import "./style.scss";
 
 interface SolidTextStateType extends StateType {
@@ -27,6 +27,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
   template(): string {
     return `
       <div>
+        <button id="button" >button</button>
         <canvas
             id="canvas"
             width="${this.state.canvasSize}"
@@ -44,6 +45,11 @@ class SolidTextPage extends Component<SolidTextStateType> {
   }
 
   setEvent() {
+    // this.addEvent("click", "#button", () => {
+    //   console.log("click");
+    //   this.setState({canvasSize: 500 + Math.random() * 500});
+    // });
+
     this.addEvent("mousedown", "#canvas", (e: MouseEvent) => {
       this.setVariable(e.clientX, e.clientY);
     });

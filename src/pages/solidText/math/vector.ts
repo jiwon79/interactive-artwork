@@ -1,6 +1,6 @@
 import Matrix from "./matrix";
-import * as Constant from "@pages/solidText/constants";
-import {IParameter, IRotate} from "@pages/solidText/viewModel";
+import * as Constant from "@pages/solidText/utils/constants";
+import { Parameter, Rotate } from "@pages/solidText/utils/type";
 
 export default class Vector extends Matrix {
   constructor(elements: number[]) {
@@ -55,13 +55,13 @@ export default class Vector extends Matrix {
   }
 }
 
-export function getRotatedRVector(parameter: IParameter, rotate: IRotate): Vector {
+export function getRotatedRVector(parameter: Parameter, rotate: Rotate): Vector {
   const r: Vector = getRVector(parameter);
 
   return getRotatedVector(r, rotate);
 }
 
-export function getRotatedNormalVector(parameter: IParameter, rotate: IRotate): Vector {
+export function getRotatedNormalVector(parameter: Parameter, rotate: Rotate): Vector {
   const normal: Vector = getNormalVector(parameter);
 
   return getRotatedVector(normal, rotate);
@@ -70,7 +70,7 @@ export function getRotatedNormalVector(parameter: IParameter, rotate: IRotate): 
 /// rotateX : z -> y 로 회전
 ///
 /// rotateY : x -> z 로 회전
-export function getRotatedVector(vector: Vector, rotate: IRotate): Vector {
+export function getRotatedVector(vector: Vector, rotate: Rotate): Vector {
   if (vector.length != 3) {
     throw new Error("length 3 의 vector 만 회전을 할 수 있습니다.");
   }
@@ -80,7 +80,7 @@ export function getRotatedVector(vector: Vector, rotate: IRotate): Vector {
   return vector.crossProduct(rotateMat);
 }
 
-function getRVector(parameter: IParameter): Vector {
+function getRVector(parameter: Parameter): Vector {
   const {theta, phi} = parameter;
 
   return new Vector([
@@ -90,7 +90,7 @@ function getRVector(parameter: IParameter): Vector {
   ]);
 }
 
-function getNormalVector(parameter: IParameter): Vector {
+function getNormalVector(parameter: Parameter): Vector {
   const {theta, phi} = parameter;
 
   return new Vector([

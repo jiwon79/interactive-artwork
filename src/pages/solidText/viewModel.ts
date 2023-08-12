@@ -1,24 +1,15 @@
 import Matrix from "./math/matrix";
-import Vector, {getRotatedNormalVector, getRotatedRVector} from "./math/vector";
-import * as Constant from "./constants";
-
-export interface IParameter {
-  theta: number;
-  phi: number;
-}
-
-export interface IRotate {
-  rotateX: number;
-  rotateY: number;
-}
+import Vector, { getRotatedNormalVector, getRotatedRVector } from "./math/vector";
+import * as Constant from "./utils/constants";
+import { Parameter, Rotate } from "./utils/type";
 
 export default class SolidTextViewModel {
   static LIGHT = new Vector([0, 0, 1]).unit;
   public size: number;
-  private lastRotate: IRotate;
-  private rotate: IRotate;
+  private lastRotate: Rotate;
+  private readonly rotate: Rotate;
   private zMatrix: Matrix;
-  private luminanceMatrix: Matrix;
+  private readonly luminanceMatrix: Matrix;
 
   constructor(size: number) {
     this.size = Constant.MATRIX_SIZE;
@@ -32,12 +23,12 @@ export default class SolidTextViewModel {
     return this.luminanceMatrix;
   }
 
-  public addRotate(rotate: IRotate) {
+  public addRotate(rotate: Rotate) {
     this.rotate.rotateX += rotate.rotateX;
     this.rotate.rotateY += rotate.rotateY;
   }
 
-  public getRotate(): IRotate {
+  public getRotate(): Rotate {
     return this.rotate;
   }
 
@@ -47,7 +38,7 @@ export default class SolidTextViewModel {
   }
 
   public get isSolidReverse(): boolean {
-    return Math.abs( Math.floor(this.rotate.rotateY / Math.PI + 0.5) % 2) == 1
+    return Math.abs(Math.floor(this.rotate.rotateY / Math.PI + 0.5) % 2) == 1
   }
 
   public updateLuminanceMatrix() {
@@ -60,7 +51,7 @@ export default class SolidTextViewModel {
       for (let j = 0; j < Constant.PHI_NUM; j++) {
         const theta = 2 * Math.PI * i / Constant.THETA_NUM;
         const phi = 2 * Math.PI * j / Constant.PHI_NUM;
-        const parameter: IParameter = {theta, phi};
+        const parameter: Parameter = {theta, phi};
 
         const rVector: Vector = getRotatedRVector(parameter, this.rotate);
         const normalVector = getRotatedNormalVector(parameter, this.rotate);
