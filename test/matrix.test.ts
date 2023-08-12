@@ -1,4 +1,4 @@
-import Matrix from '../src/pages/solidText/math/matrix';
+import Matrix from '../src/core/utils/matrix';
 
 describe('Matrix', () => {
   test("Matrix equal", () => {

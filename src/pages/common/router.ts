@@ -1,4 +1,4 @@
-import Component, {StateType} from "@model/component";
+import Component, {StateType} from "@src/core/model/component";
 import MainPage from "@pages/main";
 import SolidTextPage from "@pages/solidText";
 

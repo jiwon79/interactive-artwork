@@ -1,4 +1,4 @@
-import Component, { StateType } from "@model/component";
+import Component, { StateType } from "@src/core/model/component";
 import navigate from "../common/navigate";
 import "./style.scss"
 

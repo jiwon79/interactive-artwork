@@ -1,5 +1,5 @@
-import Matrix from "./math/matrix";
-import Vector, { getRotatedNormalVector, getRotatedRVector } from "./math/vector";
+import Matrix from "../../core/utils/matrix";
+import Vector, { getRotatedNormalVector, getRotatedRVector } from "../../core/utils/vector";
 import * as Constant from "./utils/constants";
 import { Parameter, Rotate } from "./utils/type";
 

@@ -1,4 +1,4 @@
-import Vector, {getRotatedVector} from "../src/pages/solidText/math/vector";
+import Vector, {getRotatedVector} from "../src/core/utils/vector";
 
 describe("Vector", () => {
   const epsilon: number = 0.00001;

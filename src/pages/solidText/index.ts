@@ -1,6 +1,6 @@
-import Component, { StateType } from "@model/component";
+import Component, { StateType } from "@src/core/model/component";
 import SolidTextViewModel from "./viewModel";
-import Matrix from "./math/matrix";
+import Matrix from "../../core/utils/matrix";
 import * as Constant from "./utils/constants";
 import "./style.scss";
 
