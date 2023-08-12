@@ -1,6 +1,6 @@
 import NumberMatrix from '../src/core/utils/numberMatrix';
 
-describe('Matrix', () => {
+describe('Number Matrix', () => {
   test("Matrix equal", () => {
     const a: NumberMatrix = new NumberMatrix([[1, 2], [3, 4]]);
     const b: NumberMatrix = new NumberMatrix([[1, 2], [3, 4]]);

@@ -1,16 +1,8 @@
-export default class NumberMatrix {
-  public rows: number;
-  public columns: number;
-  public elements: number[][];
+import Matrix from "./matrix";
 
+export default class NumberMatrix extends Matrix<number> {
   constructor(elements: number[][]) {
-    if (elements.some((row) => row.length !== elements[0].length)) {
-      throw new Error('Cannot create matrix with inconsistent row length');
-    }
-
-    this.rows = elements.length;
-    this.columns = elements[0].length;
-    this.elements = elements;
+    super(elements);
   }
 
   public setElement(row: number, column: number, value: number): void {
