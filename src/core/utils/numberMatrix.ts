@@ -5,32 +5,8 @@ export default class NumberMatrix extends Matrix<number> {
     super(elements);
   }
 
-  public setElement(row: number, column: number, value: number): void {
-    this.elements[row][column] = value;
-  }
-
-  public getElement(row: number, column: number): number {
-    return this.elements[row][column];
-  }
-
-  public clear(): void {
-    this.elements = this.elements.map((row) => row.map(() => -Infinity));
-  }
-
-  public equal(other: NumberMatrix): boolean {
-    if (this.rows !== other.rows || this.columns !== other.columns) {
-      return false;
-    }
-
-    for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.columns; j++) {
-        if (this.elements[i][j] !== other.elements[i][j]) {
-          return false;
-        }
-      }
-    }
-
-    return true;
+  public override clear(): void {
+    super.clear(-Infinity);
   }
 
   public similar(other: NumberMatrix, epsilon: number): boolean {
