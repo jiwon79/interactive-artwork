@@ -6,13 +6,14 @@ import {HistoryChangeEvent} from "./navigate";
 
 interface RouteInfo {
   path: string;
+  title: string;
   component: any;
 }
 
 
 const routes: RouteInfo[] = [
-  {path: "/", component: MainPage},
-  {path: "/solid-text", component: SolidTextPage},
+  {path: "/", title: 'Interactive Artwork', component: MainPage},
+  {path: "/solid-text", title: 'Drag Donut', component: SolidTextPage},
 ];
 
 class Route extends Component<StateType> {
@@ -21,6 +22,7 @@ class Route extends Component<StateType> {
     const route = routes.find((route) => route.path === path);
     if (!route) return;
 
+    document.title = route.title;
     new route.component(this.target);
   }
 
