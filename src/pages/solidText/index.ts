@@ -1,6 +1,6 @@
 import Component, { StateType } from "@src/core/model/component";
 import SolidTextViewModel from "./viewModel";
-import Matrix from "../../core/utils/matrix";
+import NumberMatrix from "@utils/numberMatrix";
 import * as Constant from "./utils/constants";
 import "./style.scss";
 
@@ -102,7 +102,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
     this.drawByLuminanceArray(ctx, luminanceMatrix);
   }
 
-  drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceMatrix: Matrix) {
+  drawByLuminanceArray(ctx: CanvasRenderingContext2D, luminanceMatrix: NumberMatrix) {
     const fontSize: number = Math.floor(this.state.canvasSize / Constant.MATRIX_SIZE);
     ctx.font = `${fontSize}px serif`;
     ctx.fillStyle = "white";

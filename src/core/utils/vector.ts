@@ -1,13 +1,13 @@
-import Matrix from "./matrix";
+import NumberMatrix from "./numberMatrix";
 import * as Constant from "@pages/solidText/utils/constants";
 import { Parameter, Rotate } from "@pages/solidText/utils/type";
 
-export default class Vector extends Matrix {
+export default class Vector extends NumberMatrix {
   constructor(elements: number[]) {
     super([elements]);
   }
 
-  static fromMatrix(matrix: Matrix): Vector {
+  static fromMatrix(matrix: NumberMatrix): Vector {
     if (matrix.rows != 1) {
       throw new Error("row 가 1이 아닌 matrix 를 vector 로 변환할 수 없습니다.");
     }
@@ -19,7 +19,7 @@ export default class Vector extends Matrix {
     return super.dotProduct(other);
   }
 
-  public crossProduct(other: Matrix): Vector {
+  public crossProduct(other: NumberMatrix): Vector {
     return Vector.fromMatrix(super.crossProduct(other));
   }
 
@@ -75,7 +75,7 @@ export function getRotatedVector(vector: Vector, rotate: Rotate): Vector {
     throw new Error("length 3 의 vector 만 회전을 할 수 있습니다.");
   }
 
-  const rotateMat: Matrix = Matrix.rotateMatrixByXY(rotate.rotateX, rotate.rotateY);
+  const rotateMat: NumberMatrix = NumberMatrix.rotateMatrixByXY(rotate.rotateX, rotate.rotateY);
 
   return vector.crossProduct(rotateMat);
 }

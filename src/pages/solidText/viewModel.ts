@@ -1,4 +1,4 @@
-import Matrix from "../../core/utils/matrix";
+import NumberMatrix from "@utils/numberMatrix";
 import Vector, { getRotatedNormalVector, getRotatedRVector } from "../../core/utils/vector";
 import * as Constant from "./utils/constants";
 import { Parameter, Rotate } from "./utils/type";
@@ -8,18 +8,18 @@ export default class SolidTextViewModel {
   public size: number;
   private lastRotate: Rotate;
   private readonly rotate: Rotate;
-  private zMatrix: Matrix;
-  private readonly luminanceMatrix: Matrix;
+  private zMatrix: NumberMatrix;
+  private readonly luminanceMatrix: NumberMatrix;
 
   constructor(size: number) {
     this.size = Constant.MATRIX_SIZE;
     this.lastRotate = {rotateX: 0, rotateY: 0};
     this.rotate = {rotateX: 0, rotateY: 0};
-    this.zMatrix = Matrix.createByRowAndColumn(size, size);
-    this.luminanceMatrix = Matrix.createByRowAndColumn(size, size);
+    this.zMatrix = NumberMatrix.createByRowAndColumn(size, size);
+    this.luminanceMatrix = NumberMatrix.createByRowAndColumn(size, size);
   }
 
-  public getLuminanceMatrix(): Matrix {
+  public getLuminanceMatrix(): NumberMatrix {
     return this.luminanceMatrix;
   }
 
