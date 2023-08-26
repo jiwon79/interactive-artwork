@@ -25,7 +25,17 @@ export default class Vector extends NumberMatrix {
     return this.elements[0].length;
   }
 
-  public divide (scalar: number): Vector {
+  public add(other: Vector): Vector {
+    if (this.length != other.length) throw new Error("Vector add는 길이가 같아야 합니다.");
+    return new Vector(this.elements[0].map((element, index) => element + other.elements[0][index]));
+  }
+
+  public minus(other: Vector): Vector {
+    if (this.length != other.length) throw new Error("Vector minus는 길이가 같아야 합니다.");
+    return new Vector(this.elements[0].map((element, index) => element - other.elements[0][index]));
+  }
+
+  public divide(scalar: number): Vector {
     return new Vector(this.elements[0].map((element) => element / scalar));
   }
 
