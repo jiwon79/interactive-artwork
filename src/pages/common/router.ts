@@ -1,8 +1,9 @@
-import Component, {StateType} from "@src/core/model/component";
+import Component, { StateType } from "@src/core/model/component";
 import MainPage from "@pages/main";
 import SolidTextPage from "@pages/solidText";
+import CrowdPage from "@pages/crowd";
 
-import {HistoryChangeEvent} from "./navigate";
+import { HistoryChangeEvent } from "./navigate";
 
 interface RouteInfo {
   path: string;
@@ -14,6 +15,7 @@ interface RouteInfo {
 const routes: RouteInfo[] = [
   {path: "/", title: 'Interactive Artwork', component: MainPage},
   {path: "/solid-text", title: 'Drag Donut', component: SolidTextPage},
+  {path: "/crowd", title: "Crowd Simulation", component: CrowdPage}
 ];
 
 class Route extends Component<StateType> {
