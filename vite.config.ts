@@ -12,5 +12,14 @@ export default defineConfig({
       '@utils': resolve(__dirname, 'src/core/utils/'),
       '@public': resolve(__dirname, 'public/'),
     }
-  }
+  },
+  // css: {
+  //   preprocessorOptions: {
+  //     scss: {
+  //       additionalData: `
+  //         @import "@src/style.scss";
+  //       `
+  //     }
+  //   }
+  // }
 })

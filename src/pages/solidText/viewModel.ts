@@ -14,19 +14,13 @@ export default class SolidTextViewModel {
   private readonly rotate: Rotate;
   private zMatrix: NumberMatrix;
   private readonly pixelMatrix: Matrix<PixelData>;
-  private readonly luminanceMatrix: NumberMatrix;
 
   constructor(size: number) {
-    this.size = Constant.MATRIX_SIZE;
+    this.size = size;
     this.lastRotate = {rotateX: 0, rotateY: 0};
     this.rotate = {rotateX: 0, rotateY: 0};
     this.pixelMatrix = Matrix.create<PixelData>(size, size, initPixel);
     this.zMatrix = NumberMatrix.createAllMinusInf(size, size);
-    this.luminanceMatrix = NumberMatrix.createAllMinusInf(size, size);
-  }
-
-  public getLuminanceMatrix(): NumberMatrix {
-    return this.luminanceMatrix;
   }
 
   public getPixelMatrix(): Matrix<PixelData> {
@@ -36,10 +30,6 @@ export default class SolidTextViewModel {
   public addRotate(rotate: Rotate) {
     this.rotate.rotateX += rotate.rotateX;
     this.rotate.rotateY += rotate.rotateY;
-  }
-
-  public getRotate(): Rotate {
-    return this.rotate;
   }
 
   public get isOverThreshold(): boolean {
@@ -55,7 +45,6 @@ export default class SolidTextViewModel {
     this.lastRotate.rotateX = this.rotate.rotateX;
     this.lastRotate.rotateY = this.rotate.rotateY;
     this.zMatrix.clear();
-    this.luminanceMatrix.clear();
     this.pixelMatrix.clear(initPixel);
 
     for (let i = 0; i < Constant.THETA_NUM; i++) {
@@ -76,11 +65,9 @@ export default class SolidTextViewModel {
           rVector.z
         ]);
 
-        if (this.isUpdateLuminanceMatrix(rCanvasVector)) {
-          this.zMatrix.setElement(rCanvasVector.x, rCanvasVector.y, rCanvasVector.z);
-          this.pixelMatrix.setElement(rCanvasVector.x, rCanvasVector.y, {luminance, parameter})
-          this.luminanceMatrix.setElement(rCanvasVector.x, rCanvasVector.y, luminance);
-        }
+        if (!this.isUpdateLuminanceMatrix(rCanvasVector)) continue;
+        this.zMatrix.setElement(rCanvasVector.x, rCanvasVector.y, rCanvasVector.z);
+        this.pixelMatrix.setElement(rCanvasVector.x, rCanvasVector.y, {luminance, parameter})
       }
     }
   }
@@ -90,8 +77,8 @@ export default class SolidTextViewModel {
     const y = rCanvasVector.y;
     const z = rCanvasVector.z;
 
-    return 0 < x && x < Constant.MATRIX_SIZE
-      && 0 < y && y < Constant.MATRIX_SIZE
+    return 0 < x && x < this.size
+      && 0 < y && y < this.size
       && this.zMatrix.getElement(x, y) <= z;
   }
 
