@@ -12,6 +12,14 @@ class CrowdViewModel {
 
     return aVector.add(bVector).add(cVector);
   }
+
+  public getSlope(t: number): Vector {
+    let aVector = this.a.multiple(2 * (1-t));
+    let bVector = this.b.multiple(2 * (1-2 * t));
+    let cVector = this.c.multiple(2 * t);
+
+    return aVector.add(bVector).add(cVector);
+  }
 }
 
 export default CrowdViewModel;
