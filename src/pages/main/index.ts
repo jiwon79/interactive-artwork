@@ -5,10 +5,13 @@ import "./style.scss"
 class MainPage extends Component<StateType> {
   template(): string {
     return `
-      <div class="main">
-        <a href="/">main</a>
-        <a href="/solid-text">solid text</a>
-      </div>
+      <main class="main">
+        <p class="title">Interactive Artwork</p>
+        <div>
+          <a href="/">main</a>
+          <a href="/solid-text">solid text</a>
+        </div>
+      </main>
     `;
   }
 

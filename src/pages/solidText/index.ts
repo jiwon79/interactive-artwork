@@ -46,6 +46,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
   template(): string {
     return `
       <main>
+        <p>Drang Dhonut</p>
         <button id="button" >button</button>
         <canvas
             id="canvas"
