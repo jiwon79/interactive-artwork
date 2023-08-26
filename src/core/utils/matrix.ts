@@ -1,5 +1,5 @@
 class Matrix<T> {
-  protected elements: T[][];
+  public elements: T[][];
   public rows: number;
   public columns: number;
 

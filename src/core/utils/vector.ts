@@ -35,6 +35,10 @@ export default class Vector extends NumberMatrix {
     return new Vector(this.elements[0].map((element, index) => element - other.elements[0][index]));
   }
 
+  public multiple(scalar: number): Vector {
+    return new Vector(this.elements[0].map((element) => element * scalar));
+  }
+
   public divide(scalar: number): Vector {
     return new Vector(this.elements[0].map((element) => element / scalar));
   }
