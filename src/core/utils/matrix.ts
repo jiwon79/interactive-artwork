@@ -1,4 +1,4 @@
-class Matrix<T> {
+class Matrix<out T> {
   public elements: T[][];
   public rows: number;
   public columns: number;

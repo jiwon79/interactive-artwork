@@ -1,15 +1,17 @@
 import Vector from "@utils/vector";
 import NumberMatrix from "@utils/numberMatrix";
 import * as Constant from "./utils/constants";
-import { Parameter, PixelData, Rotate } from "./utils/type";
+import { ColorStyle, Parameter, PixelData, Rotate } from "./utils/type";
 import { getRotatedNormalVector, getRotatedRVector } from "./utils/rotateVector";
 import Matrix from "@utils/matrix";
 
 const initPixel: PixelData = {luminance: -Infinity, parameter: {theta: 0, phi: 0}};
 
+
 export default class SolidTextViewModel {
   static LIGHT = new Vector([0, 0, 1]).unit;
   public size: number;
+  private colorStyle: ColorStyle = "gray";
   private lastRotate: Rotate;
   private readonly rotate: Rotate;
   private zMatrix: NumberMatrix;
@@ -21,6 +23,11 @@ export default class SolidTextViewModel {
     this.rotate = {rotateX: 0, rotateY: 0};
     this.pixelMatrix = Matrix.create<PixelData>(size, size, initPixel);
     this.zMatrix = NumberMatrix.createAllMinusInf(size, size);
+  }
+
+  public setColorStyle(colorStyle: ColorStyle) {
+    this.colorStyle = colorStyle;
+    console.log(this.colorStyle);
   }
 
   public getPixelMatrix(): Matrix<PixelData> {

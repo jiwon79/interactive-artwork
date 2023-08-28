@@ -46,8 +46,23 @@ class SolidTextPage extends Component<SolidTextStateType> {
   template(): string {
     return `
       <main>
-        <p>Drang Dhonut</p>
-        <button id="button" >button</button>
+        <p>Drag Dhonut</p>
+        <div>
+            <label for="color-gray">Gray</label>
+            <input type="radio" id="color-gray" name="mode" value="solid" checked>
+        </div>
+        <div>
+            <label for="color-rainbow-1">Rainbow-1</label>
+            <input type="radio" id="color-rainbow-1" name="mode" value="solid">
+        </div>
+        <div>
+            <label for="color-rainbow-2">Rainbow-2</label>
+            <input type="radio" id="color-rainbow-2" name="mode" value="solid">
+        </div>
+        <div>
+            <label for="color-change-rainbow">Change Rainbow</label>
+            <input type="radio" id="color-change-rainbow" name="mode" value="solid">
+        </div>
         <canvas
             id="canvas"
             width="${this.state.canvasSize}"
@@ -65,10 +80,25 @@ class SolidTextPage extends Component<SolidTextStateType> {
   }
 
   setEvent() {
-    // this.addEvent("click", "#button", () => {
-    //   console.log("click");
-    //   this.setState({canvasSize: 500 + Math.random() * 500});
-    // });
+    this.addEvent("click", "#color-gray", () => {
+      solidTextViewModel.setColorStyle('gray');
+      this.drawDonut();
+    });
+
+    this.addEvent("click", "#color-rainbow-1", () => {
+      solidTextViewModel.setColorStyle('rainbow-1');
+      this.drawDonut();
+    });
+
+    this.addEvent("click", "#color-rainbow-2", () => {
+      solidTextViewModel.setColorStyle('rainbow-2');
+      this.drawDonut();
+    });
+
+    this.addEvent("click", "#color-change-rainbow", () => {
+      solidTextViewModel.setColorStyle('change-rainbow');
+      this.drawDonut();
+    });
 
     this.addEvent("mousedown", "#canvas", (e: MouseEvent) => {
       this.setVariable(e.clientX, e.clientY);
