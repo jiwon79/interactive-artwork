@@ -2,8 +2,9 @@ import Vector from "@utils/vector";
 import NumberMatrix from "@utils/numberMatrix";
 import * as Constant from "./utils/constants";
 import { ColorStyle, Parameter, PixelData, Rotate } from "./utils/type";
-import { getRotatedNormalVector, getRotatedRVector } from "./utils/rotateVector";
 import Matrix from "@utils/matrix";
+import SolidService from "./service/solid/solidService";
+import SolidDoughnutService from "@pages/solidText/service/solid/solidDoughnutService";
 
 const initPixel: PixelData = {luminance: -Infinity, parameter: {theta: 0, phi: 0}};
 
@@ -16,6 +17,7 @@ export default class SolidTextViewModel {
   private readonly rotate: Rotate;
   private zMatrix: NumberMatrix;
   private readonly pixelMatrix: Matrix<PixelData>;
+  private solidService: SolidService;
 
   constructor(size: number) {
     this.size = size;
@@ -23,6 +25,7 @@ export default class SolidTextViewModel {
     this.rotate = {rotateX: 0, rotateY: 0};
     this.pixelMatrix = Matrix.create<PixelData>(size, size, initPixel);
     this.zMatrix = NumberMatrix.createAllMinusInf(size, size);
+    this.solidService = new SolidDoughnutService(Constant.majorRadius, Constant.minorRadius);
   }
 
   public setColorStyle(colorStyle: ColorStyle) {
@@ -60,8 +63,8 @@ export default class SolidTextViewModel {
         const phi = 2 * Math.PI * j / Constant.PHI_NUM;
         const parameter: Parameter = {theta, phi};
 
-        const rVector: Vector = getRotatedRVector(parameter, this.rotate);
-        const normalVector = getRotatedNormalVector(parameter, this.rotate);
+        const rVector: Vector  = this.solidService.getRotatedRVector(parameter, this.rotate);
+        const normalVector = this.solidService.getRotatedNormalVector(parameter, this.rotate);
 
         const luminance = this.calculateLuminance(rVector, normalVector);
         if (luminance < 0) continue;
