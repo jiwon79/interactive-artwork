@@ -12,7 +12,7 @@ export const emptyPixelModel: PixelModel = {
     theta: 0,
     phi: 0
   },
-  r: new Vector([0, 0, 0]),
+  r: new Vector([0, 0, -Infinity]),
   normal: new Vector([0, 0, 0])
 }
 

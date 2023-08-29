@@ -2,8 +2,8 @@ import Component, { StateType } from "@src/core/model/component";
 import SolidTextViewModel from "./viewModel";
 import * as Constant from "./utils/constants";
 import "./style.scss";
-import { PixelData } from "@pages/solidText/utils/type";
 import Matrix from "@utils/matrix";
+import PixelModel from "@pages/solidText/model/pixelModel";
 
 interface SolidTextStateType extends StateType {
   canvasSize: number;
@@ -148,22 +148,22 @@ class SolidTextPage extends Component<SolidTextStateType> {
   }
 
   drawDonut() {
-    solidTextViewModel.updateLuminanceMatrix();
     solidTextViewModel.pixelService.updatePixelMatrix();
-    const pixelMatrix = solidTextViewModel.getPixelMatrix();
+    const pixelModelMatrix = solidTextViewModel.pixelService.pixelMatrix;
+    const luminanceMatrix = solidTextViewModel.pixelService.luminanceMatrix;
 
-    this.drawByLuminanceArray(ctx, pixelMatrix);
+    this.drawByLuminanceArray(ctx, pixelModelMatrix, luminanceMatrix);
   }
 
-  drawByLuminanceArray(ctx: CanvasRenderingContext2D, pixelMatrix: Matrix<PixelData>) {
+  drawByLuminanceArray(ctx: CanvasRenderingContext2D, pixelModelMatrix: Matrix<PixelModel>, luminanceMatrix: Matrix<number>) {
     const cellSize: number = Math.floor(this.state.canvasSize / Constant.MATRIX_SIZE);
     ctx.font = `bold ${cellSize * 1.2}px serif`;
     ctx.clearRect(0, 0, this.state.canvasSize, this.state.canvasSize)
 
-    for (let i = 0; i < pixelMatrix.rows; i++) {
-      for (let j = 0; j < pixelMatrix.columns; j++) {
-        const pixel = pixelMatrix.getElement(i, j);
-        const luminance = pixel.luminance;
+    for (let i = 0; i < pixelModelMatrix.rows; i++) {
+      for (let j = 0; j < pixelModelMatrix.columns; j++) {
+        const pixel = pixelModelMatrix.getElement(i, j);
+        const luminance = luminanceMatrix.getElement(i, j);
         if (luminance >= 0 && luminance < Constant.CHAR.length) {
           const [r, g, b] = rainbowGradient(pixel.parameter.theta / (2 * Math.PI));
           // ctx.fillStyle = `rgb(${color1}, ${color2}, ${color3})`;

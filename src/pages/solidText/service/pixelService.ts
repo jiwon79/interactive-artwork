@@ -12,8 +12,8 @@ class PixelService {
   private readonly size: number;
   private readonly rotate: Rotate;
   private readonly solidService: SolidService;
-  private readonly pixelMatrix: Matrix<PixelModel>;
-  private readonly luminanceMatrix: Matrix<number>;
+  public readonly pixelMatrix: Matrix<PixelModel>;
+  public readonly luminanceMatrix: Matrix<number>;
 
   constructor(solidService: SolidService, size: number) {
     this.lastRotate = {rotateX: 0, rotateY: 0};
@@ -42,6 +42,7 @@ class PixelService {
     this.lastRotate.rotateX = this.rotate.rotateX;
     this.lastRotate.rotateY = this.rotate.rotateY;
     this.pixelMatrix.clear(emptyPixelModel);
+    this.luminanceMatrix.clear(-Infinity);
 
     for (let i = 0; i < Constant.THETA_NUM; i++) {
       for (let j = 0; j < Constant.PHI_NUM; j++) {
@@ -62,7 +63,7 @@ class PixelService {
         ]);
 
         if (!this.isUpdatePixelMatrix(rCanvasVector)) continue;
-        this.pixelMatrix.setElement(rCanvasVector.x, rCanvasVector.y, {parameter, r, normal})
+        this.pixelMatrix.setElement(rCanvasVector.x, rCanvasVector.y, {parameter, r: rCanvasVector, normal})
         this.luminanceMatrix.setElement(rCanvasVector.x, rCanvasVector.y, luminance);
       }
     }
@@ -73,9 +74,9 @@ class PixelService {
     const y = rCanvasVector.y;
     const z = rCanvasVector.z;
 
-    if (x <= 0 || this.size < x) return false;
-    if (y <= 0 || this.size < y) return false;
-    return this.pixelMatrix.getElement(x, y).r.z < z;
+    if (x <= 0 || this.size <= x) return false;
+    if (y <= 0 || this.size <= y) return false;
+    return this.pixelMatrix.getElement(x, y).r.z <= z;
   }
 }
 

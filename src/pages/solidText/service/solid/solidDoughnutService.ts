@@ -42,7 +42,7 @@ class SolidDoughnutService extends SolidService {
 
   getLuminance(r: Vector, normal: Vector, light: Vector): number {
     const luminance = normal.dotProduct(light);
-    const c = r.getElement(0, 2) / (this.majorRadius + this.minorRadius);
+    const c = r.z / (this.majorRadius + this.minorRadius);
 
     return Math.floor(1 + 7.9 * luminance + 2.9 * c);
   }
