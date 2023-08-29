@@ -32,7 +32,6 @@ let ctx: CanvasRenderingContext2D;
 let isDragging = false;
 let startX = 0;
 let startY = 0;
-let isSolidReverse = false;
 let distanceX = 0;
 let distanceY = 0;
 
@@ -76,7 +75,6 @@ class SolidTextPage extends Component<SolidTextStateType> {
     isDragging = true;
     startX = clientX;
     startY = clientY;
-    isSolidReverse = solidTextViewModel.isSolidReverse;
   }
 
   setEvent() {
@@ -114,10 +112,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
         distanceY = e.clientY - startY;
         solidTextViewModel.dragRotate(distanceX, distanceY);
 
-        const rotateX = isSolidReverse ? -distanceY / 2000 : distanceY / 2000;
-        const rotateY = -distanceX / 2000;
-        solidTextViewModel.addRotate({rotateX, rotateY});
-        if (solidTextViewModel.isOverThreshold) {
+        if (solidTextViewModel.pixelService.isOverThreshold) {
           this.drawDonut();
         }
       }
