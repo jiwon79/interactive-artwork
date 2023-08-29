@@ -2,6 +2,10 @@ import Vector from "@utils/vector";
 import { Parameter, Rotate } from "@pages/solidText/utils/type";
 import NumberMatrix from "@utils/numberMatrix";
 
+import SolidDoughnutService from "./solidDoughnutService";
+
+export { SolidDoughnutService };
+
 abstract class SolidService {
   getRotatedRVector(parameter: Parameter, rotate: Rotate): Vector {
     const r: Vector = this.getRVector(parameter);

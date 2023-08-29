@@ -112,6 +112,8 @@ class SolidTextPage extends Component<SolidTextStateType> {
       if (isDragging) {
         distanceX = e.clientX - startX;
         distanceY = e.clientY - startY;
+        solidTextViewModel.dragRotate(distanceX, distanceY);
+
         const rotateX = isSolidReverse ? -distanceY / 2000 : distanceY / 2000;
         const rotateY = -distanceX / 2000;
         solidTextViewModel.addRotate({rotateX, rotateY});
@@ -147,6 +149,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
   drawDonut() {
     solidTextViewModel.updateLuminanceMatrix();
+    solidTextViewModel.pixelService.updatePixelMatrix();
     const pixelMatrix = solidTextViewModel.getPixelMatrix();
 
     this.drawByLuminanceArray(ctx, pixelMatrix);

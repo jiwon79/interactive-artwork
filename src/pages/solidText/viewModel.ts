@@ -3,8 +3,8 @@ import NumberMatrix from "@utils/numberMatrix";
 import * as Constant from "./utils/constants";
 import { ColorStyle, Parameter, PixelData, Rotate } from "./utils/type";
 import Matrix from "@utils/matrix";
-import SolidService from "./service/solid/solidService";
-import SolidDoughnutService from "@pages/solidText/service/solid/solidDoughnutService";
+import SolidService, { SolidDoughnutService } from "./service/solid/solidService";
+import PixelService from "./service/pixelService";
 
 const initPixel: PixelData = {luminance: -Infinity, parameter: {theta: 0, phi: 0}};
 
@@ -17,7 +17,8 @@ export default class SolidTextViewModel {
   private readonly rotate: Rotate;
   private zMatrix: NumberMatrix;
   private readonly pixelMatrix: Matrix<PixelData>;
-  private solidService: SolidService;
+  private readonly solidService: SolidService;
+  public pixelService: PixelService;
 
   constructor(size: number) {
     this.size = size;
@@ -26,6 +27,7 @@ export default class SolidTextViewModel {
     this.pixelMatrix = Matrix.create<PixelData>(size, size, initPixel);
     this.zMatrix = NumberMatrix.createAllMinusInf(size, size);
     this.solidService = new SolidDoughnutService(Constant.majorRadius, Constant.minorRadius);
+    this.pixelService = new PixelService(this.solidService, size);
   }
 
   public setColorStyle(colorStyle: ColorStyle) {
@@ -35,6 +37,15 @@ export default class SolidTextViewModel {
 
   public getPixelMatrix(): Matrix<PixelData> {
     return this.pixelMatrix;
+  }
+
+  public dragRotate(distanceX: number, distanceY: number) {
+    const rotateX = this.pixelService.isSolidReverse ? -distanceY / 2000 : distanceY / 2000;
+    const rotateY = -distanceX / 2000;
+    this.pixelService.addRotate({rotateX, rotateY});
+    // if (pixelService.isOverThreshold) {
+    //   this.drawDonut();
+    // }
   }
 
   public addRotate(rotate: Rotate) {
