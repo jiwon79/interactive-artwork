@@ -2,32 +2,12 @@ import Component, { StateType } from "@src/core/model/component";
 import SolidTextViewModel from "./viewModel";
 import * as Constant from "./utils/constants";
 import "./style.scss";
-import Matrix from "@utils/matrix";
-import PixelModel from "@pages/solidText/model/pixelModel";
 
 interface SolidTextStateType extends StateType {
   canvasSize: number;
 }
 
-function rainbowGradient(x: number): [number, number, number] {
-  if (x < 0 || x > 1) {
-    throw new Error("Input should be between 0 and 1.");
-  }
-
-  const pi = Math.PI;
-
-  // Convert x from [0,1] to [0, 2π]
-  const theta = 2 * pi * x;
-
-  // Compute the RGB values
-  const r = Math.floor(255 * (Math.sin(theta) * 0.5 + 0.5));
-  const g = Math.floor(255 * (Math.sin(theta + 2 * pi / 3) * 0.5 + 0.5));
-  const b = Math.floor(255 * (Math.sin(theta + 4 * pi / 3) * 0.5 + 0.5));
-
-  return [r, g, b];
-}
-
-const solidTextViewModel = new SolidTextViewModel(Constant.MATRIX_SIZE);
+let solidTextViewModel: SolidTextViewModel;
 let ctx: CanvasRenderingContext2D;
 let isDragging = false;
 let startX = 0;
@@ -139,34 +119,14 @@ class SolidTextPage extends Component<SolidTextStateType> {
   didMount() {
     const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
     ctx = canvas.getContext('2d')!;
+    solidTextViewModel = new SolidTextViewModel(ctx, Constant.MATRIX_SIZE);
     this.drawDonut();
   }
 
   drawDonut() {
     solidTextViewModel.pixelService.updatePixelMatrix();
-    const pixelModelMatrix = solidTextViewModel.pixelService.pixelMatrix;
-    const luminanceMatrix = solidTextViewModel.pixelService.luminanceMatrix;
 
-    this.drawByLuminanceArray(ctx, pixelModelMatrix, luminanceMatrix);
-  }
-
-  drawByLuminanceArray(ctx: CanvasRenderingContext2D, pixelModelMatrix: Matrix<PixelModel>, luminanceMatrix: Matrix<number>) {
-    const cellSize: number = Math.floor(this.state.canvasSize / Constant.MATRIX_SIZE);
-    ctx.font = `bold ${cellSize * 1.2}px serif`;
-    ctx.clearRect(0, 0, this.state.canvasSize, this.state.canvasSize)
-
-    for (let i = 0; i < pixelModelMatrix.rows; i++) {
-      for (let j = 0; j < pixelModelMatrix.columns; j++) {
-        const pixel = pixelModelMatrix.getElement(i, j);
-        const luminance = luminanceMatrix.getElement(i, j);
-        if (luminance >= 0 && luminance < Constant.CHAR.length) {
-          const [r, g, b] = rainbowGradient(pixel.parameter.theta / (2 * Math.PI));
-          // ctx.fillStyle = `rgb(${color1}, ${color2}, ${color3})`;
-          ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-          ctx.fillText(Constant.CHAR[luminance], i * cellSize, j * cellSize);
-        }
-      }
-    }
+    solidTextViewModel.drawDonut(this.state.canvasSize);
   }
 }
 
