@@ -63,10 +63,10 @@ export default class SolidTextViewModel {
         const phi = 2 * Math.PI * j / Constant.PHI_NUM;
         const parameter: Parameter = {theta, phi};
 
-        const rVector: Vector  = this.solidService.getRotatedRVector(parameter, this.rotate);
+        const rVector: Vector = this.solidService.getRotatedRVector(parameter, this.rotate);
         const normalVector = this.solidService.getRotatedNormalVector(parameter, this.rotate);
 
-        const luminance = this.calculateLuminance(rVector, normalVector);
+        const luminance = this.solidService.getLuminance(rVector, normalVector, SolidTextViewModel.LIGHT);
         if (luminance < 0) continue;
 
         const rCanvasVector = new Vector([
@@ -90,13 +90,6 @@ export default class SolidTextViewModel {
     return 0 < x && x < this.size
       && 0 < y && y < this.size
       && this.zMatrix.getElement(x, y) <= z;
-  }
-
-  calculateLuminance(r: Vector, normal: Vector): number {
-    const luminance = normal.dotProduct(SolidTextViewModel.LIGHT);
-    const c = r.getElement(0, 2) / (Constant.majorRadius + Constant.minorRadius);
-
-    return Math.floor(1 + 7.9 * luminance + 2.9 * c);
   }
 }
 

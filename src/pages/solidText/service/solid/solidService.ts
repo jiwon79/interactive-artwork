@@ -31,6 +31,8 @@ abstract class SolidService {
   abstract getRVector(parameter: Parameter): Vector;
 
   abstract getNormalVector(parameter: Parameter): Vector;
+
+  abstract getLuminance(r: Vector, normal: Vector, light: Vector): number;
 }
 
 export default SolidService;
