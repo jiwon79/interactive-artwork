@@ -3,6 +3,7 @@ import Vector from "@utils/vector";
 import * as Constant from "./constants";
 import { Parameter, Rotate } from "./type";
 
+
 export function getRotatedRVector(parameter: Parameter, rotate: Rotate): Vector {
   const r: Vector = getRVector(parameter);
 

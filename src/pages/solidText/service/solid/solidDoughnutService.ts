@@ -2,11 +2,12 @@ import { Parameter } from "@pages/solidText/utils/type";
 import Vector from "@utils/vector";
 import SolidService from "./solidService";
 
-class SolidDoughnutService implements SolidService {
+class SolidDoughnutService extends SolidService {
   private majorRadius: number;
   private minorRadius: number;
 
   constructor(majorRadius: number, minorRadius: number) {
+    super();
     this.majorRadius = majorRadius;
     this.minorRadius = minorRadius;
   }
