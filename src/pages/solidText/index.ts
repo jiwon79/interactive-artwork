@@ -26,22 +26,24 @@ class SolidTextPage extends Component<SolidTextStateType> {
   template(): string {
     return `
       <main>
-        <p>Drag Dhonut</p>
-        <div>
-            <label for="color-gray">Gray</label>
-            <input type="radio" id="color-gray" name="mode" value="solid" checked>
-        </div>
-        <div>
-            <label for="color-rainbow-1">Rainbow-1</label>
-            <input type="radio" id="color-rainbow-1" name="mode" value="solid">
-        </div>
-        <div>
-            <label for="color-red">red</label>
-            <input type="radio" id="color-red" name="mode" value="solid">
-        </div>
-        <div>
-            <label for="color-change-rainbow">Change Rainbow</label>
-            <input type="radio" id="color-change-rainbow" name="mode" value="solid">
+        <p class="title">Drag Dhonut</p>
+        <div class="radio-input-wrap">
+          <div class="radio-input">
+              <input type="radio" id="color-gray" name="mode" value="solid" checked>
+              <label for="color-gray">Gray</label>
+          </div>
+          <div class="radio-input">
+              <input type="radio" id="color-rainbow-1" name="mode" value="solid">
+              <label for="color-rainbow-1">Rainbow-1</label>
+          </div>
+          <div class="radio-input">
+              <input type="radio" id="color-red" name="mode" value="solid">
+              <label for="color-red">Red Gradient</label>
+          </div>
+          <div class="radio-input">
+              <input type="radio" id="color-change-rainbow" name="mode" value="solid">
+              <label for="color-change-rainbow">Change Rainbow</label>
+          </div>
         </div>
         <canvas
             id="canvas"

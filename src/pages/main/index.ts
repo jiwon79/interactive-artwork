@@ -10,7 +10,7 @@ class MainPage extends Component<StateType> {
         <div>
           <a href="/">main</a>
           <a href="/solid-text">solid text</a>
-          <a href="/crowd">crowd text</a>
+<!--          <a href="/crowd">crowd text</a>-->
         </div>
       </main>
     `;

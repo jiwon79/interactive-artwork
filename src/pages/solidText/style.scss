@@ -1,4 +1,24 @@
+.title {
+  font-size: 20px;
+}
+
 canvas {
   width: min(100vh, 100vw);
   height: min(100vh, 100vw);
+}
+
+.radio-input-wrap {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.radio-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > input {
+    margin-right: 4px;
+  }
 }
