@@ -36,8 +36,8 @@ class SolidTextPage extends Component<SolidTextStateType> {
             <input type="radio" id="color-rainbow-1" name="mode" value="solid">
         </div>
         <div>
-            <label for="color-rainbow-2">Rainbow-2</label>
-            <input type="radio" id="color-rainbow-2" name="mode" value="solid">
+            <label for="color-red">red</label>
+            <input type="radio" id="color-red" name="mode" value="solid">
         </div>
         <div>
             <label for="color-change-rainbow">Change Rainbow</label>
@@ -66,6 +66,11 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
     this.addEvent("click", "#color-rainbow-1", () => {
       solidTextViewModel.setColorStyle(ColorStyleEnum.RAINBOW_1);
+      this.drawDonut();
+    });
+
+    this.addEvent("click", "#color-red", () => {
+      solidTextViewModel.setColorStyle(ColorStyleEnum.RED_GRADATION);
       this.drawDonut();
     });
 

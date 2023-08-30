@@ -37,7 +37,7 @@ export default class SolidTextViewModel {
     const luminanceMatrix = this.pixelService.luminanceMatrix;
 
     const cellSize: number = Math.floor(canvasSize / Constant.MATRIX_SIZE);
-    this.ctx.font = `bold ${cellSize * 1.2}px serif`;
+    this.ctx.font = `bold ${cellSize * 1.3}px serif`;
     this.ctx.clearRect(0, 0, canvasSize, canvasSize)
 
     for (let i = 0; i < pixelModelMatrix.rows; i++) {
