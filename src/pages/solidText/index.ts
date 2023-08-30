@@ -33,8 +33,8 @@ class SolidTextPage extends Component<SolidTextStateType> {
               <label for="color-gray">Gray</label>
           </div>
           <div class="radio-input">
-              <input type="radio" id="color-rainbow-1" name="mode" value="solid">
-              <label for="color-rainbow-1">Rainbow-1</label>
+              <input type="radio" id="color-rainbow" name="mode" value="solid">
+              <label for="color-rainbow">Rainbow</label>
           </div>
           <div class="radio-input">
               <input type="radio" id="color-red" name="mode" value="solid">
@@ -66,13 +66,18 @@ class SolidTextPage extends Component<SolidTextStateType> {
       this.drawDonut();
     });
 
-    this.addEvent("click", "#color-rainbow-1", () => {
-      solidTextViewModel.setColorStyle(ColorStyleEnum.RAINBOW_1);
+    this.addEvent("click", "#color-rainbow", () => {
+      solidTextViewModel.setColorStyle(ColorStyleEnum.RAINBOW);
       this.drawDonut();
     });
 
     this.addEvent("click", "#color-red", () => {
       solidTextViewModel.setColorStyle(ColorStyleEnum.RED_GRADATION);
+      this.drawDonut();
+    });
+
+    this.addEvent("click", "#color-change-rainbow", () => {
+      solidTextViewModel.setColorStyle(ColorStyleEnum.CHANGE_RAINBOW);
       this.drawDonut();
     });
 
@@ -122,6 +127,11 @@ class SolidTextPage extends Component<SolidTextStateType> {
     ctx = canvas.getContext('2d')!;
     solidTextViewModel = new SolidTextViewModel(ctx, Constant.MATRIX_SIZE);
     this.drawDonut();
+
+    setInterval(() => {
+      solidTextViewModel.drawDonut(this.state.canvasSize);
+      console.log("draw");
+    }, 80);
   }
 
   drawDonut() {

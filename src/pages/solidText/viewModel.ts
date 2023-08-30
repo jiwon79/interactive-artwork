@@ -27,9 +27,6 @@ export default class SolidTextViewModel {
     const rotateX = this.pixelService.isSolidReverse ? -distanceY : distanceY;
     const rotateY = -distanceX;
     this.pixelService.addRotate({rotateX, rotateY});
-    // if (pixelService.isOverThreshold) {
-    //   this.drawDonut();
-    // }
   }
 
   public drawDonut(canvasSize: number) {
@@ -45,7 +42,7 @@ export default class SolidTextViewModel {
         const pixel = pixelModelMatrix.getElement(i, j);
         const luminance = luminanceMatrix.getElement(i, j);
         if (luminance >= 0 && luminance < Constant.CHAR.length) {
-          const [r, g, b] = this.colorStyle.getColor(pixel.parameter)
+          const [r, g, b] = this.colorStyle.getColor(pixel.parameter, Date.now())
           this.ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
           this.ctx.fillText(Constant.CHAR[luminance], i * cellSize, j * cellSize);
         }

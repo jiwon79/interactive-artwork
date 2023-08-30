@@ -2,10 +2,9 @@ import { Parameter } from "@pages/solidText/utils/type";
 
 class ColorStyleEnum {
   static GRAY: ColorStyle = {display: 'gray', getColor: this.gray}
-  static RAINBOW_1: ColorStyle = {display: 'rainbow - 1', getColor: this.rainbow_1}
+  static RAINBOW: ColorStyle = {display: 'rainbow', getColor: this.rainbow_1}
   static RED_GRADATION: ColorStyle = {display: 'red gradation', getColor: this.red_gradation}
-
-  static Values: ColorStyleEnum[] = [ColorStyleEnum.GRAY, ColorStyleEnum.RAINBOW_1];
+  static CHANGE_RAINBOW: ColorStyle = {display: 'change gradation', getColor: this.change_rainbow}
 
   static gray(_parameter: Parameter): [number, number, number] {
     return [255, 255, 255];
@@ -32,11 +31,26 @@ class ColorStyleEnum {
 
     return [r, g, b];
   }
+
+  static change_rainbow(parameter: Parameter, time: number): [number, number, number] {
+    const pi = Math.PI;
+    const t = 2 * pi * (time % 4000) / 4000
+
+    if (parameter.theta < 0 || parameter.theta > 2 * pi) {
+      throw new Error("Input should be between 0 and 2 * PI.");
+    }
+
+    const r = Math.floor(255 * (Math.sin(parameter.theta + 2 * t) * 0.5 + 0.5));
+    const g = Math.floor(255 * (Math.sin(parameter.phi + 2 * pi / 3 + t * 2) * 0.5 + 0.5));
+    const b = Math.floor(255 * (Math.sin(parameter.theta + 4 * pi / 3 + 2 * t) * 0.5 +0.5 ));
+
+    return [r, g, b];
+  }
 }
 
 export interface ColorStyle {
   display: String;
-  getColor: (parameter: Parameter) => [number, number, number];
+  getColor: (parameter: Parameter, time: number) => [number, number, number];
 }
 
 export default ColorStyleEnum;
