@@ -24,8 +24,8 @@ export default class SolidTextViewModel {
   }
 
   public dragRotate(distanceX: number, distanceY: number) {
-    const rotateX = this.pixelService.isSolidReverse ? -distanceY / 2000 : distanceY / 2000;
-    const rotateY = -distanceX / 2000;
+    const rotateX = this.pixelService.isSolidReverse ? -distanceY : distanceY;
+    const rotateY = -distanceX;
     this.pixelService.addRotate({rotateX, rotateY});
     // if (pixelService.isOverThreshold) {
     //   this.drawDonut();

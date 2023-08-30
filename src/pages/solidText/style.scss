@@ -5,6 +5,7 @@
 canvas {
   width: min(100vh, 100vw);
   height: min(100vh, 100vw);
+  overscroll-behavior: none;
 }
 
 .radio-input-wrap {

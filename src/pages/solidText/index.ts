@@ -88,7 +88,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
       if (isDragging) {
         distanceX = e.clientX - startX;
         distanceY = e.clientY - startY;
-        solidTextViewModel.dragRotate(distanceX, distanceY);
+        solidTextViewModel.dragRotate(distanceX / 2000, distanceY / 2000);
 
         if (solidTextViewModel.pixelService.isOverThreshold) {
           this.drawDonut();
@@ -98,10 +98,13 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
     this.addEvent("touchmove", "#canvas", (e: TouchEvent) => {
       if (isDragging) {
-        // calculate the distance dragged along the X and Y axes
-        distanceX = e.touches[0].clientY - startY;
-        distanceY = e.touches[0].clientX - startX;
-        console.log(`Distance dragged: ${distanceX}px horizontally, ${distanceY}px vertically`);
+        distanceX = e.touches[0].clientX - startX;
+        distanceY = e.touches[0].clientY - startY;
+        solidTextViewModel.dragRotate(distanceX / 1000, distanceY / 1000);
+
+        if (solidTextViewModel.pixelService.isOverThreshold) {
+          this.drawDonut();
+        }
       }
     });
 
