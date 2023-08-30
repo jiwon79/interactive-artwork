@@ -1,30 +1,10 @@
 import { Parameter } from "@pages/solidText/utils/type";
 
-class ColorService {
-  private _selectedColorStyle: ColorStyleField;
+class ColorStyleEnum {
+  static GRAY: ColorStyle = {display: 'gray', getColor: this.getColorGray}
+  static RAINBOW_1: ColorStyle = {display: 'rainbow_1', getColor: this.getRainbowColor}
 
-  constructor() {
-    this._selectedColorStyle = ColorStyle.GRAY;
-  }
-
-  public test() {
-    console.log("test")
-  }
-
-  public get selectedColorStyle() {
-    return this._selectedColorStyle;
-  }
-
-  set selectedColorStyle(colorStyle: ColorStyleField) {
-    this._selectedColorStyle = colorStyle;
-  }
-}
-
-export class ColorStyle {
-  static GRAY: ColorStyleField = {display: 'gray', getColor: this.getColorGray}
-  static RAINBOW_1: ColorStyleField = {display: 'rainbow_1', getColor: this.getRainbowColor}
-
-  static Values: ColorStyle[] = [ColorStyle.GRAY, ColorStyle.RAINBOW_1];
+  static Values: ColorStyleEnum[] = [ColorStyleEnum.GRAY, ColorStyleEnum.RAINBOW_1];
 
   static getColorGray(_parameter: Parameter): [number, number, number] {
     return [255, 255, 255];
@@ -49,9 +29,9 @@ export class ColorStyle {
   }
 }
 
-export interface ColorStyleField {
+export interface ColorStyle {
   display: String;
   getColor: (parameter: Parameter) => [number, number, number];
 }
 
-export default ColorService;
+export default ColorStyleEnum;

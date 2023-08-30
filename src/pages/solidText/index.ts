@@ -1,6 +1,7 @@
 import Component, { StateType } from "@src/core/model/component";
 import SolidTextViewModel from "./viewModel";
 import * as Constant from "./utils/constants";
+import ColorStyleEnum from "./utils/colorStlye";
 import "./style.scss";
 
 interface SolidTextStateType extends StateType {
@@ -59,22 +60,12 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
   setEvent() {
     this.addEvent("click", "#color-gray", () => {
-      solidTextViewModel.setColorStyle('gray');
+      solidTextViewModel.setColorStyle(ColorStyleEnum.GRAY);
       this.drawDonut();
     });
 
     this.addEvent("click", "#color-rainbow-1", () => {
-      solidTextViewModel.setColorStyle('rainbow-1');
-      this.drawDonut();
-    });
-
-    this.addEvent("click", "#color-rainbow-2", () => {
-      solidTextViewModel.setColorStyle('rainbow-2');
-      this.drawDonut();
-    });
-
-    this.addEvent("click", "#color-change-rainbow", () => {
-      solidTextViewModel.setColorStyle('change-rainbow');
+      solidTextViewModel.setColorStyle(ColorStyleEnum.RAINBOW_1);
       this.drawDonut();
     });
 
