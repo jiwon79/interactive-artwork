@@ -11,6 +11,11 @@ canvas {
   display: flex;
   gap: 20px;
   justify-content: center;
+
+  @media screen and (max-width: 400px) {
+    flex-direction: column;
+    gap: 6px;
+  }
 }
 
 .radio-input {
