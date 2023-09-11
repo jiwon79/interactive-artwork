@@ -48,7 +48,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
               <label for="color-change-rainbow">Change Rainbow</label>
           </div>
         </div>
-        <video-player></video-player>
+<!--        <video-player></video-player>-->
         <canvas
             id="canvas"
             width="${this.state.canvasSize}"
