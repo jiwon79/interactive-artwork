@@ -4,6 +4,9 @@ import * as Constant from "./utils/constants";
 import ColorStyleEnum from "./utils/colorStlye";
 import "./style.scss";
 
+import VideoPlayer from "@pages/solidText/component/VideoPlayer";
+customElements.define('video-player', VideoPlayer);
+
 interface SolidTextStateType extends StateType {
   canvasSize: number;
 }
@@ -45,6 +48,7 @@ class SolidTextPage extends Component<SolidTextStateType> {
               <label for="color-change-rainbow">Change Rainbow</label>
           </div>
         </div>
+        <video-player></video-player>
         <canvas
             id="canvas"
             width="${this.state.canvasSize}"
