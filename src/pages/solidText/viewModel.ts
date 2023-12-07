@@ -2,14 +2,18 @@ import * as Constant from "./utils/constants";
 import SolidService from "./service/solid/solidService";
 import SolidDoughnutService from "./service/solid/solidDoughnutService";
 import PixelService from "./service/pixelService";
-import ColorStyleEnum, { ColorStyle } from "@pages/solidText/utils/colorStlye";
+import { colorShaderMap, type ColorShaderType } from "@pages/solidText/utils/colorShader";
 
 export default class SolidTextViewModel {
   public size: number;
   private ctx: CanvasRenderingContext2D;
-  private colorStyle: ColorStyle = ColorStyleEnum.GRAY;
+  private colorShaderType: ColorShaderType = 'grey';
   private readonly solidService: SolidService;
   public pixelService: PixelService;
+
+  private get colorShader() {
+    return colorShaderMap[this.colorShaderType];
+  }
 
   constructor(ctx: CanvasRenderingContext2D, size: number) {
     this.size = size;
@@ -18,9 +22,8 @@ export default class SolidTextViewModel {
     this.pixelService = new PixelService(this.solidService, size);
   }
 
-  public setColorStyle(colorStyle: ColorStyle) {
-    this.colorStyle = colorStyle;
-    console.log(this.colorStyle);
+  public setColorShaderType(colorShaderType: ColorShaderType) {
+    this.colorShaderType = colorShaderType;
   }
 
   public dragRotate(distanceX: number, distanceY: number) {
@@ -42,7 +45,7 @@ export default class SolidTextViewModel {
         const pixel = pixelModelMatrix.getElement(i, j);
         const luminance = luminanceMatrix.getElement(i, j);
         if (luminance >= 0 && luminance < Constant.CHAR.length) {
-          const [r, g, b] = this.colorStyle.getColor(pixel.parameter, Date.now())
+          const [r, g, b] = this.colorShader.getColor(pixel.parameter, Date.now())
           this.ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
           this.ctx.fillText(Constant.CHAR[luminance], i * cellSize, j * cellSize);
         }

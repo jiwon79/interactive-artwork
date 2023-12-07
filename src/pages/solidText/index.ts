@@ -1,11 +1,7 @@
 import Component, { StateType } from "@src/core/model/component";
 import SolidTextViewModel from "./viewModel";
 import * as Constant from "./utils/constants";
-import ColorStyleEnum from "./utils/colorStlye";
 import "./style.scss";
-
-import VideoPlayer from "@pages/solidText/component/VideoPlayer";
-customElements.define('video-player', VideoPlayer);
 
 interface SolidTextStateType extends StateType {
   canvasSize: number;
@@ -66,22 +62,22 @@ class SolidTextPage extends Component<SolidTextStateType> {
 
   setEvent() {
     this.addEvent("click", "#color-gray", () => {
-      solidTextViewModel.setColorStyle(ColorStyleEnum.GRAY);
+      solidTextViewModel.setColorShaderType('grey');
       this.drawDonut();
     });
 
     this.addEvent("click", "#color-rainbow", () => {
-      solidTextViewModel.setColorStyle(ColorStyleEnum.RAINBOW);
+      solidTextViewModel.setColorShaderType('rainbow');
       this.drawDonut();
     });
 
     this.addEvent("click", "#color-red", () => {
-      solidTextViewModel.setColorStyle(ColorStyleEnum.RED_GRADATION);
+      solidTextViewModel.setColorShaderType('red-gradation');
       this.drawDonut();
     });
 
     this.addEvent("click", "#color-change-rainbow", () => {
-      solidTextViewModel.setColorStyle(ColorStyleEnum.CHANGE_RAINBOW);
+      solidTextViewModel.setColorShaderType('change-rainbow');
       this.drawDonut();
     });
 
