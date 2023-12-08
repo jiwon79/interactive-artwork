@@ -1,5 +1,4 @@
 import { MainPage } from "@pages/main";
-import { HistoryChangeEvent } from "./navigate";
 import { SolidTextPage } from "@pages/solidText";
 
 interface RouteInfo {
@@ -22,7 +21,7 @@ export class Route extends HTMLElement {
     return ["data-path"];
   }
 
-  create() {
+  connectedCallback() {
     const path = window.location.pathname;
     const route = routes.find((route) => route.path === path);
     if (!route) return;
@@ -34,23 +33,10 @@ export class Route extends HTMLElement {
 
   constructor() {
     super();
-    this.create()
 
     window.addEventListener("popstate", () => {
       this._path = window.location.pathname;
       this.setAttribute("data-path", this._path);
-    });
-
-    window.addEventListener("historyChange", (event: HistoryChangeEvent) => {
-      const {to, isReplace} = event.detail;
-
-      if (isReplace || to === location.pathname) {
-        history.replaceState(null, "", to);
-      } else {
-        history.pushState(null, "", to);
-      }
-
-      this._path = window.location.pathname;
     });
   }
 }

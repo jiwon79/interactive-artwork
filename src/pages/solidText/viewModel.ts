@@ -6,24 +6,32 @@ import { colorShaderMap, type ColorShaderType } from "@pages/solidText/utils/col
 
 export default class SolidTextViewModel {
   public size: number;
-  private ctx: CanvasRenderingContext2D;
-  private colorShaderType: ColorShaderType = 'grey';
+  private ctx: CanvasRenderingContext2D | null = null;
+  private _colorShaderType: ColorShaderType = 'grey';
   private readonly solidService: SolidService;
   public pixelService: PixelService;
 
-  private get colorShader() {
-    return colorShaderMap[this.colorShaderType];
+  public get colorShaderType() {
+    return this._colorShaderType;
   }
 
-  constructor(ctx: CanvasRenderingContext2D, size: number) {
+  private get colorShader() {
+    return colorShaderMap[this._colorShaderType];
+  }
+
+  constructor(size: number) {
     this.size = size;
-    this.ctx = ctx;
+    // this.ctx = ctx;
     this.solidService = new SolidDoughnutService(Constant.majorRadius, Constant.minorRadius);
     this.pixelService = new PixelService(this.solidService, size);
   }
 
+  public setContext(ctx: CanvasRenderingContext2D) {
+    this.ctx = ctx;
+  }
+
   public setColorShaderType(colorShaderType: ColorShaderType) {
-    this.colorShaderType = colorShaderType;
+    this._colorShaderType = colorShaderType;
   }
 
   public dragRotate(distanceX: number, distanceY: number) {
@@ -33,10 +41,12 @@ export default class SolidTextViewModel {
   }
 
   public drawDonut(canvasSize: number) {
+    this.pixelService.updatePixelMatrix();
     const pixelModelMatrix = this.pixelService.pixelMatrix;
     const luminanceMatrix = this.pixelService.luminanceMatrix;
 
     const cellSize: number = Math.floor(canvasSize / Constant.MATRIX_SIZE);
+    if (!this.ctx) return;
     this.ctx.font = `bold ${cellSize * 1.3}px serif`;
     this.ctx.clearRect(0, 0, canvasSize, canvasSize)
 
