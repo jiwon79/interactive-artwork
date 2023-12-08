@@ -1,36 +1,44 @@
-import Component, { StateType } from "@src/core/model/component";
-import MainPage from "@pages/main";
-import SolidTextPage from "@pages/solidText";
-import CrowdPage from "@pages/crowd";
-
+import { MainPage } from "@pages/main";
 import { HistoryChangeEvent } from "./navigate";
+import { SolidTextPage } from "@pages/solidText";
 
 interface RouteInfo {
   path: string;
   title: string;
-  component: any;
+  pageElement: any;
 }
 
 
 const routes: RouteInfo[] = [
-  {path: "/", title: 'Interactive Artwork', component: MainPage},
-  {path: "/solid-text", title: 'Drag Donut', component: SolidTextPage},
-  {path: "/crowd", title: "Crowd Simulation", component: CrowdPage}
+  {path: "/", title: 'Interactive Artwork', pageElement: MainPage},
+  {path: "/solid-text", title: 'Drag Donut', pageElement: SolidTextPage},
+  // {path: "/crowd", title: "Crowd Simulation", component: CrowdPage}
 ];
 
-class Route extends Component<StateType> {
-  render() {
+export class Route extends HTMLElement {
+  private _path: string = "/";
+
+  static get observedAttributes() {
+    return ["data-path"];
+  }
+
+  create() {
     const path = window.location.pathname;
     const route = routes.find((route) => route.path === path);
     if (!route) return;
 
     document.title = route.title;
-    new route.component(this.target);
+    const pageElement = new route.pageElement();
+    this.append(pageElement);
   }
 
-  setEvent() {
+  constructor() {
+    super();
+    this.create()
+
     window.addEventListener("popstate", () => {
-      this.render();
+      this._path = window.location.pathname;
+      this.setAttribute("data-path", this._path);
     });
 
     window.addEventListener("historyChange", (event: HistoryChangeEvent) => {
@@ -42,9 +50,10 @@ class Route extends Component<StateType> {
         history.pushState(null, "", to);
       }
 
-      this.render();
+      this._path = window.location.pathname;
     });
   }
 }
 
-export default Route;
+customElements.define("route-wrap", Route);
+

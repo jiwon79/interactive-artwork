@@ -1,15 +1,7 @@
-import Route from "./pages/common/router";
+import { Route } from "@pages/common/router";
 
 document.addEventListener('DOMContentLoaded', () => {
-  // document.body.addEventListener('click', (e) => {
-  //   const $a = (e.target as HTMLElement).closest('a')
-  //   if ($a?.matches('[data-link]')) {
-  //     e.preventDefault()
-  //     // navigateTo($a.href)
-  //   }
-  // })
-
-  // window.addEventListener('popstate', router)
-
-  new Route(document.querySelector('#app')!);
+  const app = document.querySelector('#app')!
+  const route = new Route();
+  app.append(route);
 })

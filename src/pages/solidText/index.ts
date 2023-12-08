@@ -3,6 +3,29 @@ import SolidTextViewModel from "./viewModel";
 import * as Constant from "./utils/constants";
 import "./style.scss";
 
+export class SolidTextPage extends HTMLElement {
+  constructor() {
+    super();
+    this.create();
+  }
+
+  create() {
+    const title = document.createElement('p');
+    title.classList.add('title');
+    title.innerText = 'Drag Donut';
+
+    const canvas = document.createElement('canvas');
+    canvas.id = 'canvas';
+    canvas.width = Constant.CANVAS_SIZE;
+    canvas.height = Constant.CANVAS_SIZE;
+
+    this.append(title);
+    this.append(canvas);
+  }
+}
+
+customElements.define('solid-text-page', SolidTextPage);
+
 interface SolidTextStateType extends StateType {
   canvasSize: number;
 }
@@ -15,7 +38,7 @@ let startY = 0;
 let distanceX = 0;
 let distanceY = 0;
 
-class SolidTextPage extends Component<SolidTextStateType> {
+export class SolidTextPageXX extends Component<SolidTextStateType> {
   setUp() {
     this.state = {
       canvasSize: Constant.CANVAS_SIZE
@@ -123,6 +146,10 @@ class SolidTextPage extends Component<SolidTextStateType> {
   }
 
   didMount() {
+    // const main = document.querySelector("main") as HTMLElement;
+    // const radioWrap = new RadioWrap();
+    // main.appendChild(radioWrap);
+
     const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
     ctx = canvas.getContext('2d')!;
     solidTextViewModel = new SolidTextViewModel(ctx, Constant.MATRIX_SIZE);
@@ -141,4 +168,4 @@ class SolidTextPage extends Component<SolidTextStateType> {
   }
 }
 
-export default SolidTextPage;
+export default SolidTextPageXX;
