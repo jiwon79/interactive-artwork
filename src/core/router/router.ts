@@ -1,43 +1,50 @@
 import { MainPage } from "@pages/main";
 import { SolidTextPage } from "@pages/solidText";
+import { JElement } from "@core/element";
 
 interface RouteInfo {
   path: string;
   title: string;
-  pageElement: any;
+  page: any;
 }
 
 
 const routes: RouteInfo[] = [
-  {path: "/", title: 'Interactive Artwork', pageElement: MainPage},
-  {path: "/solid-text", title: 'Drag Donut', pageElement: SolidTextPage},
+  {path: "/", title: 'Interactive Artwork', page: MainPage},
+  {path: "/solid-text", title: 'Drag Donut', page: SolidTextPage},
   // {path: "/crowd", title: "Crowd Simulation", component: CrowdPage}
 ];
 
-export class Route extends HTMLElement {
-  private _path: string = "/";
+interface RouteState {
+  path: string;
+}
 
-  static get observedAttributes() {
-    return ["data-path"];
+export class Route extends JElement<RouteState, {}> {
+  constructor() {
+    super({path: '/'}, {})
+  }
+
+  protected createElements() {
+    const path = window.location.pathname;
+    const route = routes.find((route) => route.path === path);
+    if (route === undefined) {
+      return;
+    }
+
+    document.title = route.title;
+    this.append(new route.page());
+  }
+
+  private _onPopState() {
+    this.setState({path: window.location.pathname})
   }
 
   connectedCallback() {
-    const path = window.location.pathname;
-    const route = routes.find((route) => route.path === path);
-    if (!route) return;
-
-    document.title = route.title;
-    const pageElement = new route.pageElement();
-    this.append(pageElement);
+    window.addEventListener('popstate', this._onPopState)
   }
 
-  constructor() {
-    super();
-
-    window.addEventListener("popstate", () => {
-      this._path = window.location.pathname;
-      this.setAttribute("data-path", this._path);
-    });
+  disconnectedCallback() {
+    window.removeEventListener('popstate', this._onPopState)
   }
 }
 
