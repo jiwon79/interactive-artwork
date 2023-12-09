@@ -1,15 +1,14 @@
-import Route from "./pages/common/router";
+import { type RouteInfo, Router } from "@core/router/router";
+import { MainPage } from "@pages/main";
+import { SolidTextPage } from "@pages/solidText";
+
+const routes: RouteInfo[] = [
+  {path: "/", title: 'Interactive Artwork', page: MainPage},
+  {path: "/solid-text", title: 'Drag Donut', page: SolidTextPage},
+  // {path: "/crowd", title: "Crowd Simulation", component: CrowdPage}
+];
 
 document.addEventListener('DOMContentLoaded', () => {
-  // document.body.addEventListener('click', (e) => {
-  //   const $a = (e.target as HTMLElement).closest('a')
-  //   if ($a?.matches('[data-link]')) {
-  //     e.preventDefault()
-  //     // navigateTo($a.href)
-  //   }
-  // })
-
-  // window.addEventListener('popstate', router)
-
-  new Route(document.querySelector('#app')!);
+  const app = document.querySelector('#app')!
+  app.append(new Router({routes: routes}));
 })
