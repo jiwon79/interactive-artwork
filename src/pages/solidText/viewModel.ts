@@ -1,8 +1,11 @@
-import * as Constant from "./utils/constants";
-import SolidService from "./service/solid/solidService";
-import SolidDoughnutService from "./service/solid/solidDoughnutService";
-import PixelService from "./service/pixelService";
-import { colorShaderMap, type ColorShaderType } from "@pages/solidText/utils/colorShader";
+import * as Constant from './utils/constants';
+import SolidService from './service/solid/solidService';
+import SolidDoughnutService from './service/solid/solidDoughnutService';
+import PixelService from './service/pixelService';
+import {
+  colorShaderMap,
+  type ColorShaderType,
+} from '@pages/solidText/utils/colorShader';
 
 export default class SolidTextViewModel {
   public size: number;
@@ -22,7 +25,10 @@ export default class SolidTextViewModel {
   constructor(size: number) {
     this.size = size;
     // this.ctx = ctx;
-    this.solidService = new SolidDoughnutService(Constant.majorRadius, Constant.minorRadius);
+    this.solidService = new SolidDoughnutService(
+      Constant.majorRadius,
+      Constant.minorRadius,
+    );
     this.pixelService = new PixelService(this.solidService, size);
   }
 
@@ -37,7 +43,7 @@ export default class SolidTextViewModel {
   public dragRotate(distanceX: number, distanceY: number) {
     const rotateX = this.pixelService.isSolidReverse ? -distanceY : distanceY;
     const rotateY = -distanceX;
-    this.pixelService.addRotate({rotateX, rotateY});
+    this.pixelService.addRotate({ rotateX, rotateY });
   }
 
   public drawDonut(canvasSize: number) {
@@ -48,19 +54,25 @@ export default class SolidTextViewModel {
     const cellSize: number = Math.floor(canvasSize / Constant.MATRIX_SIZE);
     if (!this.ctx) return;
     this.ctx.font = `bold ${cellSize * 1.3}px serif`;
-    this.ctx.clearRect(0, 0, canvasSize, canvasSize)
+    this.ctx.clearRect(0, 0, canvasSize, canvasSize);
 
     for (let i = 0; i < pixelModelMatrix.rows; i++) {
       for (let j = 0; j < pixelModelMatrix.columns; j++) {
         const pixel = pixelModelMatrix.getElement(i, j);
         const luminance = luminanceMatrix.getElement(i, j);
         if (luminance >= 0 && luminance < Constant.CHAR.length) {
-          const [r, g, b] = this.colorShader.getColor(pixel.parameter, Date.now())
+          const [r, g, b] = this.colorShader.getColor(
+            pixel.parameter,
+            Date.now(),
+          );
           this.ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-          this.ctx.fillText(Constant.CHAR[luminance], i * cellSize, j * cellSize);
+          this.ctx.fillText(
+            Constant.CHAR[luminance],
+            i * cellSize,
+            j * cellSize,
+          );
         }
       }
     }
   }
 }
-

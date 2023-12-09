@@ -9,30 +9,30 @@ export class RadioInput extends HTMLElement {
   private readonly _onChange: () => void;
 
   static get observedAttributes() {
-    return ["checked"];
+    return ['checked'];
   }
 
   attributeChangedCallback(name: string, newValue: string) {
-    if (name === "data-checked") {
-      this._input.checked = newValue === "true";
+    if (name === 'data-checked') {
+      this._input.checked = newValue === 'true';
     }
   }
 
-  constructor({label, onChange, checked}: RadioInputProps) {
+  constructor({ label, onChange, checked }: RadioInputProps) {
     super();
     this._onChange = onChange;
 
-    const input = document.createElement("input");
-    input.type = "radio";
+    const input = document.createElement('input');
+    input.type = 'radio';
     input.onclick = () => {
       this._onChange();
     };
     input.checked = checked;
     input.id = `radio-${label}`;
-    this.setAttribute("data-checked", String(checked));
+    this.setAttribute('data-checked', String(checked));
     this._input = input;
 
-    const labelElement = document.createElement("label");
+    const labelElement = document.createElement('label');
     labelElement.innerText = label;
     labelElement.htmlFor = input.id;
 
@@ -41,4 +41,4 @@ export class RadioInput extends HTMLElement {
   }
 }
 
-customElements.define("radio-input", RadioInput);
+customElements.define('radio-input', RadioInput);

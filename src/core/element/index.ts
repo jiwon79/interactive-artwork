@@ -1,1 +1,1 @@
-export * from './JElement'
+export * from './JElement';

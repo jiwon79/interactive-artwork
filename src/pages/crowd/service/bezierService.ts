@@ -1,20 +1,26 @@
-import Vector from "@utils/vector";
+import Vector from '@utils/vector';
 
 class BezierService {
-  public getCurvePoint(initPoints: [Vector, Vector, Vector], t: number): Vector {
+  public getCurvePoint(
+    initPoints: [Vector, Vector, Vector],
+    t: number,
+  ): Vector {
     const [a, b, c] = initPoints;
-    let aVector = a.multiple((1-t) * (1-t));
-    let bVector = b.multiple(2 * t * (1-t));
-    let cVector = c.multiple(t * t);
+    const aVector = a.multiple((1 - t) * (1 - t));
+    const bVector = b.multiple(2 * t * (1 - t));
+    const cVector = c.multiple(t * t);
 
     return aVector.add(bVector).add(cVector);
   }
 
-  public getCurveSlope(initPoints: [Vector, Vector, Vector], t: number): Vector {
+  public getCurveSlope(
+    initPoints: [Vector, Vector, Vector],
+    t: number,
+  ): Vector {
     const [a, b, c] = initPoints;
-    let aVector = a.multiple(2 * (1-t));
-    let bVector = b.multiple(2 * (1-2 * t));
-    let cVector = c.multiple(2 * t);
+    const aVector = a.multiple(2 * (1 - t));
+    const bVector = b.multiple(2 * (1 - 2 * t));
+    const cVector = c.multiple(2 * t);
 
     return aVector.add(bVector).add(cVector);
   }
@@ -23,12 +29,11 @@ class BezierService {
     const curve: Vector[] = [];
 
     for (let t = 0; t < 1; t += 0.01) {
-      curve.push(this.getCurvePoint(initPoints, t))
+      curve.push(this.getCurvePoint(initPoints, t));
     }
 
     return curve;
   }
 }
 
-export default BezierService
-
+export default BezierService;

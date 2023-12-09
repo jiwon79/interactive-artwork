@@ -8,4 +8,17 @@ export const THETA_THRESHOLD = 0.1;
 export const majorRadius = 30;
 export const minorRadius = 10;
 
-export const CHAR = ['.', ',', '-', '~', ':', ';', '=', '!', '*', '#', '$', '@']
+export const CHAR = [
+  '.',
+  ',',
+  '-',
+  '~',
+  ':',
+  ';',
+  '=',
+  '!',
+  '*',
+  '#',
+  '$',
+  '@',
+];

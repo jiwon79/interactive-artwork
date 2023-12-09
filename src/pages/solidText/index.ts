@@ -1,8 +1,10 @@
-import * as Constant from "./utils/constants";
-import "./style.scss";
-import { RadioWrap } from "@pages/solidText/component/RadioWrap";
-import SolidTextViewModel from "@pages/solidText/viewModel";
-import { ColorShaderType } from "@pages/solidText/utils/colorShader";
+import * as Constant from './utils/constants';
+import SolidTextViewModel from '@pages/solidText/viewModel';
+import { RadioWrap } from '@pages/solidText/component/RadioWrap';
+
+import { ColorShaderType } from '@pages/solidText/utils/colorShader';
+import './style.scss';
+import { JElement } from '@core/element';
 
 let isDragging = false;
 let startX = 0;
@@ -10,29 +12,26 @@ let startY = 0;
 let distanceX = 0;
 let distanceY = 0;
 
-export class SolidTextPage extends HTMLElement {
+interface SolidTextPageState {
+  canvasSize: number;
+  selectedColorShaderType: ColorShaderType;
+}
+
+export class SolidTextPage extends JElement<SolidTextPageState, {}> {
   static viewModel: SolidTextViewModel;
 
   constructor() {
-    super();
+    super(
+      {
+        canvasSize: Constant.CANVAS_SIZE,
+        selectedColorShaderType: 'grey',
+      },
+      {},
+    );
     SolidTextPage.viewModel = new SolidTextViewModel(Constant.MATRIX_SIZE);
-    this.setAttribute('data-selected-color-type', SolidTextPage.viewModel.colorShaderType);
   }
 
-  delete() {
-    this.innerHTML = '';
-  }
-
-  static get observedAttributes() {
-    return ['data-selected-color-type'];
-  }
-
-  attributeChangedCallback() {
-    this.delete()
-    this.create()
-  }
-
-  create() {
+  createElements() {
     const title = document.createElement('p');
     title.classList.add('title');
     title.innerText = 'Drag Donut';
@@ -44,7 +43,7 @@ export class SolidTextPage extends HTMLElement {
 
     const ctx = canvas.getContext('2d')!;
     SolidTextPage.viewModel.setContext(ctx);
-    this.drawDonut()
+    this.drawDonut();
 
     setInterval(() => {
       SolidTextPage.viewModel.drawDonut(this.state.canvasSize);
@@ -61,15 +60,15 @@ export class SolidTextPage extends HTMLElement {
     this.append(radioWrap);
     this.append(canvas);
 
-    canvas.addEventListener("mousedown", (e: MouseEvent) => {
+    canvas.addEventListener('mousedown', (e: MouseEvent) => {
       this.setVariable(e.clientX, e.clientY);
     });
 
-    canvas.addEventListener("touchstart", (e: TouchEvent) => {
+    canvas.addEventListener('touchstart', (e: TouchEvent) => {
       this.setVariable(e.touches[0].clientX, e.touches[0].clientY);
     });
 
-    canvas.addEventListener("mousemove", (e: MouseEvent) => {
+    canvas.addEventListener('mousemove', (e: MouseEvent) => {
       if (isDragging) {
         distanceX = e.clientX - startX;
         distanceY = e.clientY - startY;
@@ -81,7 +80,7 @@ export class SolidTextPage extends HTMLElement {
       }
     });
 
-    canvas.addEventListener("touchmove", (e: TouchEvent) => {
+    canvas.addEventListener('touchmove', (e: TouchEvent) => {
       if (isDragging) {
         distanceX = e.touches[0].clientX - startX;
         distanceY = e.touches[0].clientY - startY;
@@ -93,11 +92,11 @@ export class SolidTextPage extends HTMLElement {
       }
     });
 
-    canvas.addEventListener("mouseup", () => {
+    canvas.addEventListener('mouseup', () => {
       isDragging = false;
     });
 
-    canvas.addEventListener("touchend", () => {
+    canvas.addEventListener('touchend', () => {
       isDragging = false;
     });
   }
@@ -108,11 +107,7 @@ export class SolidTextPage extends HTMLElement {
     startY = clientY;
   }
 
-  private state = {
-    canvasSize: Constant.CANVAS_SIZE
-  };
-
-  drawDonut() {
+  private drawDonut() {
     SolidTextPage.viewModel.drawDonut(this.state.canvasSize);
   }
 }
