@@ -1,12 +1,12 @@
-import "./style.scss"
+import './style.scss';
+import { JElement } from '@core/element';
 
-export class MainPage extends HTMLElement {
+export class MainPage extends JElement<{}, {}> {
   constructor() {
-    super();
-    this.create();
+    super({}, {});
   }
 
-  create() {
+  createElements() {
     const title = document.createElement('p');
     title.classList.add('title');
     title.innerText = 'Interactive Artwork';

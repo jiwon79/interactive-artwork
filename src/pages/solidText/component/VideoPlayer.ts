@@ -5,7 +5,7 @@ class VideoPlayer extends HTMLElement {
     super();
     this.num = 0;
 
-    const shadowRoot = this.attachShadow({mode: 'open'});
+    const shadowRoot = this.attachShadow({ mode: 'open' });
 
     shadowRoot.innerHTML = `
       <style>
@@ -48,7 +48,7 @@ class VideoPlayer extends HTMLElement {
     addButton.addEventListener('click', () => {
       this.num += 1;
       console.log(this.num);
-    })
+    });
 
     playButton.addEventListener('click', () => {
       this.playing = true;
@@ -68,12 +68,11 @@ class VideoPlayer extends HTMLElement {
   }
 
   set playing(isPlaying) {
-    if(isPlaying) {
+    if (isPlaying) {
       this.setAttribute('playing', '');
-    }
-    else {
+    } else {
       this.removeAttribute('playing');
     }
   }
 }
-export default VideoPlayer
+export default VideoPlayer;

@@ -1,6 +1,6 @@
-import { Parameter } from "@pages/solidText/utils/type";
-import Vector from "@utils/vector";
-import SolidService from "./solidService";
+import { Parameter } from '@pages/solidText/utils/type';
+import Vector from '@utils/vector';
+import SolidService from './solidService';
 
 class SolidDoughnutService extends SolidService {
   private majorRadius: number;
@@ -21,22 +21,22 @@ class SolidDoughnutService extends SolidService {
   }
 
   getRVector(parameter: Parameter): Vector {
-    const {theta, phi} = parameter;
+    const { theta, phi } = parameter;
 
     return new Vector([
       Math.cos(phi) * (this.minorRadius * Math.cos(theta) + this.majorRadius),
       Math.sin(phi) * (this.minorRadius * Math.cos(theta) + this.majorRadius),
-      this.minorRadius * Math.sin(theta)
+      this.minorRadius * Math.sin(theta),
     ]);
   }
 
   getNormalVector(parameter: Parameter): Vector {
-    const {theta, phi} = parameter;
+    const { theta, phi } = parameter;
 
     return new Vector([
       Math.cos(theta) * Math.cos(phi),
       Math.cos(theta) * Math.sin(phi),
-      Math.sin(theta)
+      Math.sin(theta),
     ]);
   }
 

@@ -1,4 +1,4 @@
-import Matrix from "./matrix";
+import Matrix from './matrix';
 
 export default class NumberMatrix extends Matrix<number> {
   constructor(elements: number[][]) {
@@ -42,11 +42,15 @@ export default class NumberMatrix extends Matrix<number> {
 
   public crossProduct(other: NumberMatrix): NumberMatrix {
     if (this.columns !== other.rows) {
-      throw new Error(`Cannot perform matrix product with incompatible matrices\nthis column : ${this.columns}, other row : ${other.rows}, other column : ${other.columns}`);
+      throw new Error(
+        `Cannot perform matrix product with incompatible matrices\nthis column : ${this.columns}, other row : ${other.rows}, other column : ${other.columns}`,
+      );
     }
 
     const result = new NumberMatrix(
-      Array(this.rows).fill(0).map(() => Array(other.columns).fill(0))
+      Array(this.rows)
+        .fill(0)
+        .map(() => Array(other.columns).fill(0)),
     );
 
     for (let i = 0; i < this.rows; i++) {
@@ -65,16 +69,24 @@ export default class NumberMatrix extends Matrix<number> {
   static rotateMatrixByXY(thetaX: number, thetaY: number): NumberMatrix {
     return new NumberMatrix([
       [Math.cos(thetaY), 0, Math.sin(thetaY)],
-      [Math.sin(thetaX) * Math.sin(thetaY), Math.cos(thetaX), -Math.sin(thetaX) * Math.cos(thetaY)],
-      [-Math.cos(thetaX) * Math.sin(thetaY), Math.sin(thetaX), Math.cos(thetaX) * Math.cos(thetaY)]
-    ])
+      [
+        Math.sin(thetaX) * Math.sin(thetaY),
+        Math.cos(thetaX),
+        -Math.sin(thetaX) * Math.cos(thetaY),
+      ],
+      [
+        -Math.cos(thetaX) * Math.sin(thetaY),
+        Math.sin(thetaX),
+        Math.cos(thetaX) * Math.cos(thetaY),
+      ],
+    ]);
   }
 
   static rotateMatrixByX(theta: number): NumberMatrix {
     return new NumberMatrix([
       [1, 0, 0],
       [0, Math.cos(theta), -Math.sin(theta)],
-      [0, Math.sin(theta), Math.cos(theta)]
+      [0, Math.sin(theta), Math.cos(theta)],
     ]);
   }
 
@@ -82,13 +94,15 @@ export default class NumberMatrix extends Matrix<number> {
     return new NumberMatrix([
       [Math.cos(theta), 0, Math.sin(theta)],
       [0, 1, 0],
-      [-Math.sin(theta), 0, Math.cos(theta)]
+      [-Math.sin(theta), 0, Math.cos(theta)],
     ]);
   }
 
   static createAllMinusInf(rows: number, columns: number): NumberMatrix {
     return new NumberMatrix(
-      Array(rows).fill(0).map(() => Array(columns).fill(-Infinity))
+      Array(rows)
+        .fill(0)
+        .map(() => Array(columns).fill(-Infinity)),
     );
   }
 }
