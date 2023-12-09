@@ -1,32 +1,30 @@
-import { MainPage } from "@pages/main";
-import { SolidTextPage } from "@pages/solidText";
 import { JElement } from "@core/element";
 
-interface RouteInfo {
+export interface RouteInfo {
   path: string;
   title: string;
   page: any;
 }
 
+interface RouterProps {
+  routes: RouteInfo[]
+}
 
-const routes: RouteInfo[] = [
-  {path: "/", title: 'Interactive Artwork', page: MainPage},
-  {path: "/solid-text", title: 'Drag Donut', page: SolidTextPage},
-  // {path: "/crowd", title: "Crowd Simulation", component: CrowdPage}
-];
-
-interface RouteState {
+interface RouterState {
   path: string;
 }
 
-export class Route extends JElement<RouteState, {}> {
-  constructor() {
-    super({path: '/'}, {})
+export class Router extends JElement<RouterState, {}> {
+  private readonly props: RouterProps;
+
+  constructor(props: RouterProps) {
+    super({ path: '/' }, {})
+    this.props = props;
   }
 
-  protected createElements() {
+  createElements() {
     const path = window.location.pathname;
-    const route = routes.find((route) => route.path === path);
+    const route = this.props.routes.find((route) => route.path === path);
     if (route === undefined) {
       return;
     }
@@ -40,6 +38,7 @@ export class Route extends JElement<RouteState, {}> {
   }
 
   connectedCallback() {
+    super.connectedCallback()
     window.addEventListener('popstate', this._onPopState)
   }
 
@@ -48,5 +47,5 @@ export class Route extends JElement<RouteState, {}> {
   }
 }
 
-customElements.define("route-wrap", Route);
+customElements.define("route-wrap", Router);
 
