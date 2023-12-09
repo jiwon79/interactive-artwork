@@ -1,7 +1,7 @@
 const STATE_KEY = 'data-state';
 const REF_KEY = 'data-ref';
 
-export abstract class JElement<S extends {}, R extends {}> extends HTMLElement {
+export class JElement<S extends {}, R extends {}> extends HTMLElement {
   protected state: S;
   protected refs: R;
 
@@ -37,5 +37,5 @@ export abstract class JElement<S extends {}, R extends {}> extends HTMLElement {
     this.innerHTML = '';
   }
 
-  abstract createElements(): void;
+  protected createElements() {}
 }
