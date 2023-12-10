@@ -1,14 +1,11 @@
 const STATE_KEY = 'data-state';
-const REF_KEY = 'data-ref';
 
-export class JElement<S extends {}, R extends {}> extends HTMLElement {
+export class JElement<S extends {}> extends HTMLElement {
   protected state: S;
-  protected refs: R;
 
-  protected constructor(initialState: S, initialRefs: R) {
+  protected constructor(initialState: S) {
     super();
     this.state = initialState;
-    this.refs = initialRefs;
   }
 
   protected setState(state: Partial<S>) {
@@ -16,17 +13,13 @@ export class JElement<S extends {}, R extends {}> extends HTMLElement {
     this.setAttribute(STATE_KEY, JSON.stringify(this.state));
   }
 
-  protected setRefs(refs: Partial<R>) {
-    this.refs = { ...this.refs, refs };
-    this.setAttribute(REF_KEY, JSON.stringify(this.refs));
-  }
-
   static observedAttributes = [STATE_KEY];
 
   connectedCallback() {
     this.setAttribute(STATE_KEY, JSON.stringify(this.state));
-    this.setAttribute(REF_KEY, JSON.stringify(this.refs));
   }
+
+  disconnectedCallback() {}
 
   attributeChangedCallback() {
     this.clearElements();
