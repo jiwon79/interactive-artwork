@@ -1,5 +1,5 @@
 import { type RouteInfo, Router } from '@core/router/router';
-import { MainPage } from '@pages/main';
+import { MainPage } from '@pages/main/MainPage';
 import { SolidTextPage } from '@pages/solidText';
 
 const routes: RouteInfo[] = [

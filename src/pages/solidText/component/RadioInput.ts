@@ -1,42 +1,38 @@
+import { JLabel } from '@core/primitives/JLabel';
+import { JInput } from '@core/primitives/JInput';
+import { JElement } from '@core/element';
+
 export interface RadioInputProps {
   label: string;
   onChange: () => void;
   checked: boolean;
 }
 
-export class RadioInput extends HTMLElement {
-  private _input: HTMLInputElement;
-  private readonly _onChange: () => void;
+export class RadioInput extends JElement<{}> {
+  private readonly _props: RadioInputProps;
 
-  static get observedAttributes() {
-    return ['checked'];
+  constructor(props: RadioInputProps) {
+    super({});
+    this._props = props;
   }
 
-  attributeChangedCallback(name: string, newValue: string) {
-    if (name === 'data-checked') {
-      this._input.checked = newValue === 'true';
-    }
-  }
+  protected createElements() {
+    super.createElements();
 
-  constructor({ label, onChange, checked }: RadioInputProps) {
-    super();
-    this._onChange = onChange;
+    const inputElement = new JInput({
+      id: `radio-${this._props.label}`,
+      type: 'radio',
+      onClick: () => {
+        this._props.onChange();
+      },
+      checked: this._props.checked,
+    });
+    const labelElement = new JLabel({
+      htmlFor: inputElement.id,
+      innerText: this._props.label,
+    });
 
-    const input = document.createElement('input');
-    input.type = 'radio';
-    input.onclick = () => {
-      this._onChange();
-    };
-    input.checked = checked;
-    input.id = `radio-${label}`;
-    this.setAttribute('data-checked', String(checked));
-    this._input = input;
-
-    const labelElement = document.createElement('label');
-    labelElement.innerText = label;
-    labelElement.htmlFor = input.id;
-
-    this.append(input);
+    this.append(inputElement);
     this.append(labelElement);
   }
 }
