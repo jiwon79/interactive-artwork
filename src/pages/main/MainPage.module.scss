@@ -1,26 +1,12 @@
 @import "@src/style.scss";
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-body {
-  padding: 0;
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-height: 100svh;
-}
-
 .title {
   font-family: Raleway, sans-serif;
   font-weight: 700;
   font-size: 30px;
 }
 
-a {
+.link {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
