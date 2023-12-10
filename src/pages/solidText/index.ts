@@ -5,6 +5,8 @@ import { RadioWrap } from '@pages/solidText/component/RadioWrap';
 import { ColorShaderType } from '@pages/solidText/utils/colorShader';
 import './style.scss';
 import { JElement } from '@core/element';
+import { JParagraph } from '@core/primitives/JParagraph';
+import { JCanvas } from '@core/primitives/JCanvas';
 
 let isDragging = false;
 let startX = 0;
@@ -17,29 +19,28 @@ interface SolidTextPageState {
   selectedColorShaderType: ColorShaderType;
 }
 
-export class SolidTextPage extends JElement<SolidTextPageState, {}> {
+export class SolidTextPage extends JElement<SolidTextPageState> {
   static viewModel: SolidTextViewModel;
 
   constructor() {
-    super(
-      {
-        canvasSize: Constant.CANVAS_SIZE,
-        selectedColorShaderType: 'grey',
-      },
-      {},
-    );
+    super({
+      canvasSize: Constant.CANVAS_SIZE,
+      selectedColorShaderType: 'grey',
+    });
     SolidTextPage.viewModel = new SolidTextViewModel(Constant.MATRIX_SIZE);
   }
 
   createElements() {
-    const title = document.createElement('p');
-    title.classList.add('title');
-    title.innerText = 'Drag Donut';
+    const title = new JParagraph({
+      innerText: 'Drag Donut',
+      className: 'title',
+    });
 
-    const canvas = document.createElement('canvas');
-    canvas.id = 'canvas';
-    canvas.width = Constant.CANVAS_SIZE;
-    canvas.height = Constant.CANVAS_SIZE;
+    const canvas = new JCanvas({
+      id: 'canvas',
+      width: Constant.CANVAS_SIZE,
+      height: Constant.CANVAS_SIZE,
+    });
 
     const ctx = canvas.getContext('2d')!;
     SolidTextPage.viewModel.setContext(ctx);
@@ -52,7 +53,7 @@ export class SolidTextPage extends JElement<SolidTextPageState, {}> {
       selectedColorShaderType: SolidTextPage.viewModel.colorShaderType,
       onChange: (colorShaderType: ColorShaderType) => {
         SolidTextPage.viewModel.setColorShaderType(colorShaderType);
-        this.setAttribute('data-selected-color-type', colorShaderType);
+        this.setState({ selectedColorShaderType: colorShaderType });
       },
     });
 

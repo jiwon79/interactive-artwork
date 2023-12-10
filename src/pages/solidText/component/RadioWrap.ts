@@ -1,72 +1,58 @@
 import { RadioInput } from '@pages/solidText/component/RadioInput';
 import { ColorShaderType } from '@pages/solidText/utils/colorShader';
+import { JElement } from '@core/element';
 
 interface RadioWrapProps {
   selectedColorShaderType: ColorShaderType;
   onChange: (colorShaderType: ColorShaderType) => void;
 }
 
-export class RadioWrap extends HTMLElement {
-  private readonly _selectedColorType: ColorShaderType = 'grey';
-  private readonly _onChange: (colorShaderType: ColorShaderType) => void;
+export class RadioWrap extends JElement<{}> {
+  private readonly _props: RadioWrapProps;
 
-  constructor({ selectedColorShaderType, onChange }: RadioWrapProps) {
-    super();
-    this._selectedColorType = selectedColorShaderType;
-    this._onChange = onChange;
-    this.setAttribute('data-selected-color-type', this._selectedColorType);
+  constructor(props: RadioWrapProps) {
+    super({});
+    this._props = props;
   }
 
-  create() {
+  protected createElements() {
+    super.createElements();
     const greyRadioInput = new RadioInput({
       label: 'grey',
       onChange: () => {
-        this._onChange('grey');
+        this._props.onChange('grey');
       },
-      checked: this._selectedColorType === 'grey',
+      checked: this._props.selectedColorShaderType === 'grey',
     });
 
     const rainbowRadioInput = new RadioInput({
       label: 'rainbow',
       onChange: () => {
-        this._onChange('rainbow');
+        this._props.onChange('rainbow');
       },
-      checked: this._selectedColorType === 'rainbow',
+      checked: this._props.selectedColorShaderType === 'rainbow',
     });
 
     const redGradationRadioInput = new RadioInput({
       label: 'red-gradation',
       onChange: () => {
-        this._onChange('red-gradation');
+        this._props.onChange('red-gradation');
       },
-      checked: this._selectedColorType === 'red-gradation',
+      checked: this._props.selectedColorShaderType === 'red-gradation',
     });
 
     const changeRainbowRadioInput = new RadioInput({
       label: 'change-rainbow',
       onChange: () => {
-        this._onChange('change-rainbow');
+        this._props.onChange('change-rainbow');
       },
-      checked: this._selectedColorType === 'change-rainbow',
+      checked: this._props.selectedColorShaderType === 'change-rainbow',
     });
 
     this.append(greyRadioInput);
     this.append(rainbowRadioInput);
     this.append(redGradationRadioInput);
     this.append(changeRainbowRadioInput);
-  }
-
-  delete() {
-    this.innerHTML = '';
-  }
-
-  static get observedAttributes() {
-    return ['data-selected-color-type'];
-  }
-
-  attributeChangedCallback() {
-    this.delete();
-    this.create();
   }
 }
 
