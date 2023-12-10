@@ -8,12 +8,6 @@ import * as Constant from '../utils/constants';
 
 import './style.scss';
 
-let isDragging = false;
-let startX = 0;
-let startY = 0;
-let distanceX = 0;
-let distanceY = 0;
-
 interface SolidTextPageState {
   canvasSize: number;
   selectedColorShaderType: ColorShaderType;
@@ -21,6 +15,7 @@ interface SolidTextPageState {
 
 export class SolidTextPage extends JElement<SolidTextPageState> {
   static viewModel: SolidTextViewModel;
+  private _canvas: JCanvas | null = null;
 
   constructor() {
     super({
@@ -41,18 +36,11 @@ export class SolidTextPage extends JElement<SolidTextPageState> {
       width: Constant.CANVAS_SIZE,
       height: Constant.CANVAS_SIZE,
     });
+    this._canvas = canvas;
 
-    const ctx = canvas.getContext('2d')!;
-    SolidTextPage.viewModel.setContext(ctx);
-    this.drawDonut();
-
-    setInterval(() => {
-      SolidTextPage.viewModel.drawDonut(this.state.canvasSize);
-    }, 80);
     const radioWrap = new RadioWrap({
-      selectedColorShaderType: SolidTextPage.viewModel.colorShaderType,
+      selectedColorShaderType: this.state.selectedColorShaderType,
       onChange: (colorShaderType: ColorShaderType) => {
-        SolidTextPage.viewModel.setColorShaderType(colorShaderType);
         this.setState({ selectedColorShaderType: colorShaderType });
       },
     });
@@ -60,56 +48,70 @@ export class SolidTextPage extends JElement<SolidTextPageState> {
     this.append(title);
     this.append(radioWrap);
     this.append(canvas);
-
-    canvas.addEventListener('mousedown', (e: MouseEvent) => {
-      this.setVariable(e.clientX, e.clientY);
-    });
-
-    canvas.addEventListener('touchstart', (e: TouchEvent) => {
-      this.setVariable(e.touches[0].clientX, e.touches[0].clientY);
-    });
-
-    canvas.addEventListener('mousemove', (e: MouseEvent) => {
-      if (isDragging) {
-        distanceX = e.clientX - startX;
-        distanceY = e.clientY - startY;
-        SolidTextPage.viewModel.dragRotate(distanceX / 2000, distanceY / 2000);
-
-        if (SolidTextPage.viewModel.pixelService.isOverThreshold) {
-          this.drawDonut();
-        }
-      }
-    });
-
-    canvas.addEventListener('touchmove', (e: TouchEvent) => {
-      if (isDragging) {
-        distanceX = e.touches[0].clientX - startX;
-        distanceY = e.touches[0].clientY - startY;
-        SolidTextPage.viewModel.dragRotate(distanceX / 1000, distanceY / 1000);
-
-        if (SolidTextPage.viewModel.pixelService.isOverThreshold) {
-          this.drawDonut();
-        }
-      }
-    });
-
-    canvas.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    canvas.addEventListener('touchend', () => {
-      isDragging = false;
-    });
   }
 
-  setVariable(clientX: number, clientY: number) {
-    isDragging = true;
-    startX = clientX;
-    startY = clientY;
+  attributeChangedCallback() {
+    super.attributeChangedCallback();
+    SolidTextPage.viewModel.setColorShaderType(
+      this.state.selectedColorShaderType,
+    );
+    SolidTextPage.viewModel.setCanvasSize(this.state.canvasSize);
   }
 
-  private drawDonut() {
-    SolidTextPage.viewModel.drawDonut(this.state.canvasSize);
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this._canvas === null) {
+      return;
+    }
+
+    const ctx = this._canvas.getContext('2d')!;
+    SolidTextPage.viewModel.setContext(ctx);
+
+    setInterval(() => {
+      SolidTextPage.viewModel.drawDonut();
+    }, 80);
+
+    this._canvas.addEventListener('mousedown', (event) =>
+      SolidTextPage.viewModel.startDrag(event),
+    );
+    this._canvas.addEventListener('touchstart', (event) =>
+      SolidTextPage.viewModel.startDrag(event),
+    );
+    this._canvas.addEventListener('mousemove', (event) =>
+      SolidTextPage.viewModel.drag(event),
+    );
+    this._canvas.addEventListener('touchmove', (event) =>
+      SolidTextPage.viewModel.drag(event),
+    );
+    this._canvas.addEventListener('mouseup', () =>
+      SolidTextPage.viewModel.endDrag(),
+    );
+    this._canvas.addEventListener('touchend', () =>
+      SolidTextPage.viewModel.endDrag(),
+    );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._canvas?.removeEventListener('mousedown', (event) =>
+      SolidTextPage.viewModel.startDrag(event),
+    );
+    this._canvas?.removeEventListener('touchstart', (event) =>
+      SolidTextPage.viewModel.startDrag(event),
+    );
+    this._canvas?.removeEventListener('mousemove', (event) =>
+      SolidTextPage.viewModel.drag(event),
+    );
+    this._canvas?.removeEventListener('touchmove', (event) =>
+      SolidTextPage.viewModel.drag(event),
+    );
+    this._canvas?.removeEventListener('mouseup', () =>
+      SolidTextPage.viewModel.endDrag(),
+    );
+    this._canvas?.removeEventListener('touchend', () =>
+      SolidTextPage.viewModel.endDrag(),
+    );
   }
 }
 

@@ -6,32 +6,29 @@ import {
   colorShaderMap,
   type ColorShaderType,
 } from '@pages/solidText/utils/colorShader';
+import { DragRotateService } from '@pages/solidText/service/dragRotateService';
 
 export default class SolidTextViewModel {
-  public size: number;
+  public matrixSize: number;
+  private canvasSize: number;
   private ctx: CanvasRenderingContext2D | null = null;
   private _colorShaderType: ColorShaderType = 'grey';
   private readonly solidService: SolidService;
+  private dragRotateService: DragRotateService;
   public pixelService: PixelService;
 
-  public get colorShaderType() {
-    return this._colorShaderType;
-  }
-
-  private get colorShader() {
-    return colorShaderMap[this._colorShaderType];
-  }
-
-  constructor(size: number) {
-    this.size = size;
-    // this.ctx = ctx;
+  constructor(matrixSize: number) {
+    this.matrixSize = matrixSize;
+    this.canvasSize = 0;
+    this.dragRotateService = new DragRotateService();
     this.solidService = new SolidDoughnutService(
       Constant.majorRadius,
       Constant.minorRadius,
     );
-    this.pixelService = new PixelService(this.solidService, size);
+    this.pixelService = new PixelService(this.solidService, matrixSize);
   }
 
+  // setter from ui state
   public setContext(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
   }
@@ -40,21 +37,40 @@ export default class SolidTextViewModel {
     this._colorShaderType = colorShaderType;
   }
 
-  public dragRotate(distanceX: number, distanceY: number) {
-    const rotateX = this.pixelService.isSolidReverse ? -distanceY : distanceY;
-    const rotateY = -distanceX;
-    this.pixelService.addRotate({ rotateX, rotateY });
+  public setCanvasSize(size: number) {
+    this.canvasSize = size;
   }
 
-  public drawDonut(canvasSize: number) {
-    this.pixelService.updatePixelMatrix();
+  // drag event
+  public startDrag(e: MouseEvent | TouchEvent) {
+    this.dragRotateService.startDrag(e);
+  }
+
+  public drag(e: MouseEvent | TouchEvent) {
+    this.dragRotateService.drag(e, () => {
+      requestAnimationFrame(() => this.drawDonut());
+    });
+  }
+
+  public endDrag() {
+    this.dragRotateService.endDrag();
+  }
+
+  // update
+
+  private get colorShader() {
+    return colorShaderMap[this._colorShaderType];
+  }
+
+  public drawDonut() {
+    this.pixelService.updatePixelMatrix(this.dragRotateService.rotate);
     const pixelModelMatrix = this.pixelService.pixelMatrix;
     const luminanceMatrix = this.pixelService.luminanceMatrix;
 
-    const cellSize: number = Math.floor(canvasSize / Constant.MATRIX_SIZE);
+    const cellSize: number = Math.floor(this.canvasSize / this.matrixSize);
     if (!this.ctx) return;
     this.ctx.font = `bold ${cellSize * 1.3}px serif`;
-    this.ctx.clearRect(0, 0, canvasSize, canvasSize);
+    this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
 
     for (let i = 0; i < pixelModelMatrix.rows; i++) {
       for (let j = 0; j < pixelModelMatrix.columns; j++) {
