@@ -3,7 +3,7 @@ import { JElement } from '@core/element';
 export interface RouteInfo {
   path: string;
   title: string;
-  page: typeof JElement<object, object>;
+  page: typeof JElement<object>;
 }
 
 interface RouterProps {
@@ -14,11 +14,11 @@ interface RouterState {
   path: string;
 }
 
-export class Router extends JElement<RouterState, object> {
+export class Router extends JElement<RouterState> {
   private readonly props: RouterProps;
 
   constructor(props: RouterProps) {
-    super({ path: '/' }, {});
+    super({ path: '/' });
     this.props = props;
   }
 
@@ -30,7 +30,7 @@ export class Router extends JElement<RouterState, object> {
     }
 
     document.title = route.title;
-    this.append(new route.page({}, {}));
+    this.append(new route.page({}));
   }
 
   private _onPopState() {
