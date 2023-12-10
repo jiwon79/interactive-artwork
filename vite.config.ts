@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
   resolve: {
@@ -11,15 +11,15 @@ export default defineConfig({
       '@element': resolve(__dirname, 'src/core/element/'),
       '@utils': resolve(__dirname, 'src/core/utils/'),
       '@public': resolve(__dirname, 'public/'),
-    }
+    },
   },
   // css: {
   //   preprocessorOptions: {
   //     scss: {
   //       additionalData: `
-  //         @import "@src/style.scss";
+  //         @import "@src/SolidTextPage.module.scss";
   //       `
   //     }
   //   }
   // }
-})
+});

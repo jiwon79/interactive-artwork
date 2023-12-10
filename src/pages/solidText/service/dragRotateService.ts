@@ -48,8 +48,8 @@ export class DragRotateService {
     }
 
     if (e instanceof TouchEvent) {
-      distanceX = (e.touches[0].clientX - this.lastClientX) / 1000;
-      distanceY = (e.touches[0].clientY - this.lastClientY) / 1000;
+      distanceX = (e.touches[0].clientX - this.lastClientX) / 150;
+      distanceY = (e.touches[0].clientY - this.lastClientY) / 150;
       this.lastClientX = e.touches[0].clientX;
       this.lastClientY = e.touches[0].clientY;
     }

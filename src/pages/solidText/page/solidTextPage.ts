@@ -6,7 +6,7 @@ import { RadioWrap } from '../component/RadioWrap';
 import { ColorShaderType } from '../utils/colorShader';
 import * as Constant from '../utils/constants';
 
-import './style.scss';
+import styles from './SolidTextPage.module.scss';
 
 interface SolidTextPageState {
   canvasSize: number;
@@ -28,13 +28,14 @@ export class SolidTextPage extends JElement<SolidTextPageState> {
   createElements() {
     const title = new JParagraph({
       innerText: 'Drag Donut',
-      className: 'title',
+      className: styles.title,
     });
 
     const canvas = new JCanvas({
       id: 'canvas',
       width: Constant.CANVAS_SIZE,
       height: Constant.CANVAS_SIZE,
+      className: styles.canvas,
     });
     this._canvas = canvas;
 

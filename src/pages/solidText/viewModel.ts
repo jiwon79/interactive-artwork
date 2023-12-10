@@ -57,7 +57,6 @@ export default class SolidTextViewModel {
   }
 
   // update
-
   private get colorShader() {
     return colorShaderMap[this._colorShaderType];
   }
