@@ -1,12 +1,11 @@
 import * as Constant from './utils/constants';
-import SolidService from './service/solid/solidService';
-import SolidDoughnutService from './service/solid/solidDoughnutService';
-import PixelService from './service/pixelService';
+import { colorShaderMap, type ColorShaderType } from './utils/colorShader';
 import {
-  colorShaderMap,
-  type ColorShaderType,
-} from '@pages/solidText/utils/colorShader';
-import { DragRotateService } from '@pages/solidText/service/dragRotateService';
+  DragRotateService,
+  PixelService,
+  SolidDoughnutService,
+  SolidService,
+} from './service';
 
 export default class SolidTextViewModel {
   public matrixSize: number;
