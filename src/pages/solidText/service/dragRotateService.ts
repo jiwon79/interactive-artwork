@@ -33,7 +33,7 @@ export class DragRotateService {
   }
 
   public drag(e: MouseEvent | TouchEvent, callback: () => void) {
-    if (!this.isDragging) {
+    if (!this.isDragging || !this.isOverTimeThreshold) {
       return;
     }
 
@@ -60,7 +60,7 @@ export class DragRotateService {
     this._rotate.rotateX += rotateX;
     this._rotate.rotateY += rotateY;
 
-    if (this.isOverRotateThreshold && this.isOverTimeThreshold) {
+    if (this.isOverRotateThreshold) {
       callback();
       this.lastUpdateTime = new Date().getTime();
       this._lastRotate.rotateX = this._rotate.rotateX;

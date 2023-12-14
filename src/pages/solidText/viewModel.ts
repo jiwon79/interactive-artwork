@@ -48,7 +48,7 @@ export default class SolidTextViewModel {
 
   public drag(e: MouseEvent | TouchEvent) {
     this.dragRotateService.drag(e, () => {
-      requestAnimationFrame(() => this.drawDonut());
+      requestAnimationFrame(() => this.updateDonut());
     });
   }
 
@@ -61,8 +61,15 @@ export default class SolidTextViewModel {
     return colorShaderMap[this._colorShaderType];
   }
 
-  public drawDonut() {
+  public updateDonut() {
     this.pixelService.updatePixelMatrix(this.dragRotateService.rotate);
+    this.drawCurrentDonut();
+  }
+
+  public drawCurrentDonut() {
+    if (!this.dragRotateService.isOverTimeThreshold) {
+      return;
+    }
     const pixelModelMatrix = this.pixelService.pixelMatrix;
     const luminanceMatrix = this.pixelService.luminanceMatrix;
 
