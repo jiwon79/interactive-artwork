@@ -10,14 +10,14 @@ type RGBColor = [number, number, number];
 export interface ColorShader {
   name: string;
   type: ColorShaderType;
-  getColor: (parameter: Parameter, time: number) => RGBColor;
+  getColor: (parameter: Parameter, luminance: number, time: number) => RGBColor;
 }
 
 export const colorShaderMap: Record<ColorShaderType, ColorShader> = {
   grey: {
     name: 'grey',
     type: 'grey',
-    getColor: () => [255, 255, 255],
+    getColor: getGrayColor,
   },
   rainbow: {
     name: 'rainbow',
@@ -36,7 +36,24 @@ export const colorShaderMap: Record<ColorShaderType, ColorShader> = {
   },
 };
 
-function getRainbowColor(parameter: Parameter): [number, number, number] {
+function sigmoid(x: number, a = 1) {
+  return 1 / (1 + Math.exp(-x * a));
+}
+
+function getGrayColor(
+  _: Parameter,
+  luminance: number,
+): [number, number, number] {
+  // const gray = Math.floor(255 * (luminance / 6));
+  const gray = Math.floor(255 * sigmoid(luminance - 2, 0.25));
+
+  return [gray, gray, gray];
+}
+
+function getRainbowColor(
+  parameter: Parameter,
+  luminance: number,
+): [number, number, number] {
   const pi = Math.PI;
 
   if (parameter.theta < 0 || parameter.theta > 2 * pi) {
@@ -51,19 +68,23 @@ function getRainbowColor(parameter: Parameter): [number, number, number] {
     255 * (Math.sin(parameter.theta + (4 * pi) / 3) * 0.5 + 0.5),
   );
 
-  return [r, g, b];
+  const curLuminance = (r + g + b) / 3;
+  const rate = sigmoid((luminance / curLuminance) * 12, 4);
+
+  return [r * rate, g * rate, b * rate];
 }
 
 function getRedGradationColor(parameter: Parameter): [number, number, number] {
   const r = 255;
-  const g = Math.floor(255 * Math.sin(parameter.phi * 4));
-  const b = Math.floor(255 * Math.sin(parameter.phi * 3));
+  const g = Math.floor(255 * Math.sin(parameter.phi * 3));
+  const b = Math.floor(255 * Math.sin(parameter.phi * 2));
 
   return [r, g, b];
 }
 
 function getChangeRainbowColor(
   parameter: Parameter,
+  _: number,
   time: number,
 ): [number, number, number] {
   const pi = Math.PI;
