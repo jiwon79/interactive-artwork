@@ -1,1 +1,1 @@
-export * from './solidTextPage';
+export * from './SolidTextPage';

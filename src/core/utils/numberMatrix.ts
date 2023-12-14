@@ -66,20 +66,33 @@ export default class NumberMatrix extends Matrix<number> {
     return result;
   }
 
+  static getRotateMatrixByXYKey(thetaX: number, thetaY: number): string {
+    const flooredThetaX = Math.floor(thetaX * 100) / 100;
+    const flooredThetaY = Math.floor(thetaY * 100) / 100;
+
+    return `${flooredThetaX},${flooredThetaY}`;
+  }
+
+  static rotateMatrixByXYCache: { [key: string]: NumberMatrix } = {};
+
   static rotateMatrixByXY(thetaX: number, thetaY: number): NumberMatrix {
-    return new NumberMatrix([
-      [Math.cos(thetaY), 0, Math.sin(thetaY)],
-      [
-        Math.sin(thetaX) * Math.sin(thetaY),
-        Math.cos(thetaX),
-        -Math.sin(thetaX) * Math.cos(thetaY),
-      ],
-      [
-        -Math.cos(thetaX) * Math.sin(thetaY),
-        Math.sin(thetaX),
-        Math.cos(thetaX) * Math.cos(thetaY),
-      ],
+    const key = NumberMatrix.getRotateMatrixByXYKey(thetaX, thetaY);
+    if (NumberMatrix.rotateMatrixByXYCache[key]) {
+      return NumberMatrix.rotateMatrixByXYCache[key];
+    }
+    const cosThetaX = Math.cos(thetaX);
+    const sinThetaX = Math.sin(thetaX);
+    const cosThetaY = Math.cos(thetaY);
+    const sinThetaY = Math.sin(thetaY);
+
+    const result = new NumberMatrix([
+      [cosThetaY, 0, sinThetaY],
+      [sinThetaX * sinThetaY, cosThetaX, -sinThetaX * cosThetaY],
+      [-cosThetaX * sinThetaY, sinThetaX, cosThetaX * cosThetaY],
     ]);
+
+    NumberMatrix.rotateMatrixByXYCache[key] = result;
+    return result;
   }
 
   static rotateMatrixByX(theta: number): NumberMatrix {

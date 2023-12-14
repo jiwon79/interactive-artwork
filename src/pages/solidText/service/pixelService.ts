@@ -8,43 +8,19 @@ import Vector from '@utils/vector';
 class PixelService {
   static LIGHT = new Vector([0, 0, 1]).unit;
 
-  private lastRotate: Rotate;
   private readonly size: number;
-  private readonly rotate: Rotate;
   private readonly solidService: SolidService;
   public readonly pixelMatrix: Matrix<PixelModel>;
   public readonly luminanceMatrix: Matrix<number>;
 
   constructor(solidService: SolidService, size: number) {
-    this.lastRotate = { rotateX: 0, rotateY: 0 };
-    this.rotate = { rotateX: 0, rotateY: 0 };
     this.size = size;
     this.solidService = solidService;
     this.pixelMatrix = Matrix.create<PixelModel>(size, size, emptyPixelModel);
     this.luminanceMatrix = Matrix.create<number>(size, size, -Infinity);
   }
 
-  public addRotate(rotate: Rotate) {
-    this.rotate.rotateX += rotate.rotateX;
-    this.rotate.rotateY += rotate.rotateY;
-  }
-
-  public get isSolidReverse(): boolean {
-    return Math.abs(Math.floor(this.rotate.rotateY / Math.PI + 0.5) % 2) == 1;
-  }
-
-  public get isOverThreshold(): boolean {
-    return (
-      Math.abs(this.rotate.rotateX - this.lastRotate.rotateX) >
-        Constant.THETA_THRESHOLD ||
-      Math.abs(this.rotate.rotateY - this.lastRotate.rotateY) >
-        Constant.THETA_THRESHOLD
-    );
-  }
-
-  public updatePixelMatrix() {
-    this.lastRotate.rotateX = this.rotate.rotateX;
-    this.lastRotate.rotateY = this.rotate.rotateY;
+  public updatePixelMatrix(rotate: Rotate) {
     this.pixelMatrix.clear(emptyPixelModel);
     this.luminanceMatrix.clear(-Infinity);
 
@@ -56,11 +32,22 @@ class PixelService {
 
         const r: Vector = this.solidService.getRotatedRVector(
           parameter,
-          this.rotate,
+          rotate,
         );
+
+        const rCanvasVector = new Vector([
+          Math.floor(r.x + Constant.MATRIX_SIZE / 2),
+          Math.floor(r.y + Constant.MATRIX_SIZE / 2),
+          r.z,
+        ]);
+
+        if (this.isAlreadyCalculated(rCanvasVector)) {
+          continue;
+        }
+
         const normal = this.solidService.getRotatedNormalVector(
           parameter,
-          this.rotate,
+          rotate,
         );
 
         const luminance = this.solidService.getLuminance(
@@ -70,13 +57,6 @@ class PixelService {
         );
         if (luminance < 0) continue;
 
-        const rCanvasVector = new Vector([
-          Math.floor(r.x + Constant.MATRIX_SIZE / 2),
-          Math.floor(r.y + Constant.MATRIX_SIZE / 2),
-          r.z,
-        ]);
-
-        if (!this.isUpdatePixelMatrix(rCanvasVector)) continue;
         this.pixelMatrix.setElement(rCanvasVector.x, rCanvasVector.y, {
           parameter,
           r: rCanvasVector,
@@ -91,14 +71,14 @@ class PixelService {
     }
   }
 
-  private isUpdatePixelMatrix(rCanvasVector: Vector): boolean {
+  private isAlreadyCalculated(rCanvasVector: Vector): boolean {
     const x = rCanvasVector.x;
     const y = rCanvasVector.y;
     const z = rCanvasVector.z;
 
     if (x <= 0 || this.size <= x) return false;
     if (y <= 0 || this.size <= y) return false;
-    return this.pixelMatrix.getElement(x, y).r.z <= z;
+    return this.pixelMatrix.getElement(x, y).r.z >= z;
   }
 }
 

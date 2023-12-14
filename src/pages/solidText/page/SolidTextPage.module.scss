@@ -2,10 +2,10 @@
   font-size: 20px;
 }
 
-canvas {
+.canvas {
   width: min(100vh, 100vw);
   height: min(100vh, 100vw);
-  overscroll-behavior: none;
+  touch-action: none;
 }
 
 .radio-input-wrap {

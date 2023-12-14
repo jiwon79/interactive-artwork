@@ -11,6 +11,9 @@ export interface BaseEvents {
   onMouseDown?: (event: MouseEvent) => void;
   onMouseUp?: (event: MouseEvent) => void;
   onMouseMove?: (event: MouseEvent) => void;
+  onTouchStart?: (event: TouchEvent) => void;
+  onTouchMove?: (event: TouchEvent) => void;
+  onTouchEnd?: (event: TouchEvent) => void;
 }
 
 const extractBaseAttributes = (props: BaseProps) => {
@@ -19,8 +22,24 @@ const extractBaseAttributes = (props: BaseProps) => {
 };
 
 const extractBaseEvents = (props: BaseProps) => {
-  const { onClick, onMouseDown, onMouseUp, onMouseMove } = props;
-  return { onClick, onMouseDown, onMouseUp, onMouseMove };
+  const {
+    onClick,
+    onMouseDown,
+    onMouseUp,
+    onMouseMove,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+  } = props;
+  return {
+    onClick,
+    onMouseDown,
+    onMouseUp,
+    onMouseMove,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+  };
 };
 
 export const initBaseAttribute = (element: HTMLElement, props: BaseProps) => {
@@ -37,11 +56,23 @@ export const addBaseEventsListener = (
   props: BaseProps,
 ) => {
   const events = extractBaseEvents(props);
-  const { onClick, onMouseDown, onMouseUp, onMouseMove } = events;
+  const {
+    onClick,
+    onMouseDown,
+    onMouseUp,
+    onMouseMove,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+  } = events;
+
   onClick && element.addEventListener('click', onClick);
   onMouseDown && element.addEventListener('mousedown', onMouseDown);
   onMouseUp && element.addEventListener('mouseup', onMouseUp);
   onMouseMove && element.addEventListener('mousemove', onMouseMove);
+  onTouchStart && element.addEventListener('touchstart', onTouchStart);
+  onTouchMove && element.addEventListener('touchmove', onTouchMove);
+  onTouchEnd && element.addEventListener('touchend', onTouchEnd);
 };
 
 export const removeBaseEventsListener = (
@@ -49,9 +80,21 @@ export const removeBaseEventsListener = (
   props: BaseProps,
 ) => {
   const events = extractBaseEvents(props);
-  const { onClick, onMouseDown, onMouseUp, onMouseMove } = events;
+  const {
+    onClick,
+    onMouseDown,
+    onMouseUp,
+    onMouseMove,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+  } = events;
+
   onClick && element.removeEventListener('click', onClick);
   onMouseDown && element.removeEventListener('mousedown', onMouseDown);
   onMouseUp && element.removeEventListener('mouseup', onMouseUp);
   onMouseMove && element.removeEventListener('mousemove', onMouseMove);
+  onTouchStart && element.removeEventListener('touchstart', onTouchStart);
+  onTouchMove && element.removeEventListener('touchmove', onTouchMove);
+  onTouchEnd && element.removeEventListener('touchend', onTouchEnd);
 };
