@@ -12,6 +12,20 @@
     src: url("/public/Raleway-Bold.ttf") format("truetype");
 }
 
+@font-face {
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 400;
+    src: url("/public/Pretendard-Regular.woff") format("woff2")
+}
+
+@font-face {
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 700;
+    src: url("/public/Pretendard-Bold.woff") format("woff2")
+}
+
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;

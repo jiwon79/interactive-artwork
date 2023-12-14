@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.radio {
+  display: none;
+}
+
+.label {
+  cursor: pointer;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  color: #B5B5B5;
+  border: 1px solid #595959;
+  border-radius: 4px;
+  padding: 3px 6px;
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    color: #FFFFFF;
+    background-color: #595959;
+  }
+}
+
+.radio:checked + .label {
+  background-color: #fff;
+  color: #000;
+}

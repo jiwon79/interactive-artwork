@@ -1,6 +1,7 @@
-import { RadioInput } from '@pages/solidText/component/RadioInput';
+import { RadioInput } from '@pages/solidText/component/RadioInput/RadioInput';
 import { ColorShaderType } from '@pages/solidText/utils/colorShader';
 import { JElement } from '@core/element';
+import styles from './RadioWrap.module.scss';
 
 interface RadioWrapProps {
   selectedColorShaderType: ColorShaderType;
@@ -13,12 +14,13 @@ export class RadioWrap extends JElement<{}> {
   constructor(props: RadioWrapProps) {
     super({});
     this._props = props;
+    this.classList.add(styles.container);
   }
 
   protected createElements() {
     super.createElements();
     const greyRadioInput = new RadioInput({
-      label: 'grey',
+      label: 'Grey',
       onChange: () => {
         this._props.onChange('grey');
       },
@@ -26,7 +28,7 @@ export class RadioWrap extends JElement<{}> {
     });
 
     const rainbowRadioInput = new RadioInput({
-      label: 'rainbow',
+      label: 'Rainbow',
       onChange: () => {
         this._props.onChange('rainbow');
       },
@@ -34,7 +36,7 @@ export class RadioWrap extends JElement<{}> {
     });
 
     const redGradationRadioInput = new RadioInput({
-      label: 'red-gradation',
+      label: 'Red-Gradation',
       onChange: () => {
         this._props.onChange('red-gradation');
       },
@@ -42,7 +44,7 @@ export class RadioWrap extends JElement<{}> {
     });
 
     const changeRainbowRadioInput = new RadioInput({
-      label: 'change-rainbow',
+      label: 'Changing-Rainbow',
       onChange: () => {
         this._props.onChange('change-rainbow');
       },

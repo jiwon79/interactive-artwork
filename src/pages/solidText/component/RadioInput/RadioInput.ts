@@ -1,6 +1,7 @@
 import { JLabel } from '@core/primitives/JLabel';
 import { JInput } from '@core/primitives/JInput';
 import { JElement } from '@core/element';
+import styles from './RadioInput.module.scss';
 
 export interface RadioInputProps {
   label: string;
@@ -14,6 +15,7 @@ export class RadioInput extends JElement<{}> {
   constructor(props: RadioInputProps) {
     super({});
     this._props = props;
+    this.classList.add(styles.container);
   }
 
   protected createElements() {
@@ -21,6 +23,7 @@ export class RadioInput extends JElement<{}> {
 
     const inputElement = new JInput({
       id: `radio-${this._props.label}`,
+      className: styles.radio,
       type: 'radio',
       onClick: () => {
         this._props.onChange();
@@ -30,6 +33,7 @@ export class RadioInput extends JElement<{}> {
     const labelElement = new JLabel({
       htmlFor: inputElement.id,
       innerText: this._props.label,
+      className: styles.label,
     });
 
     this.append(inputElement);

@@ -2,7 +2,7 @@ import { JElement } from '@core/element';
 import { JCanvas, JParagraph } from '@core/primitives';
 
 import SolidTextViewModel from '../viewModel';
-import { RadioWrap } from '../component/RadioWrap';
+import { RadioWrap } from '../component';
 import { ColorShaderType } from '../utils/colorShader';
 import * as Constant from '../utils/constants';
 
@@ -22,6 +22,7 @@ export class SolidTextPage extends JElement<SolidTextPageState> {
       canvasSize: Constant.CANVAS_SIZE,
       selectedColorShaderType: 'grey',
     });
+    this.classList.add(styles.page);
     SolidTextPage.viewModel = new SolidTextViewModel(Constant.MATRIX_SIZE);
   }
 
