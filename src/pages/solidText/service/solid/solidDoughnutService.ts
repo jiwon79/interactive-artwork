@@ -1,8 +1,8 @@
 import { Parameter } from '@pages/solidText/utils/type';
 import Vector from '@utils/vector';
-import SolidService from './solidService';
+import { SolidService } from './solidService';
 
-class SolidDoughnutService extends SolidService {
+export class SolidDoughnutService extends SolidService {
   private majorRadius: number;
   private minorRadius: number;
 
@@ -47,5 +47,3 @@ class SolidDoughnutService extends SolidService {
     return Math.floor(1 + 7.9 * luminance + 2.9 * c);
   }
 }
-
-export default SolidDoughnutService;

@@ -1,11 +1,11 @@
-import SolidService from './solid/solidService';
+import { SolidService } from './solid';
 import Matrix from '@utils/matrix';
 import PixelModel, { emptyPixelModel } from '../model/pixelModel';
 import { Parameter, Rotate } from '@pages/solidText/utils/type';
 import * as Constant from '@pages/solidText/utils/constants';
 import Vector from '@utils/vector';
 
-class PixelService {
+export class PixelService {
   static LIGHT = new Vector([0, 0, 1]).unit;
 
   private readonly size: number;
@@ -81,5 +81,3 @@ class PixelService {
     return this.pixelMatrix.getElement(x, y).r.z >= z;
   }
 }
-
-export default PixelService;

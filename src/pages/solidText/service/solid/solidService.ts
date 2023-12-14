@@ -2,7 +2,7 @@ import Vector from '@utils/vector';
 import { Parameter, Rotate } from '@pages/solidText/utils/type';
 import NumberMatrix from '@utils/numberMatrix';
 
-abstract class SolidService {
+export abstract class SolidService {
   getRotatedRVector(parameter: Parameter, rotate: Rotate): Vector {
     const r: Vector = this.getRVector(parameter);
 
@@ -37,5 +37,3 @@ abstract class SolidService {
 
   abstract getLuminance(r: Vector, normal: Vector, light: Vector): number;
 }
-
-export default SolidService;
