@@ -84,6 +84,7 @@ export default class SolidTextViewModel {
         if (luminance >= 0 && luminance < Constant.CHAR.length) {
           const [r, g, b] = this.colorShader.getColor(
             pixel.parameter,
+            luminance,
             Date.now(),
           );
           this.ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
