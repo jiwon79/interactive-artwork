@@ -1,4 +1,5 @@
 export * from './JAnchor';
+export * from './JButton';
 export * from './JCanvas';
 export * from './JDiv';
 export * from './JInput';

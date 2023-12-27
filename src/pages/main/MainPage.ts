@@ -3,9 +3,9 @@ import { JAnchor, JDiv, JParagraph } from '@core/primitives';
 
 import styles from './MainPage.module.scss';
 
-export class MainPage extends JElement<{}> {
+export class MainPage extends JElement {
   constructor() {
-    super({});
+    super();
   }
 
   createElements() {

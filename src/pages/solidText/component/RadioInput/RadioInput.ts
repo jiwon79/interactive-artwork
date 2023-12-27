@@ -9,11 +9,11 @@ export interface RadioInputProps {
   checked: boolean;
 }
 
-export class RadioInput extends JElement<{}> {
+export class RadioInput extends JElement {
   private readonly _props: RadioInputProps;
 
   constructor(props: RadioInputProps) {
-    super({});
+    super();
     this._props = props;
     this.classList.add(styles.container);
   }

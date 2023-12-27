@@ -1,40 +1,38 @@
-import { JElement } from '@core/element';
+import { JElement, property } from '@core/element';
 
 export interface RouteInfo {
   path: string;
   title: string;
-  page: typeof JElement<object>;
+  page: typeof JElement;
 }
 
 interface RouterProps {
   routes: RouteInfo[];
 }
 
-interface RouterState {
-  path: string;
-}
-
-export class Router extends JElement<RouterState> {
+export class Router extends JElement {
   private readonly props: RouterProps;
 
+  @property()
+  private _path: string = window.location.pathname;
+
   constructor(props: RouterProps) {
-    super({ path: '/' });
+    super();
     this.props = props;
   }
 
   createElements() {
-    const path = window.location.pathname;
-    const route = this.props.routes.find((route) => route.path === path);
+    const route = this.props.routes.find((route) => route.path === this._path);
     if (route === undefined) {
       return;
     }
 
     document.title = route.title;
-    this.append(new route.page({}));
+    this.append(new route.page());
   }
 
   private _onPopState() {
-    this.setState({ path: window.location.pathname });
+    this._path = window.location.pathname;
   }
 
   connectedCallback() {
