@@ -1,4 +1,4 @@
-import { JElement } from '@core/element';
+import { JElement, property } from '@core/element';
 import { JCanvas, JParagraph } from '@core/primitives';
 
 import SolidTextViewModel from '../viewModel';
@@ -8,22 +8,22 @@ import * as Constant from '../utils/constants';
 
 import styles from './SolidTextPage.module.scss';
 
-interface SolidTextPageState {
-  canvasSize: number;
-  selectedColorShaderType: ColorShaderType;
-}
-
-export class SolidTextPage extends JElement<SolidTextPageState> {
-  static viewModel: SolidTextViewModel;
+export class SolidTextPage extends JElement {
+  static viewModel?: SolidTextViewModel;
   private _rafId: number = 0;
 
+  @property()
+  private _selectedColorShaderType: ColorShaderType = 'grey';
+
   constructor() {
-    super({
-      canvasSize: Constant.CANVAS_SIZE,
-      selectedColorShaderType: 'grey',
-    });
+    super();
     this.classList.add(styles.page);
     SolidTextPage.viewModel = new SolidTextViewModel(Constant.MATRIX_SIZE);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    SolidTextPage.viewModel?.drawCurrentDonut();
   }
 
   createElements() {
@@ -37,21 +37,22 @@ export class SolidTextPage extends JElement<SolidTextPageState> {
       width: Constant.CANVAS_SIZE,
       height: Constant.CANVAS_SIZE,
       className: styles.canvas,
-      onMouseDown: (event) => SolidTextPage.viewModel.startDrag(event),
-      onTouchStart: (event) => SolidTextPage.viewModel.startDrag(event),
-      onMouseMove: (event) => SolidTextPage.viewModel.drag(event),
-      onTouchMove: (event) => SolidTextPage.viewModel.drag(event),
-      onMouseUp: () => SolidTextPage.viewModel.endDrag(),
-      onTouchEnd: () => SolidTextPage.viewModel.endDrag(),
+      onMouseDown: (event) => SolidTextPage.viewModel?.startDrag(event),
+      onTouchStart: (event) => SolidTextPage.viewModel?.startDrag(event),
+      onMouseMove: (event) => SolidTextPage.viewModel?.drag(event),
+      onTouchMove: (event) => SolidTextPage.viewModel?.drag(event),
+      onMouseUp: () => SolidTextPage.viewModel?.endDrag(),
+      onTouchEnd: () => SolidTextPage.viewModel?.endDrag(),
     });
     const ctx = canvas.getContext('2d');
-    SolidTextPage.viewModel.setContext(ctx!);
-    SolidTextPage.viewModel.updateDonut();
+    SolidTextPage.viewModel?.setContext(ctx!);
+    SolidTextPage.viewModel?.setCanvasSize(Constant.CANVAS_SIZE);
+    SolidTextPage.viewModel?.updateDonut();
 
     const radioWrap = new RadioWrap({
-      selectedColorShaderType: this.state.selectedColorShaderType,
+      selectedColorShaderType: this._selectedColorShaderType,
       onChange: (colorShaderType: ColorShaderType) => {
-        this.setState({ selectedColorShaderType: colorShaderType });
+        this._selectedColorShaderType = colorShaderType;
       },
     });
 
@@ -62,24 +63,23 @@ export class SolidTextPage extends JElement<SolidTextPageState> {
 
   attributeChangedCallback() {
     super.attributeChangedCallback();
-    SolidTextPage.viewModel.setColorShaderType(
-      this.state.selectedColorShaderType,
-    );
-    SolidTextPage.viewModel.setCanvasSize(this.state.canvasSize);
+    if (SolidTextPage.viewModel === undefined) {
+      return;
+    }
+    SolidTextPage.viewModel.setColorShaderType(this._selectedColorShaderType);
     SolidTextPage.viewModel.drawCurrentDonut();
 
-    if (this.state.selectedColorShaderType === 'change-rainbow') {
+    if (this._selectedColorShaderType === 'change-rainbow') {
       requestAnimationFrame(this.performAnimation);
     }
   }
 
   performAnimation = () => {
-    if (this.state.selectedColorShaderType !== 'change-rainbow') {
+    if (this._selectedColorShaderType !== 'change-rainbow') {
       cancelAnimationFrame(this._rafId);
       return;
     }
-    SolidTextPage.viewModel.drawCurrentDonut();
-
+    SolidTextPage.viewModel?.drawCurrentDonut();
     this._rafId = requestAnimationFrame(this.performAnimation);
   };
 }

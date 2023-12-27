@@ -8,11 +8,11 @@ interface RadioWrapProps {
   onChange: (colorShaderType: ColorShaderType) => void;
 }
 
-export class RadioWrap extends JElement<{}> {
+export class RadioWrap extends JElement {
   private readonly _props: RadioWrapProps;
 
   constructor(props: RadioWrapProps) {
-    super({});
+    super();
     this._props = props;
     this.classList.add(styles.container);
   }
