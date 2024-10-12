@@ -1,3 +1,5 @@
+import { isTouchSupported } from '../corssBrowsing.js';
+
 export type BaseProps = BaseAttributes & BaseEvents;
 
 export interface BaseAttributes {
@@ -70,9 +72,11 @@ export const addBaseEventsListener = (
   onMouseDown && element.addEventListener('mousedown', onMouseDown);
   onMouseUp && element.addEventListener('mouseup', onMouseUp);
   onMouseMove && element.addEventListener('mousemove', onMouseMove);
-  onTouchStart && element.addEventListener('touchstart', onTouchStart);
-  onTouchMove && element.addEventListener('touchmove', onTouchMove);
-  onTouchEnd && element.addEventListener('touchend', onTouchEnd);
+  if (isTouchSupported) {
+    onTouchStart && element.addEventListener('touchstart', onTouchStart);
+    onTouchMove && element.addEventListener('touchmove', onTouchMove);
+    onTouchEnd && element.addEventListener('touchend', onTouchEnd);
+  }
 };
 
 export const removeBaseEventsListener = (
@@ -94,7 +98,9 @@ export const removeBaseEventsListener = (
   onMouseDown && element.removeEventListener('mousedown', onMouseDown);
   onMouseUp && element.removeEventListener('mouseup', onMouseUp);
   onMouseMove && element.removeEventListener('mousemove', onMouseMove);
-  onTouchStart && element.removeEventListener('touchstart', onTouchStart);
-  onTouchMove && element.removeEventListener('touchmove', onTouchMove);
-  onTouchEnd && element.removeEventListener('touchend', onTouchEnd);
+  if (isTouchSupported) {
+    onTouchStart && element.removeEventListener('touchstart', onTouchStart);
+    onTouchMove && element.removeEventListener('touchmove', onTouchMove);
+    onTouchEnd && element.removeEventListener('touchend', onTouchEnd);
+  }
 };
