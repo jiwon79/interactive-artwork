@@ -27,7 +27,6 @@ export default class SolidTextViewModel {
     this.pixelService = new PixelService(this.solidService, matrixSize);
   }
 
-  // setter from ui property
   public setContext(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
   }
@@ -40,7 +39,6 @@ export default class SolidTextViewModel {
     this.canvasSize = size;
   }
 
-  // drag event
   public startDrag(e: MouseEvent | TouchEvent) {
     this.dragRotateService.startDrag(e);
   }
@@ -55,7 +53,6 @@ export default class SolidTextViewModel {
     this.dragRotateService.endDrag();
   }
 
-  // update
   private get colorShader() {
     return colorShaderMap[this._colorShaderType];
   }
@@ -65,11 +62,7 @@ export default class SolidTextViewModel {
     this.drawCurrentDonut();
   }
 
-  // add named parameter 'forceDraw' to drawCurrentDonut
-  public drawCurrentDonut(forceDraw: boolean = false) {
-    if (!forceDraw && !this.dragRotateService.isOverTimeThreshold) {
-      return;
-    }
+  public drawCurrentDonut() {
     const pixelModelMatrix = this.pixelService.pixelMatrix;
     const luminanceMatrix = this.pixelService.luminanceMatrix;
 

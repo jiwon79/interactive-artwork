@@ -13,13 +13,4 @@ export default defineConfig({
       '@public': resolve(__dirname, 'public/'),
     },
   },
-  // css: {
-  //   preprocessorOptions: {
-  //     scss: {
-  //       additionalData: `
-  //         @import "@src/SolidTextPage.module.scss";
-  //       `
-  //     }
-  //   }
-  // }
 });

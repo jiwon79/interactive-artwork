@@ -1,13 +1,12 @@
+import { isTouchSupported } from '@/src/core/corssBrowsing.js';
 import { Rotate } from '@pages/solidText/utils/type';
 
 const ROTATE_THRESHOLD = 0.01;
-const TIME_THRESHOLD = 30;
 
 export class DragRotateService {
   private isDragging: boolean = false;
   private lastClientX: number = 0;
   private lastClientY: number = 0;
-  private lastUpdateTime: number = 0;
   private readonly _lastRotate: Rotate;
   private readonly _rotate: Rotate;
 
@@ -26,14 +25,15 @@ export class DragRotateService {
       this.lastClientX = e.clientX;
       this.lastClientY = e.clientY;
     }
-    if (e instanceof TouchEvent) {
+
+    if (isTouchSupported && e instanceof TouchEvent) {
       this.lastClientX = e.touches[0].clientX;
       this.lastClientY = e.touches[0].clientY;
     }
   }
 
   public drag(e: MouseEvent | TouchEvent, callback: () => void) {
-    if (!this.isDragging || !this.isOverTimeThreshold) {
+    if (!this.isDragging) {
       return;
     }
 
@@ -47,7 +47,7 @@ export class DragRotateService {
       this.lastClientY = e.clientY;
     }
 
-    if (e instanceof TouchEvent) {
+    if (isTouchSupported && e instanceof TouchEvent) {
       distanceX = (e.touches[0].clientX - this.lastClientX) / 150;
       distanceY = (e.touches[0].clientY - this.lastClientY) / 150;
       this.lastClientX = e.touches[0].clientX;
@@ -62,7 +62,6 @@ export class DragRotateService {
 
     if (this.isOverRotateThreshold) {
       callback();
-      this.lastUpdateTime = new Date().getTime();
       this._lastRotate.rotateX = this._rotate.rotateX;
       this._lastRotate.rotateY = this._rotate.rotateY;
     }
@@ -85,11 +84,5 @@ export class DragRotateService {
     );
 
     return rotateDiffX > ROTATE_THRESHOLD || rotateDiffY > ROTATE_THRESHOLD;
-  }
-
-  public get isOverTimeThreshold(): boolean {
-    const currentTime = new Date().getTime();
-
-    return currentTime - this.lastUpdateTime > TIME_THRESHOLD;
   }
 }
