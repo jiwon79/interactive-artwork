@@ -16,22 +16,22 @@ export class MainPage extends JElement {
 
     const linkContainer = new JDiv();
 
-    const mainLink = new JAnchor({
-      href: '/',
-      innerText: 'main',
-      className: styles.link,
-    });
-
-    const solidTextLink = new JAnchor({
-      href: '/solid-text',
-      innerText: 'solid text',
-      className: styles.link,
-    });
+    const links: { href: string; innerText: string }[] = [
+      { href: '/', innerText: 'main' },
+      { href: '/solid-text', innerText: 'solid text' },
+      { href: '/window-ball', innerText: 'window ball' },
+    ];
 
     this.append(title);
     this.append(linkContainer);
-    linkContainer.append(mainLink);
-    linkContainer.append(solidTextLink);
+    links.forEach((link) => {
+      const anchor = new JAnchor({
+        href: link.href,
+        innerText: link.innerText,
+        className: styles.link,
+      });
+      linkContainer.append(anchor);
+    });
   }
 }
 
