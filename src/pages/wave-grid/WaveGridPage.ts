@@ -20,7 +20,7 @@ export class WaveGridPage extends JElement {
 
   createElements() {
     const title = new JParagraph({
-      innerText: 'Window Ball',
+      innerText: 'Wave Grid',
     });
 
     this._canvas = new JCanvas({
