@@ -92,3 +92,23 @@ export default class Vector extends NumberMatrix {
     return this.elements[0][2];
   }
 }
+
+export class Vector2 extends Vector {
+  constructor(elements: [number, number]) {
+    super(elements);
+  }
+
+  public toString(): string {
+    return `Vector2(${this.elements[0][0]}, ${this.elements[0][1]})`;
+  }
+}
+
+export class Vector3 extends Vector {
+  constructor(elements: [number, number, number]) {
+    super(elements);
+  }
+
+  public toString(): string {
+    return `Vector3(${this.elements[0][0]}, ${this.elements[0][1]}, ${this.elements[0][2]})`;
+  }
+}
