@@ -1,8 +1,8 @@
 import { range } from '@/src/core/utils/range';
 import { Vector2, Vector3 } from '@/src/core/utils/vector';
 
-const L = 500;
-const step = 20;
+export const L = 500;
+const step = 16;
 
 export class WaveGridViewModel {
   private _dots: Vector3[] = [];

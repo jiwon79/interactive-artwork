@@ -1,8 +1,10 @@
 import { JElement } from '@core/element';
 import { JCanvas, JParagraph } from '@core/primitives';
-import { WaveGridViewModel } from './ViewModel';
+import { L, WaveGridViewModel } from './ViewModel';
 import { CanvasService } from './service/CanvasService';
 import { Vector2 } from '@/src/core/utils/vector';
+
+import styles from './WaveGridPage.module.scss';
 
 export class WaveGridPage extends JElement {
   private _canvas: JCanvas | null = null;
@@ -24,9 +26,11 @@ export class WaveGridPage extends JElement {
     });
 
     this._canvas = new JCanvas({
-      width: 500,
-      height: 500,
+      width: L,
+      height: L,
+      className: styles.canvas,
       onMouseMove: this.onCanvasMouseMove,
+      onTouchMove: this.onCanvasTouchMove,
     });
     const context = this._canvas.getContext('2d');
     if (context != null) {
@@ -38,15 +42,27 @@ export class WaveGridPage extends JElement {
     this.draw();
   }
 
+  onCanvasTouchMove = (event: TouchEvent) => {
+    const touch = event.touches[0];
+    if (touch == null) {
+      return;
+    }
+    this.onMove(new Vector2([touch.clientX, touch.clientY]));
+  };
+
   onCanvasMouseMove = (event: MouseEvent) => {
+    this.onMove(new Vector2([event.clientX, event.clientY]));
+  };
+
+  onMove = (mousePosition: Vector2) => {
     if (this._canvas == null) {
       return;
     }
 
     const boundary = this._canvas?.getBoundingClientRect();
     const position = new Vector2([
-      event.clientX - boundary.left,
-      event.clientY - boundary.top,
+      mousePosition.x - boundary.left,
+      mousePosition.y - boundary.top,
     ]);
 
     if (this._canvasService != null) {
