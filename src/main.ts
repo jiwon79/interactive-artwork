@@ -1,7 +1,7 @@
 import { type RouteInfo, Router } from '@core/router/router';
 import { MainPage } from '@pages/main/MainPage';
 import { SolidTextPage } from '@pages/solidText';
-import { WaveGridPage } from './pages/wave-grid/page/WaveGridPage';
+import { WaveGridPage } from './pages/wave-grid/WaveGridPage';
 
 const routes: RouteInfo[] = [
   { path: '/', title: 'Interactive Artwork', page: MainPage },

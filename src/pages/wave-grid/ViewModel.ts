@@ -18,10 +18,6 @@ export class WaveGridViewModel {
     return this._edges;
   }
 
-  get canvasDots() {
-    return this._dots.map((dot) => this.projection(dot));
-  }
-
   constructor() {
     for (const j of range(-L / 2, L / 2, step)) {
       for (const i of range(-L, 0, step)) {
@@ -43,14 +39,10 @@ export class WaveGridViewModel {
     }
   }
 
-  public setMousePosition(x: number, y: number) {
-    this._mouseX = x;
-    this._mouseY = y;
-
-    const unDot = this.unProjection(new Vector2([x, y]));
+  public setMousePosition(position: Vector2) {
     this._dots = this._dots.map((dot) => {
-      const distanceX = Math.abs(dot.x - unDot.x);
-      const distanceY = Math.abs(dot.y - unDot.y);
+      const distanceX = Math.abs(dot.x - position.x);
+      const distanceY = Math.abs(dot.y - position.y);
       const r = 50;
       return distanceX ** 2 + distanceY ** 2 < r ** 2
         ? new Vector3([
@@ -64,18 +56,5 @@ export class WaveGridViewModel {
 
   public getMousePosition() {
     return new Vector2([this._mouseX, this._mouseY]);
-  }
-
-  private projection(point: Vector3) {
-    const x = point.x;
-    const y = point.y;
-    const z = point.z;
-    return new Vector2([-x + y, -x - y + z]);
-  }
-
-  private unProjection(point: Vector2) {
-    const x = point.x;
-    const y = point.y;
-    return new Vector3([-(x + y) / 2, (x - y) / 2, 0]);
   }
 }
