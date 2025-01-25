@@ -1,13 +1,12 @@
 import { type RouteInfo, Router } from '@core/router/router';
 import { MainPage } from '@pages/main/MainPage';
 import { SolidTextPage } from '@pages/solidText';
-import { WindowBallPage } from './pages/window-ball/page/WindowBallPage';
+import { WaveGridPage } from './pages/wave-grid/page/WaveGridPage';
 
 const routes: RouteInfo[] = [
   { path: '/', title: 'Interactive Artwork', page: MainPage },
   { path: '/solid-text', title: 'Drag Donut', page: SolidTextPage },
-  { path: '/window-ball', title: 'Window Ball', page: WindowBallPage },
-  // {path: "/crowd", title: "Crowd Simulation", component: CrowdPage}
+  { path: '/wave-grid', title: 'Wave Grid', page: WaveGridPage },
 ];
 
 document.addEventListener('DOMContentLoaded', () => {

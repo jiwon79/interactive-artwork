@@ -19,7 +19,7 @@ export class MainPage extends JElement {
     const links: { href: string; innerText: string }[] = [
       { href: '/', innerText: 'main' },
       { href: '/solid-text', innerText: 'solid text' },
-      { href: '/window-ball', innerText: 'window ball' },
+      { href: '/wave-grid', innerText: 'wave grid' },
     ];
 
     this.append(title);

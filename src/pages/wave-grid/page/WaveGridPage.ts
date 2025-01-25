@@ -1,15 +1,15 @@
 import { Vector2 } from '@/src/core/utils/vector';
 import { JElement } from '@core/element';
 import { JCanvas, JParagraph } from '@core/primitives';
-import { TestViewModel } from './ViewModel';
+import { WaveGridViewModel } from './ViewModel';
 
-export class WindowBallPage extends JElement {
+export class WaveGridPage extends JElement {
   private _canvas: JCanvas | null = null;
-  private _viewModel: TestViewModel;
+  private _viewModel: WaveGridViewModel;
 
   constructor() {
     super();
-    this._viewModel = new TestViewModel();
+    this._viewModel = new WaveGridViewModel();
   }
 
   connectedCallback() {
@@ -90,4 +90,4 @@ export class WindowBallPage extends JElement {
   }
 }
 
-customElements.define('window-ball-page', WindowBallPage);
+customElements.define('window-ball-page', WaveGridPage);
