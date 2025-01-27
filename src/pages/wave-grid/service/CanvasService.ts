@@ -23,6 +23,7 @@ export class CanvasService {
       const dot2 = this.projection(dots[edge[1]]);
       this._ctx.beginPath();
       this._ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+      this._ctx.lineWidth = 2;
       this._ctx.moveTo(dot1.x, dot1.y);
       this._ctx.lineTo(dot2.x, dot2.y);
       this._ctx.stroke();
@@ -36,7 +37,7 @@ export class CanvasService {
     }
   }
 
-  private drawCircle(point: Vector2, radius: number = 2) {
+  private drawCircle(point: Vector2, radius: number = 8) {
     this._ctx.beginPath();
     this._ctx.arc(point.x, point.y, radius, 0, 2 * Math.PI);
     this._ctx.fillStyle = 'white';
@@ -47,12 +48,12 @@ export class CanvasService {
     const x = point.x;
     const y = point.y;
     const z = point.z;
-    return new Vector2([-x + y, -x - y + z]);
+    return new Vector2([-x + y, (-x * 2) / 3 - (y * 2) / 3 + z]);
   }
 
   public unProjection(point: Vector2) {
     const x = point.x;
     const y = point.y;
-    return new Vector3([-(x + y) / 2, (x - y) / 2, 0]);
+    return new Vector3([-x / 2 - (y * 3) / 4, x / 2 - (y * 3) / 4, 0]);
   }
 }
