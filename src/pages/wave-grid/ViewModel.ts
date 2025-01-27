@@ -4,16 +4,35 @@ import { K } from './service/constants';
 
 export const L = 3000;
 const step = 100;
-const R = 300;
+const R = 400;
 
 export class WaveGridViewModel {
   private _dots: Vector3[] = [];
   private _edges: [number, number][] = [];
-  private _mouseX = 0;
-  private _mouseY = 0;
+
+  touch: { point: Vector2; time: number } | null = null;
 
   get dots() {
-    return this._dots;
+    const touch = this.touch;
+    if (touch == null) {
+      return this._dots;
+    }
+    const mousePosition = touch.point;
+    const time = touch.time;
+
+    return this._dots.map((dot) => {
+      const distanceX = Math.abs(dot.x - mousePosition.x);
+      const distanceY = Math.abs(dot.y - mousePosition.y);
+      const r = Math.min((R * (Date.now() - time)) / 1200, R);
+
+      return distanceX ** 2 + distanceY ** 2 < r ** 2
+        ? new Vector3([
+            dot.x,
+            dot.y,
+            Math.sqrt(r ** 2 - distanceX ** 2 - distanceY ** 2),
+          ])
+        : new Vector3([dot.x, dot.y, 0]);
+    });
   }
 
   get edges() {
@@ -45,24 +64,5 @@ export class WaveGridViewModel {
         this._edges.push([i * yCount + j, (i + 1) * yCount + j]);
       }
     }
-  }
-
-  public setMousePosition(position: Vector2) {
-    this._dots = this._dots.map((dot) => {
-      const distanceX = Math.abs(dot.x - position.x);
-      const distanceY = Math.abs(dot.y - position.y);
-
-      return distanceX ** 2 + distanceY ** 2 < R ** 2
-        ? new Vector3([
-            dot.x,
-            dot.y,
-            Math.sqrt(R ** 2 - distanceX ** 2 - distanceY ** 2),
-          ])
-        : new Vector3([dot.x, dot.y, 0]);
-    });
-  }
-
-  public getMousePosition() {
-    return new Vector2([this._mouseX, this._mouseY]);
   }
 }
