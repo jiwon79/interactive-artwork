@@ -61,8 +61,8 @@ export class WaveGridPage extends JElement {
 
     const boundary = this._canvas?.getBoundingClientRect();
     const position = new Vector2([
-      mousePosition.x - boundary.left,
-      mousePosition.y - boundary.top,
+      ((mousePosition.x - boundary.left) * L) / boundary.width,
+      ((mousePosition.y - boundary.top) * L) / boundary.height,
     ]);
 
     if (this._canvasService != null) {

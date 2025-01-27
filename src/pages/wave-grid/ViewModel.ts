@@ -1,9 +1,9 @@
 import { range } from '@/src/core/utils/range';
 import { Vector2, Vector3 } from '@/src/core/utils/vector';
 
-export const L = 500;
-const step = 16;
-
+export const L = 3000;
+const step = 100;
+const R = 300;
 export class WaveGridViewModel {
   private _dots: Vector3[] = [];
   private _edges: [number, number][] = [];
@@ -43,12 +43,12 @@ export class WaveGridViewModel {
     this._dots = this._dots.map((dot) => {
       const distanceX = Math.abs(dot.x - position.x);
       const distanceY = Math.abs(dot.y - position.y);
-      const r = 50;
-      return distanceX ** 2 + distanceY ** 2 < r ** 2
+
+      return distanceX ** 2 + distanceY ** 2 < R ** 2
         ? new Vector3([
             dot.x,
             dot.y,
-            -Math.sqrt(r ** 2 - distanceX ** 2 - distanceY ** 2),
+            Math.sqrt(R ** 2 - distanceX ** 2 - distanceY ** 2),
           ])
         : new Vector3([dot.x, dot.y, 0]);
     });
