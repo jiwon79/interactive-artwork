@@ -1,4 +1,5 @@
 import { Vector2, Vector3 } from '@/src/core/utils/vector';
+import { K } from './constants';
 
 export class CanvasService {
   private _ctx: CanvasRenderingContext2D;
@@ -33,14 +34,18 @@ export class CanvasService {
   drawDots(dots: Vector3[]) {
     for (const dot of dots) {
       const point = this.projection(dot);
-      this.drawCircle(point);
+      const absZ = Math.abs(dot.z);
+      const r = 8;
+      const signZ = Math.sign(dot.z);
+      const radius = r * (1 - signZ * Math.min(1, Math.sqrt(absZ) / 50));
+      this.drawCircle(point, radius);
     }
   }
 
   private drawCircle(point: Vector2, radius: number = 8) {
     this._ctx.beginPath();
     this._ctx.arc(point.x, point.y, radius, 0, 2 * Math.PI);
-    this._ctx.fillStyle = 'white';
+    this._ctx.fillStyle = `rgba(255, 255, 255, 1)`;
     this._ctx.fill();
   }
 
@@ -48,12 +53,12 @@ export class CanvasService {
     const x = point.x;
     const y = point.y;
     const z = point.z;
-    return new Vector2([-x + y, (-x * 2) / 3 - (y * 2) / 3 + z]);
+    return new Vector2([-x + y, -x * K - y * K + z]);
   }
 
   public unProjection(point: Vector2) {
     const x = point.x;
     const y = point.y;
-    return new Vector3([-x / 2 - (y * 3) / 4, x / 2 - (y * 3) / 4, 0]);
+    return new Vector3([-x / 2 - y / 2 / K, x / 2 - y / 2 / K, 0]);
   }
 }

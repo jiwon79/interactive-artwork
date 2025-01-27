@@ -1,9 +1,11 @@
 import { range } from '@/src/core/utils/range';
 import { Vector2, Vector3 } from '@/src/core/utils/vector';
+import { K } from './service/constants';
 
 export const L = 3000;
 const step = 100;
 const R = 300;
+
 export class WaveGridViewModel {
   private _dots: Vector3[] = [];
   private _edges: [number, number][] = [];
@@ -18,23 +20,29 @@ export class WaveGridViewModel {
     return this._edges;
   }
 
+  xStart = (-L * (K + 1)) / 2 / K;
+  xEnd = 0;
+  yStart = -L / 2 / K;
+  yEnd = L / 2;
+
   constructor() {
-    for (const j of range(-L / 2, L / 2, step)) {
-      for (const i of range(-L, 0, step)) {
+    for (const j of range(this.yStart, this.yEnd, step)) {
+      for (const i of range(this.xStart, this.xEnd, step)) {
         const point = new Vector3([i, j, 0]);
         this._dots.push(point);
       }
     }
-    const count = Math.ceil(L / step);
-    for (const i of range(0, count)) {
-      for (const j of range(0, count - 1, 1)) {
-        this._edges.push([i * count + j, i * count + j + 1]);
+    const xCount = Math.ceil((this.xEnd - this.xStart) / step);
+    const yCount = Math.ceil((this.yEnd - this.yStart) / step);
+    for (const i of range(0, xCount)) {
+      for (const j of range(0, yCount - 1, 1)) {
+        this._edges.push([i * yCount + j, i * yCount + j + 1]);
       }
     }
 
-    for (const i of range(0, count - 1)) {
-      for (const j of range(0, count)) {
-        this._edges.push([i * count + j, (i + 1) * count + j]);
+    for (const i of range(0, xCount - 1)) {
+      for (const j of range(0, yCount)) {
+        this._edges.push([i * yCount + j, (i + 1) * yCount + j]);
       }
     }
   }
