@@ -1,5 +1,6 @@
 import { Vector2, Vector3 } from '@/src/core/utils/vector';
 import { K } from './constants';
+import { STEP } from '../ViewModel';
 
 export class CanvasService {
   private _ctx: CanvasRenderingContext2D;
@@ -35,7 +36,7 @@ export class CanvasService {
     for (const dot of dots) {
       const point = this.projection(dot);
       const absZ = Math.abs(dot.z);
-      const r = 8;
+      const r = STEP / 10;
       const signZ = Math.sign(dot.z);
       const radius = r * (1 - signZ * Math.min(1, Math.sqrt(absZ) / 50));
       this.drawCircle(point, radius);

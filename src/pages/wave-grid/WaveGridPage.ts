@@ -1,6 +1,6 @@
 import { JElement } from '@core/element';
 import { JCanvas, JParagraph } from '@core/primitives';
-import { L, R, WaveGridViewModel } from './ViewModel';
+import { L, WaveGridViewModel } from './ViewModel';
 import { CanvasService } from './service/CanvasService';
 import { Vector2 } from '@/src/core/utils/vector';
 
@@ -81,11 +81,15 @@ export class WaveGridPage extends JElement {
       return;
     }
     const now = Date.now();
-    this._viewModel.waves = {
+    this._viewModel.waves = this._viewModel.waves.filter(
+      (wave) => now - wave.time < 30 * 1000,
+    );
+    this._viewModel.waves.push({
       point: touch.point,
       time: now,
-      r: Math.min((R * (now - touch.time)) / 1200, R),
-    };
+      r: this._viewModel.getTouchRadius(touch.time),
+    });
+    console.log('length', this._viewModel.waves.length);
     this._viewModel.touch = null;
   };
 
