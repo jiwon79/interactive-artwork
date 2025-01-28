@@ -3,35 +3,65 @@ import { Vector2, Vector3 } from '@/src/core/utils/vector';
 import { K } from './service/constants';
 
 export const L = 3000;
-const step = 100;
-const R = 400;
+const step = 80;
+export const R = 200;
 
 export class WaveGridViewModel {
   private _dots: Vector3[] = [];
   private _edges: [number, number][] = [];
 
   touch: { point: Vector2; time: number } | null = null;
+  waves: { point: Vector2; time: number; r: number } | null = null;
 
   get dots() {
-    const touch = this.touch;
-    if (touch == null) {
-      return this._dots;
-    }
-    const mousePosition = touch.point;
-    const time = touch.time;
-
     return this._dots.map((dot) => {
-      const distanceX = Math.abs(dot.x - mousePosition.x);
-      const distanceY = Math.abs(dot.y - mousePosition.y);
-      const r = Math.min((R * (Date.now() - time)) / 1200, R);
+      const zByTouch =
+        (() => {
+          const touch = this.touch;
+          if (touch == null) {
+            return null;
+          }
 
-      return distanceX ** 2 + distanceY ** 2 < r ** 2
-        ? new Vector3([
-            dot.x,
-            dot.y,
-            Math.sqrt(r ** 2 - distanceX ** 2 - distanceY ** 2),
-          ])
-        : new Vector3([dot.x, dot.y, 0]);
+          const mousePosition = touch.point;
+          const time = touch.time;
+
+          const distanceX = Math.abs(dot.x - mousePosition.x);
+          const distanceY = Math.abs(dot.y - mousePosition.y);
+          const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+
+          const r = Math.min((R * (Date.now() - time)) / 1200, R);
+          const z =
+            distance < r ? r * Math.cos((distance * Math.PI) / 2 / r) : 0;
+
+          return z;
+        })() ?? 0;
+
+      const zByWave =
+        (() => {
+          const wave = this.waves;
+          if (wave == null) {
+            return null;
+          }
+
+          const distanceX = Math.abs(dot.x - wave.point.x);
+          const distanceY = Math.abs(dot.y - wave.point.y);
+          const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+          const x = distance;
+          const r = wave.r;
+          const t = Date.now() - wave.time;
+
+          const lambda = r * 4;
+          const v = r / (Math.PI * 100);
+
+          const cos = Math.cos(((2 * Math.PI) / lambda) * (x - v * t));
+          const damping = Math.E ** (-t / 8000);
+          const z =
+            (damping * (r * cos)) / (x < r ? 1 : Math.sqrt((x / r) * 2));
+
+          return x < v * t + r ? z : 0;
+        })() ?? 0;
+
+      return new Vector3([dot.x, dot.y, zByTouch + zByWave]);
     });
   }
 
