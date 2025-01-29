@@ -7,6 +7,7 @@ export const STEP = 60;
 export const R = 300;
 
 export class WaveGridViewModel {
+  private _step: number = 60;
   private _dots: Vector3[] = [];
   private _edges: [number, number][] = [];
 
@@ -15,6 +16,10 @@ export class WaveGridViewModel {
 
   getTouchRadius(time: number) {
     return Math.min((R * (Date.now() - time)) / 300, R);
+  }
+
+  get step() {
+    return this._step;
   }
 
   get dots() {
@@ -76,25 +81,46 @@ export class WaveGridViewModel {
   yEnd = L / 2;
 
   constructor() {
-    for (const j of range(this.yStart, this.yEnd, STEP)) {
-      for (const i of range(this.xStart, this.xEnd, STEP)) {
+    this._dots = this.createDots();
+    this._edges = this.createEdges();
+  }
+
+  setStep(step: number) {
+    this._step = step;
+    this._dots = this.createDots();
+    this._edges = this.createEdges();
+  }
+
+  createDots() {
+    const dots: Vector3[] = [];
+    for (const j of range(this.yStart, this.yEnd, this._step)) {
+      for (const i of range(this.xStart, this.xEnd, this._step)) {
         const point = new Vector3([i, j, 0]);
-        this._dots.push(point);
+        dots.push(point);
       }
     }
-    const xCount = Math.ceil((this.xEnd - this.xStart) / STEP);
-    const yCount = Math.ceil((this.yEnd - this.yStart) / STEP);
+
+    return dots;
+  }
+
+  createEdges() {
+    const edges: [number, number][] = [];
+
+    const xCount = Math.ceil((this.xEnd - this.xStart) / this._step);
+    const yCount = Math.ceil((this.yEnd - this.yStart) / this._step);
     for (const i of range(0, xCount)) {
       for (const j of range(0, yCount - 1, 1)) {
-        this._edges.push([i * yCount + j, i * yCount + j + 1]);
+        edges.push([i * yCount + j, i * yCount + j + 1]);
       }
     }
 
     for (const i of range(0, xCount - 1)) {
       for (const j of range(0, yCount)) {
-        this._edges.push([i * yCount + j, (i + 1) * yCount + j]);
+        edges.push([i * yCount + j, (i + 1) * yCount + j]);
       }
     }
+
+    return edges;
   }
 }
 

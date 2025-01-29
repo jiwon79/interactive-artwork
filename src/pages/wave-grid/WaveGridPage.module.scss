@@ -1,5 +1,26 @@
+@import '../../style.scss';
+
+.title {
+    font-size: 24px;
+    font-family: Pretendard;
+    font-weight: 700;
+}
+
+.description {
+    font-size: 16px;
+    font-family: Pretendard;
+}
+
 .canvas {
     touch-action: none;
     width: min(80vh, 80vw);
     height: min(80vh, 80vw);
+}
+
+.input_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
 }
