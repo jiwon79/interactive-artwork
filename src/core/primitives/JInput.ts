@@ -5,17 +5,43 @@ import {
   removeBaseEventsListener,
 } from './BaseProps';
 
+type JInputType =
+  | 'buton'
+  | 'checkbox'
+  | 'color'
+  | 'date'
+  | 'datetime-local'
+  | 'email'
+  | 'file'
+  | 'hidden'
+  | 'image'
+  | 'month'
+  | 'number'
+  | 'password'
+  | 'radio'
+  | 'range'
+  | 'reset'
+  | 'search'
+  | 'submit'
+  | 'tel'
+  | 'text'
+  | 'time'
+  | 'url'
+  | 'week';
+
 interface JInputProp extends BaseProps {
-  type?: string;
+  type?: JInputType;
   value?: string;
   placeholder?: string;
   checked?: boolean;
+  min?: string;
+  max?: string;
   onChange?: (event: Event) => void;
-  onFocus?: (event: Event) => void;
-  onBlur?: (event: Event) => void;
+  onFocus?: (event: FocusEvent) => void;
+  onBlur?: (event: FocusEvent) => void;
   onInput?: (event: Event) => void;
-  onKeyUp?: (event: Event) => void;
-  onKeyDown?: (event: Event) => void;
+  onKeyUp?: (event: KeyboardEvent) => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
 }
 
 export class JInput extends HTMLInputElement {
@@ -29,6 +55,8 @@ export class JInput extends HTMLInputElement {
     props.value && (this.value = props.value);
     props.placeholder && (this.placeholder = props.placeholder);
     props.checked && (this.checked = props.checked);
+    props.min && (this.min = props.min);
+    props.max && (this.max = props.max);
   }
 
   connectedCallback() {
