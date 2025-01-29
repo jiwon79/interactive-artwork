@@ -5,7 +5,9 @@ import {
   removeBaseEventsListener,
 } from './BaseProps';
 
-interface JDivProps extends BaseProps {}
+interface JDivProps extends BaseProps {
+  children?: HTMLElement[];
+}
 
 export class JDiv extends HTMLDivElement {
   private readonly _props: JDivProps;
@@ -14,6 +16,9 @@ export class JDiv extends HTMLDivElement {
     super();
     this._props = props;
     initBaseAttribute(this, this._props);
+    if (props.children) {
+      props.children.forEach((child) => this.append(child));
+    }
   }
 
   connectedCallback() {

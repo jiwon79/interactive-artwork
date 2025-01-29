@@ -22,29 +22,6 @@ export class WaveGridPage extends JElement {
   }
 
   createElements() {
-    const title = new JParagraph({
-      innerText: 'Wave Grid',
-      className: styles.title,
-    });
-    const description = new JParagraph({
-      innerText: 'mouse down and up with drag',
-      className: styles.description,
-    });
-
-    const inputContainer = new JDiv({
-      className: styles.input_container,
-    });
-    const label = new JLabel({
-      innerText: 'step',
-    });
-    const input = new JInput({
-      type: 'range',
-      min: '40',
-      max: '150',
-      value: '60',
-      onInput: this.onRangeInput,
-    });
-
     this._canvas = new JCanvas({
       width: L,
       height: L,
@@ -59,12 +36,36 @@ export class WaveGridPage extends JElement {
       this._canvasService = new CanvasService(context);
     }
 
-    this.append(title);
-    this.append(description);
-    this.append(inputContainer);
-    inputContainer.append(label);
-    inputContainer.append(input);
-    this.append(this._canvas);
+    this.append(
+      new JDiv({
+        children: [
+          new JParagraph({
+            innerText: 'Wave Grid',
+            className: styles.title,
+          }),
+          new JParagraph({
+            innerText: 'mouse down and up with drag',
+            className: styles.description,
+          }),
+          new JDiv({
+            className: styles.input_container,
+            children: [
+              new JLabel({
+                innerText: 'interval',
+              }),
+              new JInput({
+                type: 'range',
+                min: '40',
+                max: '150',
+                value: '60',
+                onInput: this.onRangeInput,
+              }),
+            ],
+          }),
+          this._canvas,
+        ],
+      }),
+    );
 
     this.draw();
   }
