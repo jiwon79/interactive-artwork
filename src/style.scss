@@ -41,7 +41,6 @@
     -webkit-text-size-adjust: 100%;
 }
 
-
 #app {
     max-width: 1280px;
     margin: 0 auto;
@@ -55,3 +54,19 @@ body {
     place-items: center;
     min-height: 100svh;
 }
+
+p, span, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+$grey50: #f9fafb;
+$grey100: #f3f4f6;
+$grey200: #e5e7eb;
+$grey300: #d1d5db;
+$grey400: #9ca3af;
+$grey500: #6b7280;
+$grey600: #4b5563;
+$grey700: #374151;
+$grey800: #1f2937;
+$grey900: #111827;
+$grey950: #030712;

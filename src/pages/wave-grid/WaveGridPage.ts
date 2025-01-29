@@ -1,10 +1,11 @@
 import { JElement } from '@core/element';
-import { JCanvas, JParagraph } from '@core/primitives';
+import { JCanvas, JDiv, JInput, JLabel, JParagraph } from '@core/primitives';
 import { L, WaveGridViewModel } from './ViewModel';
 import { CanvasService } from './service/CanvasService';
 import { Vector2 } from '@/src/core/utils/vector';
 
 import styles from './WaveGridPage.module.scss';
+import { parseNumber } from '@/src/core/utils/parseNumber';
 
 export class WaveGridPage extends JElement {
   private _canvas: JCanvas | null = null;
@@ -23,6 +24,25 @@ export class WaveGridPage extends JElement {
   createElements() {
     const title = new JParagraph({
       innerText: 'Wave Grid',
+      className: styles.title,
+    });
+    const description = new JParagraph({
+      innerText: 'mouse down and up with drag',
+      className: styles.description,
+    });
+
+    const inputContainer = new JDiv({
+      className: styles.input_container,
+    });
+    const label = new JLabel({
+      innerText: 'step',
+    });
+    const input = new JInput({
+      type: 'range',
+      min: '40',
+      max: '150',
+      value: '60',
+      onInput: this.onRangeInput,
     });
 
     this._canvas = new JCanvas({
@@ -40,9 +60,22 @@ export class WaveGridPage extends JElement {
     }
 
     this.append(title);
+    this.append(description);
+    this.append(inputContainer);
+    inputContainer.append(label);
+    inputContainer.append(input);
     this.append(this._canvas);
+
     this.draw();
   }
+
+  onRangeInput = (event: Event) => {
+    const value = parseNumber((event.target as HTMLInputElement).value);
+    if (value == null) {
+      return;
+    }
+    this._viewModel.setStep(value);
+  };
 
   onTouchMove = (event: TouchEvent) => {
     const touch = event.touches[0];
@@ -109,7 +142,11 @@ export class WaveGridPage extends JElement {
       return;
     }
 
-    this._canvasService.draw(this._viewModel.dots, this._viewModel.edges);
+    this._canvasService.draw(
+      this._viewModel.dots,
+      this._viewModel.edges,
+      this._viewModel.step,
+    );
     requestAnimationFrame(() => {
       this.draw();
     });
@@ -128,6 +165,11 @@ export class WaveGridPage extends JElement {
 
     return this._canvasService?.unProjection(position) ?? null;
   }
+
+  clear = () => {
+    this._viewModel.waves = [];
+    this._viewModel.touch = null;
+  };
 }
 
 customElements.define('window-ball-page', WaveGridPage);
