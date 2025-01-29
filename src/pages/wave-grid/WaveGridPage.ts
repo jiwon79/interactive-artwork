@@ -27,6 +27,8 @@ export class WaveGridPage extends JElement {
       height: L,
       className: styles.canvas,
       onTouchMove: this.onTouchMove,
+      onTouchStart: this.onTouchStart,
+      onTouchEnd: this.onTouchEnd,
       onMouseDown: this.onMouseDown,
       onMouseMove: this.onMouseMove,
       onMouseUp: this.onMouseUp,
@@ -78,12 +80,24 @@ export class WaveGridPage extends JElement {
     this._viewModel.setStep(value);
   };
 
+  onTouchStart = (event: TouchEvent) => {
+    const touch = event.touches[0];
+    if (touch == null) {
+      return;
+    }
+    this.onMoveStart(new Vector2([touch.clientX, touch.clientY]));
+  };
+
   onTouchMove = (event: TouchEvent) => {
     const touch = event.touches[0];
     if (touch == null) {
       return;
     }
     this.onMove(new Vector2([touch.clientX, touch.clientY]));
+  };
+
+  onTouchEnd = () => {
+    this.onMoveEnd();
   };
 
   onMouseDown = (event: MouseEvent) => {
@@ -167,10 +181,7 @@ export class WaveGridPage extends JElement {
     return this._canvasService?.unProjection(position) ?? null;
   }
 
-  clear = () => {
-    this._viewModel.waves = [];
-    this._viewModel.touch = null;
-  };
+  clear = () => {};
 }
 
 customElements.define('window-ball-page', WaveGridPage);
