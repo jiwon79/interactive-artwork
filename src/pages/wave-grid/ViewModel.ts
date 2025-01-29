@@ -52,7 +52,7 @@ export class WaveGridViewModel {
         const v = r / (Math.PI * 100);
 
         const cos = Math.cos(((2 * Math.PI) / lambda) * (x - v * t));
-        const damping = Math.E ** (-t / 8000);
+        const damping = Math.E ** (-t / 5000);
         const dampingX = 2;
         const z =
           (damping * (r * cos)) /
