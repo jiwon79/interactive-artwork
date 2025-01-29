@@ -4,7 +4,7 @@ import { K } from './service/constants';
 
 export const L = 3000;
 export const STEP = 60;
-export const R = 300;
+export const R = 400;
 
 export class WaveGridViewModel {
   private _step: number = 60;

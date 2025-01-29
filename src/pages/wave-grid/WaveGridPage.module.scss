@@ -14,8 +14,14 @@
 
 .canvas {
     touch-action: none;
+    user-select: none;
     width: min(80vh, 80vw);
     height: min(80vh, 80vw);
+
+    @media (max-width: 768px) {
+        width: min(100vh, 100vw);
+        height: min(100vh, 100vw);
+    }
 }
 
 .input_container {

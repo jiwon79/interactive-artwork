@@ -81,6 +81,7 @@ export class WaveGridPage extends JElement {
   };
 
   onTouchStart = (event: TouchEvent) => {
+    event.preventDefault();
     const touch = event.touches[0];
     if (touch == null) {
       return;
@@ -137,7 +138,6 @@ export class WaveGridPage extends JElement {
       time: now,
       r: this._viewModel.getTouchRadius(touch.time),
     });
-    console.log('length', this._viewModel.waves.length);
     this._viewModel.touch = null;
   };
 
