@@ -3,17 +3,67 @@ import { Vector2, Vector3 } from '@/src/core/utils/vector';
 import { K } from './service/constants';
 
 export const L = 3000;
-const step = 100;
-const R = 300;
+export const STEP = 60;
+export const R = 300;
 
 export class WaveGridViewModel {
   private _dots: Vector3[] = [];
   private _edges: [number, number][] = [];
-  private _mouseX = 0;
-  private _mouseY = 0;
+
+  touch: { point: Vector2; time: number } | null = null;
+  waves: { point: Vector2; time: number; r: number }[] = [];
+
+  getTouchRadius(time: number) {
+    return Math.min((R * (Date.now() - time)) / 300, R);
+  }
 
   get dots() {
-    return this._dots;
+    return this._dots.map((dot) => {
+      const zByTouch =
+        (() => {
+          const touch = this.touch;
+          if (touch == null) {
+            return null;
+          }
+
+          const mousePosition = touch.point;
+          const time = touch.time;
+
+          const distanceX = Math.abs(dot.x - mousePosition.x);
+          const distanceY = Math.abs(dot.y - mousePosition.y);
+          const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+
+          const r = this.getTouchRadius(time);
+          const z =
+            distance < r ? r * Math.cos((distance * Math.PI) / 2 / r) : 0;
+
+          return z;
+        })() ?? 0;
+
+      const zByWaves = this.waves.map((wave) => {
+        const distanceX = Math.abs(dot.x - wave.point.x);
+        const distanceY = Math.abs(dot.y - wave.point.y);
+        const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+        const x = distance;
+        const r = wave.r;
+        const t = Date.now() - wave.time;
+
+        const lambda = r * 4;
+        const v = r / (Math.PI * 100);
+
+        const cos = Math.cos(((2 * Math.PI) / lambda) * (x - v * t));
+        const damping = Math.E ** (-t / 5000);
+        const dampingX = 2;
+        const z =
+          (damping * (r * cos)) /
+          (x < r / dampingX ? 1 : Math.sqrt((x / r) * dampingX));
+
+        return x < v * t + r ? z : 0;
+      });
+      const sumZ = sum(zByWaves);
+
+      return new Vector3([dot.x, dot.y, zByTouch + sumZ]);
+    });
   }
 
   get edges() {
@@ -26,14 +76,14 @@ export class WaveGridViewModel {
   yEnd = L / 2;
 
   constructor() {
-    for (const j of range(this.yStart, this.yEnd, step)) {
-      for (const i of range(this.xStart, this.xEnd, step)) {
+    for (const j of range(this.yStart, this.yEnd, STEP)) {
+      for (const i of range(this.xStart, this.xEnd, STEP)) {
         const point = new Vector3([i, j, 0]);
         this._dots.push(point);
       }
     }
-    const xCount = Math.ceil((this.xEnd - this.xStart) / step);
-    const yCount = Math.ceil((this.yEnd - this.yStart) / step);
+    const xCount = Math.ceil((this.xEnd - this.xStart) / STEP);
+    const yCount = Math.ceil((this.yEnd - this.yStart) / STEP);
     for (const i of range(0, xCount)) {
       for (const j of range(0, yCount - 1, 1)) {
         this._edges.push([i * yCount + j, i * yCount + j + 1]);
@@ -46,23 +96,13 @@ export class WaveGridViewModel {
       }
     }
   }
+}
 
-  public setMousePosition(position: Vector2) {
-    this._dots = this._dots.map((dot) => {
-      const distanceX = Math.abs(dot.x - position.x);
-      const distanceY = Math.abs(dot.y - position.y);
-
-      return distanceX ** 2 + distanceY ** 2 < R ** 2
-        ? new Vector3([
-            dot.x,
-            dot.y,
-            Math.sqrt(R ** 2 - distanceX ** 2 - distanceY ** 2),
-          ])
-        : new Vector3([dot.x, dot.y, 0]);
-    });
+function sum(array: number[]): number {
+  let sum = 0;
+  for (const item of array) {
+    sum += item;
   }
 
-  public getMousePosition() {
-    return new Vector2([this._mouseX, this._mouseY]);
-  }
+  return sum;
 }

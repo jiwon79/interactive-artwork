@@ -29,8 +29,10 @@ export class WaveGridPage extends JElement {
       width: L,
       height: L,
       className: styles.canvas,
-      onMouseMove: this.onCanvasMouseMove,
-      onTouchMove: this.onCanvasTouchMove,
+      onTouchMove: this.onTouchMove,
+      onMouseDown: this.onMouseDown,
+      onMouseMove: this.onMouseMove,
+      onMouseUp: this.onMouseUp,
     });
     const context = this._canvas.getContext('2d');
     if (context != null) {
@@ -42,7 +44,7 @@ export class WaveGridPage extends JElement {
     this.draw();
   }
 
-  onCanvasTouchMove = (event: TouchEvent) => {
+  onTouchMove = (event: TouchEvent) => {
     const touch = event.touches[0];
     if (touch == null) {
       return;
@@ -50,24 +52,55 @@ export class WaveGridPage extends JElement {
     this.onMove(new Vector2([touch.clientX, touch.clientY]));
   };
 
-  onCanvasMouseMove = (event: MouseEvent) => {
+  onMouseDown = (event: MouseEvent) => {
+    this.onMoveStart(new Vector2([event.clientX, event.clientY]));
+  };
+
+  onMouseUp = () => {
+    this.onMoveEnd();
+  };
+
+  onMouseMove = (event: MouseEvent) => {
     this.onMove(new Vector2([event.clientX, event.clientY]));
   };
 
+  onMoveStart = (mousePosition: Vector2) => {
+    if (this._canvasService == null) {
+      return;
+    }
+    const unProjection = this.unprojection(mousePosition);
+    if (unProjection == null) {
+      return;
+    }
+    this._viewModel.touch = { point: unProjection, time: Date.now() };
+  };
+
+  onMoveEnd = () => {
+    const touch = this._viewModel.touch;
+    if (touch == null) {
+      return;
+    }
+    const now = Date.now();
+    this._viewModel.waves = this._viewModel.waves.filter(
+      (wave) => now - wave.time < 30 * 1000,
+    );
+    this._viewModel.waves.push({
+      point: touch.point,
+      time: now,
+      r: this._viewModel.getTouchRadius(touch.time),
+    });
+    console.log('length', this._viewModel.waves.length);
+    this._viewModel.touch = null;
+  };
+
   onMove = (mousePosition: Vector2) => {
-    if (this._canvas == null) {
+    const unProjection = this.unprojection(mousePosition);
+    if (unProjection == null) {
       return;
     }
 
-    const boundary = this._canvas?.getBoundingClientRect();
-    const position = new Vector2([
-      ((mousePosition.x - boundary.left) * L) / boundary.width,
-      ((mousePosition.y - boundary.top) * L) / boundary.height,
-    ]);
-
-    if (this._canvasService != null) {
-      const unProjection = this._canvasService.unProjection(position);
-      this._viewModel.setMousePosition(unProjection);
+    if (this._viewModel.touch != null) {
+      this._viewModel.touch.point = unProjection;
     }
   };
 
@@ -80,6 +113,20 @@ export class WaveGridPage extends JElement {
     requestAnimationFrame(() => {
       this.draw();
     });
+  }
+
+  unprojection(point: Vector2): Vector2 | null {
+    const boundary = this._canvas?.getBoundingClientRect();
+    if (boundary == null) {
+      return null;
+    }
+
+    const position = new Vector2([
+      ((point.x - boundary.left) * L) / boundary.width,
+      ((point.y - boundary.top) * L) / boundary.height,
+    ]);
+
+    return this._canvasService?.unProjection(position) ?? null;
   }
 }
 
